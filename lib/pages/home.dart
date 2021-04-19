@@ -2,6 +2,7 @@ import 'package:bugheist/pages/feed.dart';
 import 'package:bugheist/pages/issues.dart';
 import 'package:bugheist/pages/leaderboard.dart';
 import 'package:bugheist/pages/login_signup.dart';
+import 'package:bugheist/pages/plans.dart';
 import 'package:bugheist/pages/report_bug.dart';
 import 'package:flutter/material.dart';
 
@@ -98,6 +99,19 @@ class _HomeState extends State<Home> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => LoginSignUp(),
+                  ),
+                );
+              },
+            ),
+            Divider(),
+            ListTile(
+              title: Text('Plans'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Plans(),
                   ),
                 );
               },
