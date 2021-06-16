@@ -15,7 +15,7 @@ enum Status {
   Registered,
   Authenticating,
   Registering,
-  LoggedOut
+  LoggedOut,
 }
 
 class AuthProvider with ChangeNotifier {
