@@ -7,6 +7,7 @@ class AppUrl {
   static const String baseURL = liveURL;
   static const String login = liveURL + "/auth/login/";
   static const String register = liveURL + "/auth/registration/";
-  static const String forgotPassword = baseURL + "/forgot-password";
+  static const String forgotPassword = baseURL + "/forgot-password/";
   static const String user = liveURL + "/auth/user/";
+  static const String authFacebook = testBaseURL + "/auth/facebook/";
 }

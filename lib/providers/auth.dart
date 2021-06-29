@@ -7,6 +7,8 @@ import 'package:http/http.dart';
 import '../data/user.dart';
 import '../util/app_url.dart';
 import '../util/shared_preferences.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:bugheist/pages/home.dart';
 
 enum Status {
   NotLoggedIn,
@@ -117,5 +119,115 @@ class AuthProvider with ChangeNotifier {
       };
     }
     return result;
+  }
+
+  Future<Map<String, dynamic>> wrapperFacebook(
+    String? accessToken,
+  ) async {
+    var result;
+    final Map<String, dynamic> facebookData = {
+      'access_token': accessToken,
+    };
+    Response response = await post(
+      Uri.parse(AppUrl.authFacebook),
+      body: json.encode(facebookData),
+      headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      result = {
+        'status': true,
+        'key': json.decode(response.body)['key'],
+        'message': 'Successfully Login',
+      };
+    } else {
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['non_field_errors'],
+      };
+    }
+    return result;
+  }
+
+  Future fbAuth(BuildContext context) async {
+    final LoginResult result = await FacebookAuth.instance.login(
+      permissions: [
+        'public_profile',
+        'email',
+      ],
+    );
+    try {
+      if (result.status == LoginStatus.success) {
+        final AccessToken? token = await FacebookAuth.instance.accessToken;
+        final String? facebookToken = token?.token;
+        print(facebookToken);
+        final graphResponse = await get(
+          Uri.parse(
+            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${facebookToken}',
+          ),
+        );
+        final profile = json.decode(graphResponse.body);
+        print(profile);
+        print(profile['email']);
+        if (profile["email"] != null) {
+          _loggedInStatus = Status.Authenticating;
+          notifyListeners();
+          Future<Map<String, dynamic>> successfullMessage =
+              wrapperFacebook(facebookToken);
+          var accessToken;
+          successfullMessage.then(
+            (response) {
+              print(response);
+              accessToken = response['key'];
+              print(accessToken);
+            },
+          );
+          print(accessToken);
+          Response responseUser = await post(
+            Uri.parse(AppUrl.user),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Token ' + accessToken,
+            },
+          );
+          final Map<String, dynamic> userData = json.decode(responseUser.body);
+          User authUser = User.fromJson(userData, accessToken);
+
+          UserPreferences().saveUser(authUser);
+          _loggedInStatus = Status.LoggedIn;
+          notifyListeners();
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_buildContext) => Home(),
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Successfully signed in with Facebook',
+              ),
+            ),
+          );
+        } else {
+          _loggedInStatus = Status.NotLoggedIn;
+          notifyListeners();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Your FB account is not configured with email!!',
+              ),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Facebook error: ' + e.toString(),
+          ),
+        ),
+      );
+      return null;
+    }
   }
 }

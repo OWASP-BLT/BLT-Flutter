@@ -111,7 +111,9 @@ class LoginSignUpState extends State<LoginSignUp> {
   LoginFresh buildLoginFresh() {
     List<LoginFreshTypeLoginModel> listLogin = [
       LoginFreshTypeLoginModel(
-          callFunction: (BuildContext _buildContext) {},
+          callFunction: (BuildContext _buildContext) {
+            AuthProvider().fbAuth(_buildContext);
+          },
           logo: TypeLogo.facebook),
       LoginFreshTypeLoginModel(
         callFunction: (BuildContext _buildContext) {},
