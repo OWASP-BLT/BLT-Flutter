@@ -64,6 +64,7 @@ class LoginSignUpState extends State<LoginSignUp> {
         //_sharedText = value;
       });
     });
+    Timer(Duration(seconds: 3), () {});
   }
 
   @override
