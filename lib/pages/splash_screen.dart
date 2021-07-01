@@ -27,10 +27,25 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color.fromRGBO(253, 14, 53, 1),
+      color: Color(0xFFDC4654),
       child: Stack(
         alignment: Alignment.topLeft,
         children: <Widget>[
+          Positioned(
+            child: DelayedDisplay(
+              delay: Duration(seconds: 2),
+              child: Container(
+                child: Image.asset(
+                  "assets/bug.png",
+                  width: MediaQuery.of(context).size.width * 0.77,
+                  height: MediaQuery.of(context).size.height * 0.33,
+                ),
+              ),
+            ),
+            left: 0.22222 * MediaQuery.of(context).size.width,
+            right: 0.2246 * MediaQuery.of(context).size.width,
+            top: 0.1500 * MediaQuery.of(context).size.height,
+          ),
           Positioned(
             child: DelayedDisplay(
               delay: Duration(seconds: 2),
@@ -137,7 +152,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
               ),
             ),
             left: 0.6217 * MediaQuery.of(context).size.width,
-            top: 0.5250 * MediaQuery.of(context).size.height,
+            top: 0.5280 * MediaQuery.of(context).size.height,
             right: 0.3566 * MediaQuery.of(context).size.width,
             bottom: 0.4340 * MediaQuery.of(context).size.height,
           ),
@@ -152,8 +167,8 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
                 ),
               ),
             ),
-            left: 0.6275 * MediaQuery.of(context).size.width,
-            top: 0.5215 * MediaQuery.of(context).size.height,
+            left: 0.6295 * MediaQuery.of(context).size.width,
+            top: 0.5275 * MediaQuery.of(context).size.height,
             right: 0.3508 * MediaQuery.of(context).size.width,
             bottom: 0.4420 * MediaQuery.of(context).size.height,
           ),
@@ -168,8 +183,8 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
                 ),
               ),
             ),
-            left: 0.6339 * MediaQuery.of(context).size.width,
-            top: 0.5189 * MediaQuery.of(context).size.height,
+            left: 0.6359 * MediaQuery.of(context).size.width,
+            top: 0.5249 * MediaQuery.of(context).size.height,
             right: 0.3442 * MediaQuery.of(context).size.width,
             bottom: 0.4480 * MediaQuery.of(context).size.height,
           ),
@@ -185,7 +200,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
               ),
             ),
             left: 0.6256 * MediaQuery.of(context).size.width,
-            top: 0.4927 * MediaQuery.of(context).size.height,
+            top: 0.4987 * MediaQuery.of(context).size.height,
             right: 0.3298 * MediaQuery.of(context).size.width,
             bottom: 0.4867 * MediaQuery.of(context).size.height,
           ),
@@ -200,9 +215,9 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
                 ),
               ),
             ),
-            left: 0.6733 * MediaQuery.of(context).size.width,
-            top: 0.5255 * MediaQuery.of(context).size.height,
-            right: 0.2717 * MediaQuery.of(context).size.width,
+            left: 0.6833 * MediaQuery.of(context).size.width,
+            top: 0.5235 * MediaQuery.of(context).size.height,
+            right: 0.2577 * MediaQuery.of(context).size.width,
             bottom: 0.4420 * MediaQuery.of(context).size.height,
           ),
           Positioned(
@@ -216,9 +231,9 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
                 ),
               ),
             ),
-            left: 0.7363 * MediaQuery.of(context).size.width,
-            top: 0.5152 * MediaQuery.of(context).size.height,
-            right: 0.2246 * MediaQuery.of(context).size.width,
+            left: 0.7563 * MediaQuery.of(context).size.width,
+            top: 0.5200 * MediaQuery.of(context).size.height,
+            right: 0.2100 * MediaQuery.of(context).size.width,
             bottom: 0.4424 * MediaQuery.of(context).size.height,
           ),
         ],
