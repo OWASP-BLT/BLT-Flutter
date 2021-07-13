@@ -15,7 +15,10 @@ dependencies:
   provider: ^5.0.0
   receive_sharing_intent: ^1.4.5
   shared_preferences: ^2.0.5
-
+  cupertino_icons: ^1.0.0
+  matrix4_transform: ^2.0.0-nullsafety.1
+  google_fonts:
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

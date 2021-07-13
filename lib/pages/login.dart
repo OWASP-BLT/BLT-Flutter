@@ -5,7 +5,7 @@ import '../providers/user_provider.dart';
 //import '../util/validators.dart';
 import '../util/widgets.dart';
 import 'package:provider/provider.dart';
-import 'home.dart';
+import 'package:bugheist/pages/drawer/custom_drawer.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -81,7 +81,7 @@ class _LoginState extends State<Login> {
             Provider.of<UserProvider>(context, listen: false).setUser(user);
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_buildContext) => Home(),
+                builder: (_buildContext) => CustomDrawer(),
               ),
             );
             //Navigator.pushReplacementNamed(context, '/dashboard');
