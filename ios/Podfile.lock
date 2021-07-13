@@ -1,21 +1,40 @@
 PODS:
+  - connectivity (0.0.1):
+    - Flutter
+    - Reachability
   - Flutter (1.0.0)
+  - fluttertoast (0.0.2):
+    - Flutter
+    - Toast
   - image_picker (0.0.1):
     - Flutter
+  - Reachability (3.2)
   - receive_sharing_intent (0.0.1):
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
+  - Toast (4.0.0)
 
 DEPENDENCIES:
+  - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - Flutter (from `Flutter`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - receive_sharing_intent (from `.symlinks/plugins/receive_sharing_intent/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
 
+SPEC REPOS:
+  trunk:
+    - Reachability
+    - Toast
+
 EXTERNAL SOURCES:
+  connectivity:
+    :path: ".symlinks/plugins/connectivity/ios"
   Flutter:
     :path: Flutter
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
   receive_sharing_intent:
@@ -24,10 +43,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences/ios"
 
 SPEC CHECKSUMS:
+  connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   image_picker: 50e7c7ff960e5f58faa4d1f4af84a771c671bc4a
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   receive_sharing_intent: c0d87310754e74c0f9542947e7cbdf3a0335a3b1
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 

@@ -4,6 +4,10 @@ import '../pages/issue_detail.dart';
 
 import '../services/api.dart';
 import '../data/models.dart';
+import 'package:bugheist/services/api.dart';
+import 'dart:async';
+import 'package:bugheist/pages/error_page.dart';
+import 'package:connectivity/connectivity.dart';
 
 class PaginatedClass extends StatefulWidget {
   @override
@@ -21,6 +25,16 @@ class PaginatedClassState extends State<PaginatedClass>
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  bool _isConnection = true;
+  Future<bool> check() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      return true;
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      return true;
+    }
+    return false;
+  }
 
   @override
   void initState() {
@@ -64,6 +78,17 @@ class PaginatedClassState extends State<PaginatedClass>
         }
       }
     });
+    check().then(
+      (internet) async {
+        if (internet == false) {
+          setState(
+            () {
+              _isConnection = false;
+            },
+          );
+        }
+      },
+    );
     super.initState();
   }
 
@@ -75,76 +100,82 @@ class PaginatedClassState extends State<PaginatedClass>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: FutureBuilder(
-          future: _getObj,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    'Something went wrong!',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                );
-              } else if (snapshot.hasData) {
-                return ListView.builder(
-                    itemCount: (snapshot.data! as DataModel).results.length + 1,
-                    controller: _scrollController,
-                    itemBuilder: (context, index) {
-                      if (index == (snapshot.data! as DataModel).results.length)
-                        return Center(
-                          child: Opacity(
-                            opacity: _loading ? 1.0 : 0.0,
-                            child: CircularProgressIndicator(
-                              valueColor: animationController.drive(
-                                ColorTween(
-                                  begin: Colors.blueAccent,
-                                  end: Colors.red,
+    if (_isConnection) {
+      return SafeArea(
+        child: Scaffold(
+          body: FutureBuilder(
+            future: _getObj,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      'Something went wrong!',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  );
+                } else if (snapshot.hasData) {
+                  return ListView.builder(
+                      itemCount:
+                          (snapshot.data! as DataModel).results.length + 1,
+                      controller: _scrollController,
+                      itemBuilder: (context, index) {
+                        if (index ==
+                            (snapshot.data! as DataModel).results.length)
+                          return Center(
+                            child: Opacity(
+                              opacity: _loading ? 1.0 : 0.0,
+                              child: CircularProgressIndicator(
+                                valueColor: animationController.drive(
+                                  ColorTween(
+                                    begin: Colors.blueAccent,
+                                    end: Colors.red,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      else
-                        return new GestureDetector(
-                          onTap: () => {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ArticleOnePage(
-                                  issue: (snapshot.data! as DataModel)
-                                      .results[index],
+                          );
+                        else
+                          return new GestureDetector(
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ArticleOnePage(
+                                    issue: (snapshot.data! as DataModel)
+                                        .results[index],
+                                  ),
                                 ),
-                              ),
-                            )
-                          },
-                          child: IssueCard(
-                            description: (snapshot.data! as DataModel)
-                                .results[index]
-                                .description,
-                            imageSrc: (snapshot.data! as DataModel)
-                                .results[index]
-                                .screenshot,
-                          ),
-                        );
-                    });
+                              )
+                            },
+                            child: IssueCard(
+                              description: (snapshot.data! as DataModel)
+                                  .results[index]
+                                  .description,
+                              imageSrc: (snapshot.data! as DataModel)
+                                  .results[index]
+                                  .screenshot,
+                            ),
+                          );
+                      });
+                }
               }
-            }
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor: animationController.drive(
-                  ColorTween(
-                    begin: Colors.blueAccent,
-                    end: Colors.red,
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: animationController.drive(
+                    ColorTween(
+                      begin: Colors.blueAccent,
+                      end: Colors.red,
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return ErrorPage();
+    }
   }
 }

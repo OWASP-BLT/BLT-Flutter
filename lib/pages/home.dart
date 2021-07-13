@@ -1,3 +1,4 @@
+import 'package:bugheist/pages/error_page.dart';
 import 'package:bugheist/pages/feed.dart';
 import 'package:bugheist/pages/issues.dart';
 import 'package:bugheist/pages/leaderboard.dart';
@@ -12,11 +13,13 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
+
   final List<Widget> _children = [
     PaginatedClass(),
     ReportBug(),
     Feed(),
-    LeaderBoard()
+    LeaderBoard(),
+    ErrorPage(),
   ];
   void _onItemTapped(int index) {
     setState(() {
