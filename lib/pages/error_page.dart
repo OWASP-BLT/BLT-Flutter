@@ -8,8 +8,8 @@ class ErrorPage extends StatefulWidget {
 }
 
 class _ErrorPageState extends State<ErrorPage> {
-  @override
   var _index = 0;
+  @override
   Widget build(BuildContext context) {
     if (_index == 0) {
       return Column(
