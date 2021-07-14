@@ -17,6 +17,7 @@ dependencies:
   shared_preferences: ^2.0.5
   cupertino_icons: ^1.0.0
   matrix4_transform: ^2.0.0-nullsafety.1
+  flutter_html: ^2.1.0
   google_fonts:
   
 dev_dependencies:

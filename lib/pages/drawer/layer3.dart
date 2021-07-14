@@ -1,7 +1,15 @@
+import 'package:bugheist/pages/about.dart';
+import 'package:bugheist/pages/privacy.dart';
 import 'package:flutter/material.dart';
 import 'package:bugheist/pages/login_signup.dart';
+import 'package:bugheist/pages/terms.dart';
 
-class ThirdLayer extends StatelessWidget {
+class ThirdLayer extends StatefulWidget {
+  @override
+  _ThirdLayerState createState() => _ThirdLayerState();
+}
+
+class _ThirdLayerState extends State<ThirdLayer> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,9 +55,6 @@ class ThirdLayer extends StatelessWidget {
             ListTile(
               title: Text('Login'),
               onTap: () {
-                // Update trhe state of the app
-                // ...
-                // Then close the drawer
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -62,9 +67,6 @@ class ThirdLayer extends StatelessWidget {
             ListTile(
               title: Text('Social'),
               onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
                 Navigator.pop(context);
               },
             ),
@@ -72,9 +74,6 @@ class ThirdLayer extends StatelessWidget {
             ListTile(
               title: Text('Stats'),
               onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
                 Navigator.pop(context);
               },
             ),
@@ -82,30 +81,36 @@ class ThirdLayer extends StatelessWidget {
             ListTile(
               title: Text('About'),
               onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AboutClass(),
+                  ),
+                );
               },
             ),
             Divider(),
             ListTile(
               title: Text('Privacy Policy'),
               onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PrivacyClass(),
+                  ),
+                );
               },
             ),
             Divider(),
             ListTile(
               title: Text('Terms and Conditions'),
               onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TermsClass(),
+                  ),
+                );
               },
             ),
             Divider(),
