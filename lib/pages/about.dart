@@ -20,7 +20,7 @@ class AboutClassState extends State<AboutClass> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    renderedUrl = AppUrl.testAbout;
+    renderedUrl = AppUrl.about;
     _loading = false;
     animationController =
         AnimationController(duration: new Duration(seconds: 2), vsync: this);

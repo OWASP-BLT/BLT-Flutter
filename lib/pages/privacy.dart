@@ -21,7 +21,7 @@ class PrivacyClassState extends State<PrivacyClass>
 
   @override
   void initState() {
-    renderedUrl = AppUrl.testPrivacy;
+    renderedUrl = AppUrl.privacy;
     _loading = false;
     animationController =
         AnimationController(duration: new Duration(seconds: 2), vsync: this);

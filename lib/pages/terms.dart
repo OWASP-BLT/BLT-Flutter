@@ -20,7 +20,7 @@ class TermsClassState extends State<TermsClass> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    renderedUrl = AppUrl.testTerms;
+    renderedUrl = AppUrl.terms;
     _loading = false;
     animationController =
         AnimationController(duration: new Duration(seconds: 2), vsync: this);
