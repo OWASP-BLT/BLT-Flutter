@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 //import 'dart:io';
 
+import 'package:bugheist/pages/drawer/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import '../data/user.dart';
@@ -161,15 +162,12 @@ class AuthProvider with ChangeNotifier {
       if (result.status == LoginStatus.success) {
         final AccessToken? token = await FacebookAuth.instance.accessToken;
         final String? facebookToken = token?.token;
-        print(facebookToken);
         final graphResponse = await get(
           Uri.parse(
             'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${facebookToken}',
           ),
         );
         final profile = json.decode(graphResponse.body);
-        print(profile);
-        print(profile['email']);
         if (profile["email"] != null) {
           _loggedInStatus = Status.Authenticating;
           notifyListeners();
@@ -177,12 +175,9 @@ class AuthProvider with ChangeNotifier {
               wrapperFacebook(facebookToken);
           successfullMessage.then(
             (response) {
-              print(response);
               this.accessToken = response['key'];
-              print(this.accessToken);
             },
           );
-          print(this.accessToken);
           Response responseUser = await post(
             Uri.parse(AppUrl.user),
             headers: {
@@ -198,7 +193,7 @@ class AuthProvider with ChangeNotifier {
           notifyListeners();
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_buildContext) => Home(),
+              builder: (_buildContext) => CustomDrawer(),
             ),
           );
           ScaffoldMessenger.of(context).showSnackBar(

@@ -16,7 +16,11 @@ dependencies:
   receive_sharing_intent: ^1.4.5
   shared_preferences: ^2.0.5
   flutter_facebook_auth: ^3.5.0 
-
+  cupertino_icons: ^1.0.0
+  matrix4_transform: ^2.0.0-nullsafety.1
+  flutter_html: ^2.1.0
+  google_fonts:
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
