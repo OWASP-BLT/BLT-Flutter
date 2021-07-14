@@ -56,10 +56,10 @@
 	</array>
 	<key>FacebookAppID</key>
 	<!-- Replace "000000000000" with your Facebook App ID here. -->
-	<string>000000000000</string>
+	<string>325823045839598</string>
 	<key>FacebookDisplayName</key>
 	<!-- Replace "YOUR_APP_NAME" with your Facebook App name. -->
-	<string>YOUR_APP_NAME</string>
+	<string>FacebookAuth</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 	    <string>fbapi</string>

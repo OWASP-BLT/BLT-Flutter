@@ -23,6 +23,7 @@ enum Status {
 class AuthProvider with ChangeNotifier {
   Status _loggedInStatus = Status.NotLoggedIn;
   Status _registeredInStatus = Status.NotRegistered;
+  String accessToken = "";
 
   Status get loggedInStatus => _loggedInStatus;
   Status get registeredInStatus => _registeredInStatus;
@@ -139,13 +140,14 @@ class AuthProvider with ChangeNotifier {
         'key': json.decode(response.body)['key'],
         'message': 'Successfully Login',
       };
+      return result;
     } else {
       result = {
         'status': false,
         'message': json.decode(response.body)['non_field_errors'],
       };
+      return result;
     }
-    return result;
   }
 
   Future fbAuth(BuildContext context) async {
@@ -173,15 +175,14 @@ class AuthProvider with ChangeNotifier {
           notifyListeners();
           Future<Map<String, dynamic>> successfullMessage =
               wrapperFacebook(facebookToken);
-          var accessToken;
           successfullMessage.then(
             (response) {
               print(response);
-              accessToken = response['key'];
-              print(accessToken);
+              this.accessToken = response['key'];
+              print(this.accessToken);
             },
           );
-          print(accessToken);
+          print(this.accessToken);
           Response responseUser = await post(
             Uri.parse(AppUrl.user),
             headers: {

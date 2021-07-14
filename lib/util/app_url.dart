@@ -9,5 +9,7 @@ class AppUrl {
   static const String register = liveURL + "/auth/registration/";
   static const String forgotPassword = baseURL + "/forgot-password/";
   static const String user = liveURL + "/auth/user/";
-  static const String authFacebook = testBaseURL + "/auth/facebook/";
+  // Below url is for testing using ngrok as facebook requires the api to deploy on https url to work
+  static const String testFacebook = "https://b9940a443045.ngrok.io";
+  static const String authFacebook = testFacebook + "/auth/facebook/";
 }
