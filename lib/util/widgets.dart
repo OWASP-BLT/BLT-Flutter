@@ -30,3 +30,8 @@ InputDecoration buildInputDecoration(String hintText, IconData icon) {
     border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
   );
 }
+
+class AppContent {
+  static const String twitterContent =
+      r"""<a class="twitter-timeline" href="https://twitter.com/BugHeist?ref_src=twsrc%5Etfw">Tweets by BugHeist</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> """;
+}

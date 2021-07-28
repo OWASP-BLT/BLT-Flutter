@@ -160,7 +160,7 @@ class _HomeState extends State<Home> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            label: 'Issues',
+            label: 'Feed',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.leaderboard),
