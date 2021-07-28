@@ -22,12 +22,6 @@ PODS:
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
-  - video_player (0.0.1):
-    - Flutter
-  - wakelock (0.0.1):
-    - Flutter
-  - webview_flutter (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -35,9 +29,6 @@ DEPENDENCIES:
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - receive_sharing_intent (from `.symlinks/plugins/receive_sharing_intent/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
-  - video_player (from `.symlinks/plugins/video_player/ios`)
-  - wakelock (from `.symlinks/plugins/wakelock/ios`)
-  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 SPEC REPOS:
   trunk:
@@ -56,12 +47,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/receive_sharing_intent/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
-  video_player:
-    :path: ".symlinks/plugins/video_player/ios"
-  wakelock:
-    :path: ".symlinks/plugins/wakelock/ios"
-  webview_flutter:
-    :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
   FBSDKCoreKit: 38c9e29a3f1436362acacff6486d3a28628c288f
@@ -72,9 +57,6 @@ SPEC CHECKSUMS:
   image_picker: 50e7c7ff960e5f58faa4d1f4af84a771c671bc4a
   receive_sharing_intent: c0d87310754e74c0f9542947e7cbdf3a0335a3b1
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
-  video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
-  wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
-  webview_flutter: 3603125dfd3bcbc9d8d418c3f80aeecf331c068b
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 

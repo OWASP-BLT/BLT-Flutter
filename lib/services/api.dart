@@ -28,18 +28,4 @@ class ApiBackend {
       return leaders;
     });
   }
-
-  Future getHTMLData(String paginatedUrl) async {
-    return http
-        .get(
-      Uri.parse(paginatedUrl),
-    )
-        .then(
-      (http.Response response) {
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          return response.body;
-        }
-      },
-    );
-  }
 }
