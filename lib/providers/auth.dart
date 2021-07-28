@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 //import 'dart:io';
 
-import 'package:bugheist/pages/drawer/custom_drawer.dart';
+import 'package:bugheist/pages/login_signup.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import '../data/user.dart';
 import '../util/app_url.dart';
 import '../util/shared_preferences.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:bugheist/pages/home.dart';
 
 enum Status {
   NotLoggedIn,
@@ -193,7 +192,7 @@ class AuthProvider with ChangeNotifier {
           notifyListeners();
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_buildContext) => CustomDrawer(),
+              builder: (_buildContext) => LoginSignUp(),
             ),
           );
           ScaffoldMessenger.of(context).showSnackBar(
