@@ -7,7 +7,7 @@ import 'package:bugheist/providers/auth.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:bugheist/data/user.dart';
-import 'package:bugheist/pages/drawer/custom_drawer.dart';
+import 'package:bugheist/pages/home.dart';
 import 'package:bugheist/providers/user_provider.dart';
 import 'package:bugheist/config/login_signup_structure.dart';
 
@@ -313,8 +313,7 @@ class _LoginFreshUserAndPasswordState extends State<LoginFreshUserAndPassword> {
                                       .setUser(user);
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (_buildContext) =>
-                                          CustomDrawer(),
+                                      builder: (_buildContext) => Home(),
                                     ),
                                   );
                                 } else {

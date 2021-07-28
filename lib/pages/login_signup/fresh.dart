@@ -1,4 +1,4 @@
-import 'package:bugheist/pages/drawer/custom_drawer.dart';
+import 'package:bugheist/pages/home.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bugheist/data/login_model.dart';
@@ -160,7 +160,7 @@ class _LoginFreshState extends State<LoginFresh> {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_buildContext) => CustomDrawer(),
+                  builder: (_buildContext) => Home(),
                 ),
               );
             },
