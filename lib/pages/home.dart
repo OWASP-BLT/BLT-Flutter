@@ -4,6 +4,8 @@ import 'package:bugheist/pages/leaderboard.dart';
 import 'package:bugheist/pages/login_signup.dart';
 import 'package:bugheist/pages/report_bug.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
 
 class Home extends StatefulWidget {
   @override
@@ -12,6 +14,33 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
+  final TextEditingController _filter = new TextEditingController();
+  String _searchText = "";
+  List<dynamic> names = [];
+  List<dynamic> filteredNames = [];
+  Icon _searchIcon = new Icon(Icons.search);
+  bool _ifSearching = false;
+  Widget _appBarTitle = new Image.asset(
+    'assets/bugheist_logo.png',
+    fit: BoxFit.cover,
+    height: 30,
+  );
+  void _getNames() async {
+    final response =
+        await get(Uri.parse('https://www.bugheist.com/api/v1/issues/'));
+    final Map<String, dynamic> searchData = json.decode(response.body);
+    List<dynamic> tempList = [];
+    for (int i = 0; i < searchData['results'].length; i++) {
+      tempList.add(searchData['results'][i]);
+      //print(tempList[i]);
+    }
+    //print(tempList);
+    setState(() {
+      names = tempList;
+      filteredNames = names;
+    });
+  }
+
   final List<Widget> _children = [
     PaginatedClass(),
     ReportBug(),
@@ -24,16 +53,79 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void _searchPressed() {
+    setState(
+      () {
+        if (this._searchIcon.icon == Icons.search) {
+          this._searchIcon = new Icon(Icons.close);
+          this._appBarTitle = new TextField(
+            controller: _filter,
+            decoration: new InputDecoration(
+                prefixIcon: new Icon(Icons.search), hintText: 'Search...'),
+          );
+        } else {
+          this._searchIcon = new Icon(Icons.search);
+          this._appBarTitle = new Text('Search Example');
+          filteredNames = names;
+          _filter.clear();
+        }
+        this._ifSearching = true;
+      },
+    );
+  }
+
+  _HomeState() {
+    _filter.addListener(() {
+      if (_filter.text.isEmpty) {
+        setState(() {
+          _searchText = "";
+          filteredNames = names;
+        });
+      } else {
+        setState(() {
+          _searchText = _filter.text;
+        });
+      }
+    });
+  }
+  Widget _buildList() {
+    if (_searchText.isNotEmpty) {
+      List<dynamic> tempList = [];
+      for (int i = 0; i < (filteredNames.length); i++) {
+        if (filteredNames[i]['description']
+            .toLowerCase()
+            .contains(_searchText.toLowerCase())) {
+          tempList.add(filteredNames[i]);
+        }
+      }
+      filteredNames = tempList;
+    }
+    //print(names);
+    return Container(
+      child: ListView.builder(
+        itemCount: names == null ? 0 : filteredNames.length,
+        itemBuilder: (BuildContext context, int index) {
+          return new ListTile(
+            title: Text(filteredNames[index]['description']),
+            onTap: () => print(filteredNames[index]['description']),
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    this._getNames();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Image.asset(
-          'assets/bugheist_logo.png',
-          fit: BoxFit.cover,
-          height: 30,
-        ),
+        title: _appBarTitle,
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -41,7 +133,7 @@ class _HomeState extends State<Home> {
               color: Colors.black,
             ),
             onPressed: () {
-              // do something
+              _searchPressed();
             },
           ),
           IconButton(
@@ -146,7 +238,7 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-      body: _children[_selectedIndex],
+      body: _ifSearching == true ? _buildList() : _children[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
