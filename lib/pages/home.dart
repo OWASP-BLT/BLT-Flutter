@@ -3,6 +3,7 @@ import 'package:bugheist/pages/issues.dart';
 import 'package:bugheist/pages/leaderboard.dart';
 import 'package:bugheist/pages/login_signup.dart';
 import 'package:bugheist/pages/report_bug.dart';
+import 'package:bugheist/pages/user_details.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -51,6 +52,12 @@ class _HomeState extends State<Home> {
             ),
             onPressed: () {
               // do something
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserDetails(),
+                ),
+              );
             },
           )
         ],
@@ -140,6 +147,21 @@ class _HomeState extends State<Home> {
                 // ...
                 // Then close the drawer
                 Navigator.pop(context);
+              },
+            ),
+            Divider(),
+            ListTile(
+              title: Text('Pricing Page'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                // Navigator.pushReplacement(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => Pricing1dartWidget(),
+                //   ),
+                // );
               },
             ),
             Divider(),

@@ -25,6 +25,23 @@ flutter:
   assets:
     - assets/
     - assets/login_signup/
+    - assets/images/
+    - assets/fonts/
+  fonts: 
+    - 
+      family: "Open Sans"
+      fonts: 
+        - 
+          asset: "assets/fonts/OpenSans-regular.ttf"
+          style: "normal"
+          weight: 400
+    - 
+      family: "Roboto"
+      fonts: 
+        - 
+          asset: "assets/fonts/Roboto-regular.ttf"
+          style: "normal"
+          weight: 400
 
 flutter_icons:
   android: "ic_launcher"
