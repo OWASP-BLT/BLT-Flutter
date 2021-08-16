@@ -25,6 +25,25 @@ flutter:
   assets:
     - assets/
     - assets/login_signup/
+    - assets/images/
+    - assets/fonts/
+    - assets/company_scoreboard/
+  fonts: 
+    - 
+      family: "Open Sans"
+      fonts: 
+        - 
+          asset: "assets/fonts/OpenSans-regular.ttf"
+          style: "normal"
+          weight: 400
+    - 
+      family: "Paytone One"
+      fonts: 
+        - 
+          asset: "assets/fonts/PaytoneOne-regular.ttf"
+          style: "normal"
+          weight: 400
+
 
 flutter_icons:
   android: "ic_launcher"
