@@ -2,6 +2,7 @@ import 'package:bugheist/pages/feed.dart';
 import 'package:bugheist/pages/issues.dart';
 import 'package:bugheist/pages/leaderboard.dart';
 import 'package:bugheist/pages/login_signup.dart';
+import 'package:bugheist/pages/pricing_pages/pricing_page.dart';
 import 'package:bugheist/pages/report_bug.dart';
 import 'package:flutter/material.dart';
 
@@ -140,6 +141,21 @@ class _HomeState extends State<Home> {
                 // ...
                 // Then close the drawer
                 Navigator.pop(context);
+              },
+            ),
+            Divider(),
+            ListTile(
+              title: Text('Pricing'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PricingPageWidget(),
+                  ),
+                );
               },
             ),
             Divider(),
