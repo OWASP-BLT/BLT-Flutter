@@ -1,3 +1,4 @@
+import 'package:bugheist/pages/company_details.dart';
 import 'package:bugheist/pages/feed.dart';
 import 'package:bugheist/pages/issues.dart';
 import 'package:bugheist/pages/leaderboard.dart';
@@ -140,6 +141,21 @@ class _HomeState extends State<Home> {
                 // ...
                 // Then close the drawer
                 Navigator.pop(context);
+              },
+            ),
+            Divider(),
+            ListTile(
+              title: Text('Comapany Details'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CompanyDashboardWidget(),
+                  ),
+                );
               },
             ),
             Divider(),
