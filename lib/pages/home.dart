@@ -3,6 +3,8 @@ import 'package:bugheist/pages/issues.dart';
 import 'package:bugheist/pages/leaderboard.dart';
 import 'package:bugheist/pages/login_signup.dart';
 import 'package:bugheist/pages/report_bug.dart';
+import 'package:bugheist/pages/start_a_bug_hunt.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -12,6 +14,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
+  bool _bug_hunt = false;
   final List<Widget> _children = [
     PaginatedClass(),
     ReportBug(),
@@ -89,6 +92,21 @@ class _HomeState extends State<Home> {
               ),
             ),
             ListTile(
+              title: Text('Home'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Home(),
+                  ),
+                );
+              },
+            ),
+            Divider(),
+            ListTile(
               title: Text('Login'),
               onTap: () {
                 // Update trhe state of the app
@@ -143,34 +161,49 @@ class _HomeState extends State<Home> {
               },
             ),
             Divider(),
+            ListTile(
+              title: Text('Start Bug Hunt'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+                setState(() {
+                  _bug_hunt = true;
+                });
+              },
+            ),
+            Divider(),
           ],
         ),
       ),
-      body: _children[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bug_report),
-            label: 'Report',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Issues',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.leaderboard),
-            label: 'Leaderboard',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xFFDC4654),
-        onTap: _onItemTapped,
-      ),
+      body: _bug_hunt == true ? StartBugHunt() : _children[_selectedIndex],
+      bottomNavigationBar: _bug_hunt == false
+          ? BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.bug_report),
+                  label: 'Report',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.list),
+                  label: 'Issues',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.leaderboard),
+                  label: 'Leaderboard',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: Color(0xFFDC4654),
+              onTap: _onItemTapped,
+            )
+          : null,
     );
   }
 }
