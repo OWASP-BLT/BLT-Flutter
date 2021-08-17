@@ -11,13 +11,16 @@ class IssueCard extends StatelessWidget {
     return Column(
       children: [
         Card(
-          margin: EdgeInsets.all(10),
-          elevation: 0,
+          shadowColor: Colors.blueAccent,
+          margin: EdgeInsets.all(20),
+          elevation: 10,
           clipBehavior: Clip.antiAlias,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(15.0),
-                  bottomRight: Radius.circular(15.0))),
+                  topRight: Radius.circular(30.0),
+                  bottomRight: Radius.circular(30.0),
+                  bottomLeft: Radius.circular(30.0),
+                  topLeft: Radius.circular(30.0))),
           child: Container(
             height: 130,
             padding: const EdgeInsets.all(0),
@@ -43,22 +46,30 @@ class IssueCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10,
                     ),
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Flexible(
-                              child: Text(
-                                description,
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: true,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 12),
+                    child: Container(
+                      color: Color.fromRGBO(255, 250, 250, 1),
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            width: 20,
+                            height: 50,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Flexible(
+                                child: Text(
+                                  description,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: true,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 )
