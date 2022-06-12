@@ -114,15 +114,15 @@ class LoginSignUpState extends State<LoginSignUp> {
 
   LoginFresh buildLoginFresh() {
     List<LoginFreshTypeLoginModel> listLogin = [
-      LoginFreshTypeLoginModel(
-          callFunction: (BuildContext _buildContext) {},
-          logo: TypeLogo.facebook),
-      LoginFreshTypeLoginModel(
-        callFunction: (BuildContext _buildContext) {},
-        logo: TypeLogo.google,
-      ),
-      LoginFreshTypeLoginModel(
-          callFunction: (BuildContext _buildContext) {}, logo: TypeLogo.apple),
+//       LoginFreshTypeLoginModel(
+//           callFunction: (BuildContext _buildContext) {},
+//           logo: TypeLogo.facebook),
+//       LoginFreshTypeLoginModel(
+//         callFunction: (BuildContext _buildContext) {},
+//         logo: TypeLogo.google,
+//       ),
+//       LoginFreshTypeLoginModel(
+//           callFunction: (BuildContext _buildContext) {}, logo: TypeLogo.apple),
       LoginFreshTypeLoginModel(
         callFunction: (BuildContext _buildContext) {
           Navigator.of(_buildContext).push(MaterialPageRoute(
