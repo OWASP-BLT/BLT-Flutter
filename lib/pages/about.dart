@@ -1,11 +1,9 @@
-import 'package:bugheist/constants/legal_constants.dart';
+import 'package:bugheist/constants/about_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 
-class LegalPage extends StatelessWidget {
-  const LegalPage({Key? key}) : super(key: key);
+class AboutPage extends StatelessWidget {
+  const AboutPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +17,7 @@ class LegalPage extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        title: Text("Terms of Service"),
+        title: Text("About Us"),
         backgroundColor: Color(0xFFDC4654),
       ),
       body: SingleChildScrollView(
@@ -37,7 +35,7 @@ class LegalPage extends StatelessWidget {
             Container(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
               child: Text(
-                "By using the BugHeist app, you agree to the following terms and conditions and privacy policy. ",
+                aboutBugHeist,
                 style: GoogleFonts.aBeeZee(
                   textStyle: TextStyle(
                     color: Color(0xFF737373),
@@ -49,10 +47,49 @@ class LegalPage extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
               alignment: Alignment.centerLeft,
               child: Text(
-                "Terms and Conditions",
+                "What's in it for you?",
                 style: GoogleFonts.ubuntu(
                   textStyle: TextStyle(
                     color: Color(0xFFDC4654),
+                    fontSize: 20,
+                  ),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
+              child: Text(
+                forYou,
+                style: GoogleFonts.aBeeZee(
+                  textStyle: TextStyle(
+                    color: Color(0xFF737373),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "How it works?",
+                style: GoogleFonts.ubuntu(
+                  textStyle: TextStyle(
+                    color: Color(0xFFDC4654),
+                    fontSize: 17.5,
+                  ),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "For Testers",
+                style: GoogleFonts.ubuntu(
+                  textStyle: TextStyle(
+                    color: Color(0xFF737373),
                     fontSize: 15,
                   ),
                   fontWeight: FontWeight.bold,
@@ -60,53 +97,34 @@ class LegalPage extends StatelessWidget {
               ),
             ),
             Container(
-              height: 800,
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 24),
-              child: FutureBuilder(
-                  future: rootBundle.loadString("assets/TnC.md"),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<String> snapshot) {
-                    if (snapshot.hasData) {
-                      return Markdown(
-                        data: snapshot.data!,
-                        padding: EdgeInsets.all(0),
-                        styleSheet: MarkdownStyleSheet.fromTheme(
-                          ThemeData(
-                            textTheme: TextTheme(
-                              bodyText2: GoogleFonts.aBeeZee(
-                                textStyle: TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xFF737373),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }),
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
+              child: Text(
+                forTesters,
+                style: GoogleFonts.aBeeZee(
+                  textStyle: TextStyle(
+                    color: Color(0xFF737373),
+                  ),
+                ),
+              ),
             ),
             Container(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
               alignment: Alignment.centerLeft,
               child: Text(
-                "Privacy Policy",
+                "For Organizations",
                 style: GoogleFonts.ubuntu(
                   textStyle: TextStyle(
-                    color: Color(0xFFDC4654),
-                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF737373),
+                    fontSize: 15,
                   ),
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             Container(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 36),
               child: Text(
-                privacyPolicy,
+                forOrgs,
                 style: GoogleFonts.aBeeZee(
                   textStyle: TextStyle(
                     color: Color(0xFF737373),
