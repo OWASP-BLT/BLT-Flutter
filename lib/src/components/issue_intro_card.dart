@@ -39,7 +39,7 @@ class IssueCard extends StatelessWidget {
                 height: 0.214 * size.height,
                 child: Image.network(
                   issue.screenshotsLink![0],
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 ),
               ),
               Container(
