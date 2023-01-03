@@ -39,10 +39,12 @@ class IssueCard extends StatelessWidget {
                 height: 0.214 * size.height,
                 child: AspectRatio(
                   aspectRatio: size.width / 0.214 * size.height,
-                  child: Image.network(
-                    issue.screenshotsLink![0],
-                    fit: BoxFit.cover,
-                  ),
+                  child: (issue.screenshotsLink!.isEmpty)
+                      ? Image.asset("assets/default_profile.png")
+                      : Image.network(
+                          issue.screenshotsLink![0],
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
               Container(
