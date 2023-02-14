@@ -55,7 +55,7 @@ class _HomeState extends ConsumerState<Home> {
     return loginState == LoginType.guest ? "Logout (Guest)" : "Logout";
   }
 
-  void startBugHeist(BuildContext context) async {
+  void startBugHunt(BuildContext context) async {
     LoginType loginState = ref.watch(loginProvider);
 
     if (loginState == LoginType.guest) {
@@ -63,7 +63,7 @@ class _HomeState extends ConsumerState<Home> {
       Navigator.pushReplacementNamed(
         context,
         RouteManager.welcomePage,
-        arguments: "You need to login in order to start bug heist."
+        arguments: "You need to login in order to start bug hunt."
       );
       await logout();
     } else {
@@ -249,7 +249,7 @@ class _HomeState extends ConsumerState<Home> {
                           ),
                         ),
                         onPressed: () async {
-                          startBugHeist(context);
+                          startBugHunt(context);
                         },
                       );
                     }
