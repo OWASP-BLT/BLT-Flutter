@@ -9,6 +9,7 @@ import '../routes/routing.dart';
 
 /// The Landing page for unauthenticated users, or if a
 /// user wants to try the guest mode of the app.
+//ignore: must_be_immutable
 class WelcomePage extends StatefulWidget {
   String? snackBarMessage;
   WelcomePage({Key? key, this.snackBarMessage}) : super(key: key);
