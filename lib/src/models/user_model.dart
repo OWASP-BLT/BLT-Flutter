@@ -11,6 +11,7 @@ class User {
   List<int>? following;
   List<int>? upvotedIssueId;
   List<int>? savedIssueId;
+  int? totalScore;
 
   User({
     this.id,
@@ -24,6 +25,7 @@ class User {
     this.following,
     this.upvotedIssueId,
     this.savedIssueId,
+    this.totalScore,
   });
 
   factory User.fromJson(Map<String, dynamic> responseData, String accessToken) {
@@ -38,6 +40,7 @@ class User {
       following: responseData["follows"],
       upvotedIssueId: responseData["issue_upvoted"],
       savedIssueId: responseData["issue_saved"],
+      totalScore: responseData["total_score"] ?? 0,
     );
   }
 }
@@ -52,6 +55,6 @@ User guestUser = User(
       "https://secure.gravatar.com/avatar/3633ff387ed54aa6d8e9a1593192b8de.jpg?s=200&d=mm&r=g",
   description: "I like to stay anonymous!",
   following: [],
-  upvotedIssueId: [1, 2, 3, 4, 5, 6],
+  upvotedIssueId: [],
   savedIssueId: [],
 );
