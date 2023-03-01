@@ -126,7 +126,7 @@ class _HomeState extends ConsumerState<Home> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        forgetUser();
+        forgetUser(); 
         logout();
         return true;
       },
