@@ -215,7 +215,7 @@ class _CompanyDetailPageState extends State<CompanyDetailPage> {
                         children: [
                           TextButton.icon(
                             onPressed: () {
-                              sendEmail(context, widget.company);
+                              redirectEmail(context, widget.company);
                             },
                             icon: Icon(
                               Icons.email,
