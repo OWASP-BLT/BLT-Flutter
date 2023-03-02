@@ -50,7 +50,7 @@ class _HuntFormState extends State<HuntForm> {
     });
   }
 
-    Future<File> _coverToImage(Uint8List imageBytes) async{
+    Future<File> _convertToImage(Uint8List imageBytes) async{
     String tempPath = (await getTemporaryDirectory()).path;
     File file = File('$tempPath/profile.png');
     await file.writeAsBytes(
@@ -63,7 +63,7 @@ class _HuntFormState extends State<HuntForm> {
     final imageBytes = await Pasteboard.image;
     late File? image ;
     if(imageBytes != null){
-     image = await _coverToImage(imageBytes!);
+     image = await _convertToImage(imageBytes);
     }
     setState(() {
       _image = image! ;

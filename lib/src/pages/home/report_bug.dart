@@ -170,7 +170,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
     final imageBytes = await Pasteboard.image;
     late File? image ;
     if(imageBytes != null){
-     image = await _coverToImage(imageBytes!);
+     image = await _coverToImage(imageBytes);
     }
     setState(() {
       _image = image ;
