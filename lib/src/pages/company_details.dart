@@ -19,7 +19,7 @@ class CompanyDetailPage extends StatefulWidget {
 class _CompanyDetailPageState extends State<CompanyDetailPage> {
   late Color companyColor;
 
-  Future<void> sendEmail(BuildContext context,Company company) async{
+  Future<void> redirectEmail(BuildContext context,Company company) async{
     SnackBar emailSnack = SnackBar(
       content: Text("This company has not provided their email ."),
       duration: Duration(seconds: 2),
