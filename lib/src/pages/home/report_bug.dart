@@ -1,11 +1,16 @@
 // import 'dart:convert';
+// import 'dart:u';
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pasteboard/pasteboard.dart';
+import 'package:path_provider/path_provider.dart';
+
 
 import '../../pages/home/start_hunt.dart';
 import '../../global/variables.dart';
@@ -18,15 +23,14 @@ import '../../util/enums/login_type.dart';
 /// posting bugs, companies and individuals
 /// should be able to start bughunts.
 class ReportBug extends ConsumerStatefulWidget {
-  const ReportBug({Key? key}) : super(key: key);
-
+  const ReportBug({Key? key, required this.selectedWidgetName}) : super(key: key);
+  final String? selectedWidgetName;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ReportBugState();
 }
 
 class _ReportBugState extends ConsumerState<ReportBug> {
-  String selectedWidgetName = "Report Issue";
-
+  String? selectedWidgetName ;
   Widget bodyWidget = SizedBox();
 
   List<DropdownMenuItem<String>> _dropDownItem() {
@@ -51,7 +55,6 @@ class _ReportBugState extends ConsumerState<ReportBug> {
 
   buildPageSwitcher(Size size) {
     LoginType loginType = ref.watch(loginProvider.notifier).loginType;
-
     return (loginType == LoginType.guest)
         ? Container(
             padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
@@ -68,7 +71,7 @@ class _ReportBugState extends ConsumerState<ReportBug> {
             value: selectedWidgetName,
             onChanged: (val) {
               selectedWidgetName = val.toString();
-              switch (val) {
+              switch (selectedWidgetName) {
                 case "Report Issue":
                   setState(() {
                     bodyWidget = ReportForm(
@@ -97,10 +100,11 @@ class _ReportBugState extends ConsumerState<ReportBug> {
   @override
   void initState() {
     super.initState();
-    bodyWidget = ReportForm(
+    selectedWidgetName = widget.selectedWidgetName;
+    bodyWidget = (widget.selectedWidgetName == "Start Bug Hunt") ? StartHuntPage():ReportForm(
       size: window.physicalSize / window.devicePixelRatio,
       parentContext: context,
-    );
+    ) ;
   }
 
   @override
@@ -150,6 +154,31 @@ class _ReportFormState extends ConsumerState<ReportForm> {
     } else {
       print('No image selected.');
     }
+  }
+
+  Future<File> _coverToImage(Uint8List imageBytes) async{
+    String tempPath = (await getTemporaryDirectory()).path;
+    File file = File('$tempPath/profile.png');
+    await file.writeAsBytes(
+      imageBytes.buffer.asUint8List(imageBytes.offsetInBytes, imageBytes.lengthInBytes));
+    return file;
+  }
+
+  Future<void> _pasteImageFromClipBoard() async{
+    try {
+    final imageBytes = await Pasteboard.image;
+    late File? image ;
+    if(imageBytes != null){
+     image = await _coverToImage(imageBytes);
+    }
+    setState(() {
+      _image = image ;
+    });
+    }
+    catch(e){
+      print('No Image Found On Clipboard');
+    }
+
   }
 
   @override
@@ -282,30 +311,30 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                   ),
                 ),
               ),
-              // SizedBox(
-              //   width: 10,
-              // ),
-              // SizedBox(
-              //   child: TextButton(
-              //     child: Text(
-              //       "Choose From Clipboard",
-              //       style: GoogleFonts.ubuntu(
-              //         textStyle: TextStyle(
-              //           color: Colors.white,
-              //           fontSize: 15,
-              //         ),
-              //       ),
-              //     ),
-              //     onPressed: () {
-              //       _pickImageFromGallery();
-              //     },
-              //     style: ButtonStyle(
-              //       backgroundColor: MaterialStateProperty.all(
-              //         Color(0xFFDC4654),
-              //       ),
-              //     ),
-              //   ),
-              // ),
+              SizedBox(
+                width: 10,
+              ),
+              SizedBox(
+                child: TextButton(
+                  child: Text(
+                    "Choose From Clipboard",
+                    style: GoogleFonts.ubuntu(
+                      textStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    _pasteImageFromClipBoard();
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      Color(0xFFDC4654),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
           Container(

@@ -9,6 +9,7 @@ import 'package:bugheist/src/routes/routing.dart';
 import 'package:bugheist/src/util/enums/login_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../components/appbar.dart';
 
@@ -27,14 +28,15 @@ class Home extends ConsumerStatefulWidget {
 
 class _HomeState extends ConsumerState<Home> {
   late int _selectedIndex;
+  String _reportBugState = "Report Issue";
   late PageController _pageController;
 
-  final List<ConsumerStatefulWidget> _children = [
-    // Feed(),
-    IssuesPage(),
-    ReportBug(),
-    LeaderBoard()
-  ];
+  // final List<ConsumerStatefulWidget> _children = [
+  //   // Feed(),
+  //   IssuesPage(),
+  //   ReportBug(selectedWidgetName: ""),
+  //   LeaderBoard()
+  // ];
   void _onItemTapped(int index) {
     setState(
       () {
@@ -52,6 +54,24 @@ class _HomeState extends ConsumerState<Home> {
     LoginType loginState = ref.watch(loginProvider);
 
     return loginState == LoginType.guest ? "Logout (Guest)" : "Logout";
+  }
+
+  void startBugHunt(BuildContext context) async {
+    LoginType loginState = ref.watch(loginProvider);
+
+    if (loginState == LoginType.guest) {
+      await forgetUser();
+      Navigator.pushReplacementNamed(
+        context,
+        RouteManager.welcomePage,
+        arguments: "You need to login in order to start bug hunt."
+      );
+      await logout();
+    } else {
+        _reportBugState="Start Bug Hunt";
+      _onItemTapped(1);
+      Navigator.pop(context);
+    }
   }
 
   Widget buildReferralOption() {
@@ -108,6 +128,7 @@ class _HomeState extends ConsumerState<Home> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        forgetUser(); 
         logout();
         return true;
       },
@@ -204,6 +225,40 @@ class _HomeState extends ConsumerState<Home> {
                 },
               ),
               buildReferralOption(),
+              ListTile(
+                title: Container(
+                  width: double.infinity,
+                  height: 50,
+                  child: Builder(
+                    builder: (context) {
+                      return TextButton(
+                        child: Text(
+                          "Start Bug Hunt",
+                          style: GoogleFonts.ubuntu(
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                          backgroundColor: MaterialStateProperty.all(
+                            Color(0xFFDC4654),
+                          ),
+                        ),
+                        onPressed: () async {
+                          startBugHunt(context);
+                        },
+                      );
+                    }
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -212,7 +267,12 @@ class _HomeState extends ConsumerState<Home> {
             onPageChanged: (index) {
               setState(() => _selectedIndex = index);
             },
-            children: _children),
+            children: [
+              // Feed(),
+              IssuesPage(),
+              ReportBug(selectedWidgetName: _reportBugState,),
+              LeaderBoard(),
+            ]),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: const <BottomNavigationBarItem>[
