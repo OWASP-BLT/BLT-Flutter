@@ -35,7 +35,7 @@ We value a good user experience empowered by good design practices. You can view
 </div>
 <br/>
 
-_Figma link: https://www.figma.com/file/NYD5WZzJywnO338lchnece/BLT?node-id=7%3A634&t=gjDWzr6qy82jpUQa-1_
+_Figma link: https://www.figma.com/file/NYD5WZzJywnO338lchnece/Design?node-id=7%3A634&t=gjDWzr6qy82jpUQa-1_
 
 ### Dev, Set, GO!
 If you have set up the dev environment, what are you waiting for? You can do so much! Need a good starting point? Go through the list of [issues](https://github.com/OWASP/BLT-Flutter/issues) on the repository! Have a great new idea that you implemented and want it in the app? [Make a PR](https://github.com/OWASP/BLT-Flutter/pulls), and we'll be sure to consider it! One last thing, while suggesting a screen, please follow the design schemes in the above-shared design file, and make sure that &emsp; `flutter analyze` works before submitting that hard-worked pull request of yours!
