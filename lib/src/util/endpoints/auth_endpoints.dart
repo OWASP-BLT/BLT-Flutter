@@ -2,9 +2,9 @@
 class AuthEndPoints {
   AuthEndPoints._();
 
-  static const String baseUrl = "https://www.bugheist.com/";
+  static const String baseUrl = "https://www.blt.owasp.org/";
 
-  static const String baseUrl2 = "https://www.bugheist.com/auth/";
+  static const String baseUrl2 = "https://www.blt.owasp.org/auth/";
 
   static const String emailpasswordLogin = baseUrl + "authenticate/";
 
