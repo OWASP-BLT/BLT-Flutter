@@ -4,11 +4,11 @@ class GeneralEndPoints {
 
   static const String domain = "blt.owasp.org/";
 
-  static const String baseUrl = "https://www.blt.owasp.org/";
+  static const String baseUrl = "https://www.owasp.org/BLT/";
 
-  static const String baseUrl2 = "https://www.blt.owasp.org/api/v1/";
+  static const String apiBaseUrl = baseUrl + "api/v1/";
 
-  static const String stats = baseUrl2 + "stats/";
+  static const String stats = apiBaseUrl + "stats/";
 
-  static const String duplicateURL = baseUrl2 + "urlcheck/";
+  static const String duplicateURL = apiBaseUrl + "urlcheck/";
 }
