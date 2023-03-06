@@ -29,7 +29,7 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
-    <false/>
+	<false/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -50,22 +50,20 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-    		<key>CFBundleURLSchemes</key>
-    		<array>
-    			<string>ShareMedia</string>
-    		</array>
-    	</dict>
-    	<dict/>
-    </array>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>To upload photos, please allow permission to access your photo library.</string>
-    <key>NSCameraUsageDescription</key>
-    <string>To upload photos, please allow permission to access your photo library.</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>To upload photos, please allow permission to access your photo library.</string>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>ShareMedia</string>
+			</array>
+		</dict>
+		<dict/>
+	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To upload photos, please allow permission to access your photo library.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>To upload photos, please allow permission to access your photo library.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>To upload photos, please allow permission to access your photo library.</string>
+
+
 </dict>
 </plist>
