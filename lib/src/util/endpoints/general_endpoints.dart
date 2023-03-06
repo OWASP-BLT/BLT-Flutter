@@ -4,7 +4,7 @@ class GeneralEndPoints {
 
   static const String domain = "www.owasp.org/BLT/";
 
-  static const String baseUrl = "https://www.owasp.org/BLT/";
+  static const String baseUrl = "https://www.bugheist.com/";
 
   static const String apiBaseUrl = baseUrl + "api/v1/";
 
