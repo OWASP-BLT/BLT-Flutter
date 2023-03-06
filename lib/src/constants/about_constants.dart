@@ -22,5 +22,5 @@ final String forTesters = '''1. Create a User Account to log into BLT.
 final String forOrgs = '''
 We want everyone to love your website and apps.\n
 You want to keep your customers happy by giving them a consistent bug-free user experience. 
-BLT offers monthly Bug Hunts through 4 different subscription plans to help you achieve this.
+BLT offers the ability to start a bug hunt and have testers from around the world test your site.
 ''';
