@@ -41,7 +41,7 @@ class IssueApiClient {
         );
       }
     } catch (e) {
-      print(e); #show error to user
+      print(e); //show error to user
     }
     return issueData;
   }
