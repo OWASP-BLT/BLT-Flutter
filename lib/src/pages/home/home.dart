@@ -14,7 +14,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../components/appbar.dart';
 import '../../pages/welcome.dart';
 
-
 /// Navigator and drawer provider for the main pages:
 /// Issues, Report Bug, Leaderboards and Feed.
 class Home extends ConsumerStatefulWidget {
@@ -33,12 +32,6 @@ class _HomeState extends ConsumerState<Home> {
   String _reportBugState = "Report Issue";
   late PageController _pageController;
 
-  // final List<ConsumerStatefulWidget> _children = [
-  //   // Feed(),
-  //   IssuesPage(),
-  //   ReportBug(selectedWidgetName: ""),
-  //   LeaderBoard()
-  // ];
   void _onItemTapped(int index) {
     setState(
       () {
@@ -63,11 +56,17 @@ class _HomeState extends ConsumerState<Home> {
 
     if (loginState == LoginType.guest) {
       await forgetUser();
-              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-              builder: (context) => WelcomePage(snackBarMessage:"Only Logged in users can start a Bug Hunt")), (Route route) => false);
+      await Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => WelcomePage(
+            snackBarMessage: "Only Logged in users can start a Bug Hunt",
+          ),
+        ),
+        (Route route) => false,
+      );
       await logout();
     } else {
-        _reportBugState="Start Bug Hunt";
+      _reportBugState = "Start Bug Hunt";
       _onItemTapped(1);
       Navigator.pop(context);
     }
@@ -127,7 +126,7 @@ class _HomeState extends ConsumerState<Home> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        forgetUser(); 
+        forgetUser();
         logout();
         return true;
       },
@@ -168,8 +167,9 @@ class _HomeState extends ConsumerState<Home> {
                   // ...
                   // Then close the drawer
                   await forgetUser();
-              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-              builder: (context) => WelcomePage()), (Route route) => false);
+                  await Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => WelcomePage()),
+                      (Route route) => false);
                   await logout();
                 },
               ),
@@ -226,34 +226,33 @@ class _HomeState extends ConsumerState<Home> {
                 title: Container(
                   width: double.infinity,
                   height: 50,
-                  child: Builder(
-                    builder: (context) {
-                      return TextButton(
-                        child: Text(
-                          "Start Bug Hunt",
-                          style: GoogleFonts.ubuntu(
-                            textStyle: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
+                  child: Builder(builder: (context) {
+                    return TextButton(
+                      child: Text(
+                        "Start Bug Hunt",
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
                           ),
                         ),
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                          backgroundColor: MaterialStateProperty.all(
-                            Color(0xFFDC4654),
+                      ),
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
-                        onPressed: () async {
-                          startBugHunt(context);
-                        },
-                      );
-                    }
-                  ),
+                        backgroundColor: MaterialStateProperty.all(
+                          Color(0xFFDC4654),
+                        ),
+                      ),
+                      onPressed: () async {
+                        startBugHunt(context);
+                      },
+                    );
+                  }),
                 ),
               ),
             ],
@@ -267,7 +266,9 @@ class _HomeState extends ConsumerState<Home> {
             children: [
               // Feed(),
               IssuesPage(),
-              ReportBug(selectedWidgetName: _reportBugState,),
+              ReportBug(
+                selectedWidgetName: _reportBugState,
+              ),
               LeaderBoard(),
             ]),
         bottomNavigationBar: BottomNavigationBar(
