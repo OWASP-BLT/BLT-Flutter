@@ -106,11 +106,11 @@ class _HomeState extends ConsumerState<Home> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      TextButton(onPressed: (){
-                          forgetUser(); 
+                      TextButton(onPressed: () async {
+                          await forgetUser();
+                          await Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                              builder: (context) => WelcomePage()), (Route route) => false);
                           logout();
-                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                          builder: (context) => WelcomePage()), (Route route) => false);
                       },
                       style: ButtonStyle(
                         alignment: Alignment.center,
