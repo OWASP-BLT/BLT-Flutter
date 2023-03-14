@@ -1,7 +1,6 @@
 # OWASP BLT
 
-
-  
+`Report Bugs and Secure the Web`
 
 [![Build Status](https://github.com/OWASP/BLT/actions/workflows/auto-merge.yml/badge.svg)](https://github.com/OWASP/BLT/actions)
 
@@ -17,6 +16,9 @@
 
 - Read more about [BLT](https://owasp.org/www-project-bug-logging-tool/) 
 
+# About BLT
+
+OWASP BLT (Bug Logging Tool) is a powerful tool designed to allow everyone who uses the internet to help improve it. With BLT, users can submit any type of issue they encounter, whether it’s a simple design flaw like a button being the wrong color, or a serious security vulnerability.
 
 # Development
 
@@ -38,7 +40,6 @@ Please follow the development server setup procedure [here](https://github.com/O
 
 - Postman API Documentations: [Postman Docs](https://documenter.getpostman.com/view/19782933/VUqpscyV).
 
-  
 
 ### Resources
 
@@ -49,6 +50,11 @@ Please follow the development server setup procedure [here](https://github.com/O
 - Github activity can be seen in Slack **#blt-github**.
 
 - Figma designs for web and flutter app are available [here](https://www.figma.com/file/s0xuxeU6O2guoWEfA9OElZ/Design)
+- ### New to flutter?
+    A few resources to get you started:
+    - [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
+    - [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+
 
   
 
