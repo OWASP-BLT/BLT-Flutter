@@ -44,7 +44,6 @@ class LeaderboardApiClient {
           previousQuery: decodedResponse["previous"],
           leaderList: leaderList,
         );
-        print(leaderList);
       return leaderData;
     });
   }
