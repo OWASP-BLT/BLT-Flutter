@@ -139,7 +139,6 @@ class _MonthlyLeaderBoardPageState extends ConsumerState<MonthlyLeaderBoardPage>
                               topRight: Radius.circular(10),
                             )
                           ),
-                          useSafeArea: true,
                           builder: (BuildContext context){
                             return  
                               Container(
