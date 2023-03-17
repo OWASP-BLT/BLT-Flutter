@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../constants/socialurls_constants.dart';
 
+
 class SocialPage extends ConsumerStatefulWidget{
   const SocialPage({Key? key}) : super(key: key);
 
@@ -24,6 +25,7 @@ Future<void> redirectSocial(String? socialUrl) async{
   }
   catch(e){}
 }
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
