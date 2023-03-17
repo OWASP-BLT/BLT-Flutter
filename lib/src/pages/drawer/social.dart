@@ -90,13 +90,25 @@ Future<void> redirectSocial(String? socialUrl) async{
                   useShouldOverrideUrlLoading: true,
                   ),
                   ),
-                initialUrlRequest: URLRequest(url: Uri.parse("https://twitter.com/OWASP")),
+                initialData: InAppWebViewInitialData(
+                  data : """
+                  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <a class="twitter-timeline" href="https://twitter.com/owasp?ref_src=twsrc%5Etfw" style="text-decoration:none;color:0xFF737373;">Loading Tweets ...</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    </div>
+</body>
+</html>
+"""
+                ),
                 shouldOverrideUrlLoading: (controller, navigationAction) async{
-                  List<String> allowedUrls = ["https://twitter.com/OWASP","https://twitter.com/owasp/with_replies",];
-                  final url = navigationAction.request.url.toString();
-                  if((url == allowedUrls[0]) || (url == allowedUrls[1])){
-                    return NavigationActionPolicy.ALLOW;
-                  }
                   return NavigationActionPolicy.CANCEL;
                 },
               )),
