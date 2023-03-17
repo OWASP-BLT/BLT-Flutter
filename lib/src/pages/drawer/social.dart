@@ -33,7 +33,7 @@ late PullToRefreshController refreshController;
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(child: InAppWebView(
-                initialUrlRequest: URLRequest(url: Uri.parse("https://twitter.com/Bugheist")),
+                initialUrlRequest: URLRequest(url: Uri.parse("https://twitter.com/OWASP")),
                 shouldOverrideUrlLoading: (controller, navigationAction) async{
                   return NavigationActionPolicy.CANCEL;
                 },
