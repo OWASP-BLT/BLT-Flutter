@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:bugheist/src/util/endpoints/user_endpoints.dart';
+import 'package:blt/src/util/endpoints/user_endpoints.dart';
 import 'package:http/http.dart' as http;
-import 'package:bugheist/src/models/user_model.dart';
+import 'package:blt/src/models/user_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserApiClient {
@@ -44,7 +44,7 @@ class UserApiClient {
       user.winning = decodedResponse["winnings"];
       user.description = decodedResponse["description"];
       user.following = decodedResponse["follows"].cast<int>();
-      user.upvotedIssueId = decodedResponse["issue_upvoted"].cast<int>();
+      user.likedIssueId = decodedResponse["issue_upvoted"].cast<int>();
       user.savedIssueId = decodedResponse["issue_saved"].cast<int>();
       user.totalScore = decodedResponse["total_score"];
     } catch (e) {

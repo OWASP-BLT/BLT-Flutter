@@ -1,123 +1,40 @@
-// import 'dart:convert';
-// import 'dart:u';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:blt/src/util/api/general_api.dart';
+import 'package:blt/src/util/endpoints/general_endpoints.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pasteboard/pasteboard.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-
-import '../../pages/home/start_hunt.dart';
 import '../../global/variables.dart';
-import '../../providers/login_provider.dart';
 import '../../util/api/issues_api.dart';
 import '../../models/issue_model.dart';
-import '../../util/enums/login_type.dart';
 
 /// Report Bug and Start Bug Hunt Page, namesake, used for
 /// posting bugs, companies and individuals
 /// should be able to start bughunts.
 class ReportBug extends ConsumerStatefulWidget {
-  const ReportBug({Key? key, required this.selectedWidgetName}) : super(key: key);
-  final String? selectedWidgetName;
+  const ReportBug({Key? key}) : super(key: key);
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ReportBugState();
 }
 
 class _ReportBugState extends ConsumerState<ReportBug> {
-  String? selectedWidgetName ;
-  Widget bodyWidget = SizedBox();
-
-  List<DropdownMenuItem<String>> _dropDownItem() {
-    List<String> ddl = [
-      "Report Issue",
-      "Start Bug Hunt",
-    ];
-    return ddl.map(
-      (value) {
-        return DropdownMenuItem(
-          value: value,
-          child: Text(
-            value,
-            style: GoogleFonts.ubuntu(
-              textStyle: TextStyle(color: Color(0xFF737373), fontSize: 30),
-            ),
-          ),
-        );
-      },
-    ).toList();
-  }
-
-  buildPageSwitcher(Size size) {
-    LoginType loginType = ref.watch(loginProvider.notifier).loginType;
-    return (loginType == LoginType.guest)
-        ? Container(
-            padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
-            alignment: Alignment.centerLeft,
-            child: Text(
-              "Report Issue",
-              style: GoogleFonts.ubuntu(
-                textStyle: TextStyle(color: Color(0xFF737373), fontSize: 30),
-              ),
-            ),
-          )
-        : DropdownButton(
-            items: _dropDownItem(),
-            value: selectedWidgetName,
-            onChanged: (val) {
-              selectedWidgetName = val.toString();
-              switch (selectedWidgetName) {
-                case "Report Issue":
-                  setState(() {
-                    bodyWidget = ReportForm(
-                      size: size,
-                      parentContext: context,
-                    );
-                  });
-                  break;
-                case "Start Bug Hunt":
-                  setState(() {
-                    bodyWidget = StartHuntPage();
-                  });
-                  break;
-                default:
-                  setState(() {
-                    bodyWidget = ReportForm(
-                      size: size,
-                      parentContext: context,
-                    );
-                  });
-              }
-            },
-          );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    selectedWidgetName = widget.selectedWidgetName;
-    bodyWidget = (widget.selectedWidgetName == "Start Bug Hunt") ? StartHuntPage():ReportForm(
-      size: window.physicalSize / window.devicePixelRatio,
-      parentContext: context,
-    ) ;
-  }
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          buildPageSwitcher(size),
-          bodyWidget,
-        ],
+      child: ReportForm(
+        size: window.physicalSize / window.devicePixelRatio,
+        parentContext: context,
       ),
     );
   }
@@ -140,9 +57,12 @@ class ReportForm extends ConsumerStatefulWidget {
 class _ReportFormState extends ConsumerState<ReportForm> {
   final _descriptionController = TextEditingController();
   final _titleController = TextEditingController();
+  final _categoryController = TextEditingController();
+  int _selectedIssueCategoriesIndex = 0;
   final _formKey = GlobalKey<FormState>();
   File? _image;
   final picker = ImagePicker();
+  List<String> _issueCategories = ["General","Number error","Functional","Performance","Security","Typo","Design","Server down"];
 
   Future<void> _pickImageFromGallery() async {
     final imageFile = await picker.pickImage(source: ImageSource.gallery);
@@ -156,30 +76,216 @@ class _ReportFormState extends ConsumerState<ReportForm> {
     }
   }
 
-  Future<File> _coverToImage(Uint8List imageBytes) async{
+  Future<File> _coverToImage(Uint8List imageBytes) async {
     String tempPath = (await getTemporaryDirectory()).path;
     File file = File('$tempPath/profile.png');
-    await file.writeAsBytes(
-      imageBytes.buffer.asUint8List(imageBytes.offsetInBytes, imageBytes.lengthInBytes));
+    await file.writeAsBytes(imageBytes.buffer
+        .asUint8List(imageBytes.offsetInBytes, imageBytes.lengthInBytes));
     return file;
   }
 
-  Future<void> _pasteImageFromClipBoard() async{
+  Future<void> _pasteImageFromClipBoard() async {
     try {
-    final imageBytes = await Pasteboard.image;
-    late File? image ;
-    if(imageBytes != null){
-     image = await _coverToImage(imageBytes);
-    }
-    setState(() {
-      _image = image ;
-    });
-    }
-    catch(e){
+      final imageBytes = await Pasteboard.image;
+      late File? image;
+      if (imageBytes != null) {
+        image = await _coverToImage(imageBytes);
+      }
+      setState(() {
+        _image = image;
+      });
+    } catch (e) {
       print('No Image Found On Clipboard');
     }
-
   }
+
+  void showIssueCategories(BuildContext context) {
+    showModalBottomSheet(context: context, 
+    builder: (context){
+      return Container(
+        padding: EdgeInsets.fromLTRB(0,20,0,0),
+        child: ListView.builder(
+          itemCount: 8,
+          itemBuilder: (BuildContext context,index){
+            return ListTile(
+              onTap: (){
+                setState(() {
+                  _selectedIssueCategoriesIndex = index;
+                });
+                _categoryController.text = _issueCategories[index];
+                Navigator.of(context).pop();
+              },
+              title: Text(
+                _issueCategories[index],
+                style: GoogleFonts.ubuntu(
+                      textStyle: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+              ),
+            );
+          }),
+      );
+    },
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical( 
+            top: Radius.circular(25.0),
+          ),
+    )
+    );
+  }
+
+  void showDuplicateDialog(BuildContext context) {
+    if (_titleController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("URL field is required"),
+        ),
+      );
+      return;
+    }
+    showGeneralDialog(
+      context: context,
+      barrierLabel: "Barrier",
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: Duration(milliseconds: 400),
+      pageBuilder: (_, __, ___) {
+        return FutureBuilder<Map<String, String>?>(
+          future: GeneralApiClient.checkForDuplicate(_titleController.text),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              Map<String, String>? m = snapshot.data;
+              if (m == null) {
+                return AlertDialog(
+                  title: Text(
+                    'Sweet!',
+                    style: GoogleFonts.ubuntu(
+                      textStyle: TextStyle(
+                        color: Color(0xFFDC4654),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  content: Text(
+                    "We haven't got any bug from this URL till now.",
+                    style: GoogleFonts.aBeeZee(
+                      textStyle: TextStyle(
+                        color: Color(0xFF737373),
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                return AlertDialog(
+                  title: Text(
+                    'A bug with same URL already exists!',
+                    style: GoogleFonts.ubuntu(
+                      textStyle: TextStyle(
+                        color: Color(0xFFDC4654),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          style: GoogleFonts.aBeeZee(
+                            textStyle: TextStyle(
+                              color: Color(0xFF737373),
+                            ),
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: "Description: ",
+                              style: GoogleFonts.aBeeZee(
+                                textStyle: TextStyle(
+                                  color: Color(0xFF737373),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            TextSpan(text: m["description"])
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 16.0,
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          style: GoogleFonts.aBeeZee(
+                            textStyle: TextStyle(
+                              color: Color(0xFF737373),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text:
+                                  "Ensure you are not submitting a duplicate bug by checking here: ",
+                            ),
+                            TextSpan(
+                              text:
+                                  "${GeneralEndPoints.domain}issue/${m["id"]}",
+                              style: GoogleFonts.aBeeZee(
+                                textStyle: TextStyle(
+                                  color: Color(0xFF4A93F8),
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () async {
+                                  Uri site = Uri.parse(
+                                      "${GeneralEndPoints.baseUrl}issue/${m["id"]}");
+                                  try {
+                                    await launchUrl(site,
+                                        mode: LaunchMode.externalApplication);
+                                  } catch (e) {}
+                                },
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        );
+      },
+      transitionBuilder: (_, anim, __, child) {
+        Tween<Offset> tween;
+        if (anim.status == AnimationStatus.reverse) {
+          tween = Tween(begin: Offset(-1, 0), end: Offset.zero);
+        } else {
+          tween = Tween(begin: Offset(1, 0), end: Offset.zero);
+        }
+
+        return SlideTransition(
+          position: tween.animate(anim),
+          child: FadeTransition(
+            opacity: anim,
+            child: child,
+          ),
+        );
+      },
+    );
+  }
+
+@override
+void initState(){
+  _categoryController.text = _issueCategories[_selectedIssueCategoriesIndex];
+}
 
   @override
   Widget build(BuildContext context) {
@@ -239,8 +345,81 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                     ),
                   ),
                 ),
+                Builder(builder: (context) {
+                  return TextButton(
+                    onPressed: () {
+                      showDuplicateDialog(context);
+                    },
+                    child: Text(
+                      "Check for duplicates",
+                      style: GoogleFonts.ubuntu(
+                        textStyle: TextStyle(
+                          color: Color(0xFFDC4654),
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
               ],
             ),
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                TextButton.icon(
+                  label: Text(
+                  "Category",
+                  style: GoogleFonts.ubuntu(
+                    textStyle: TextStyle(
+                      color: Color(0xFFDC4654),
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                icon: Icon(
+                  Icons.arrow_drop_down,
+                ),
+                onPressed: (){
+                  showIssueCategories(context);
+                },
+                ),
+                
+                  ],),
+                SizedBox(
+                  height: 12,
+                ),
+                SizedBox(
+                  height: 40,
+                  child: TextFormField(
+                    controller: _categoryController,
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8.0),
+                        ),
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8.0),
+                        ),
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 12,
           ),
           Container(
             padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
@@ -413,6 +592,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                       ocr: _image!.path,
                       userAgent:
                           "Dart ${Platform.version.substring(0, 7) + Platform.operatingSystem}",
+                      label: _selectedIssueCategoriesIndex,
                     );
                     await IssueApiClient.postIssue(issue, widget.parentContext);
                   } else {

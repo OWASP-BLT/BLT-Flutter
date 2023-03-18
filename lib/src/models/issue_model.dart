@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 
 import './user_model.dart';
 
-/// Model class for an issue posted on BugHeist.
+/// Model class for an issue posted on BLT.
 class Issue {
   final int? id;
   final User? user;
@@ -112,6 +112,7 @@ class Issue {
       'score': 0,
       'status': isOpen ? "open" : "closed",
       'description': description,
+      'label': label,
       // "hunt": null,
       // "domain": null,
       // "closed_by": null,

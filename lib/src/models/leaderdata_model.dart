@@ -1,25 +1,25 @@
-import 'package:blt/src/models/issue_model.dart';
+import 'package:blt/src/models/leader_model.dart';
 
 /// Model class for the paginated data sent on requesting issues.
-class IssueData {
+class LeaderData {
   final int count;
   String? nextQuery;
   String? previousQuery;
-  List<Issue>? issueList;
+  List<Leaders>? leaderList;
 
-  IssueData({
+  LeaderData({
     required this.count,
     this.nextQuery,
     this.previousQuery,
-    this.issueList,
+    this.leaderList,
   });
 
-  factory IssueData.fromJson(Map<String, dynamic> responseData) {
-    return IssueData(
+  factory LeaderData.fromJson(Map<String, dynamic> responseData) {
+    return LeaderData(
       count: responseData["count"],
       nextQuery: responseData["next"],
       previousQuery: responseData["previous"],
-      issueList: responseData["results"],
+      leaderList: responseData["results"],
     );
   }
 }

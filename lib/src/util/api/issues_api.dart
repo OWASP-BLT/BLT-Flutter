@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:bugheist/src/global/variables.dart';
-import 'package:bugheist/src/models/user_model.dart';
-import 'package:bugheist/src/routes/routing.dart';
-import 'package:bugheist/src/util/endpoints/issue_endpoints.dart';
+import 'package:blt/src/global/variables.dart';
+import 'package:blt/src/models/user_model.dart';
+import 'package:blt/src/routes/routing.dart';
+import 'package:blt/src/util/endpoints/issue_endpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../models/issuedata_model.dart';
@@ -41,7 +41,7 @@ class IssueApiClient {
         );
       }
     } catch (e) {
-      print(e);
+      print(e); //show error to user
     }
     return issueData;
   }
@@ -115,15 +115,11 @@ class IssueApiClient {
       request.fields["url"] = issueMap["url"];
       request.fields["status"] = issueMap["status"];
       request.fields["description"] = issueMap["description"];
-
       var streamedresponse = await request.send();
-
-      print(streamedresponse);
+      print(request.fields);
       response = await http.Response.fromStream(streamedresponse);
 
-      print(response.body);
-
-      if (streamedresponse.statusCode == 201) {
+      if (streamedresponse.statusCode == 201 || streamedresponse.statusCode == 200) {
         var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes));
         issue = Issue.fromJson(decodedResponse);
 

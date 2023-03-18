@@ -1,4 +1,5 @@
-import 'package:bugheist/src/util/api/user_api.dart';
+import 'package:blt/src/pages/welcome.dart';
+import 'package:blt/src/util/api/user_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -38,10 +39,21 @@ class AuthNotifier extends StateNotifier<AsyncValue<AuthState>> {
     read(loginProvider.notifier).setGuestLogin();
   }
 
+  Future<void> checkFirstLogin(BuildContext context) async{
+    String? firstLogin = await storage.read(key: "firstLogin");
+    if(firstLogin == null) {
+      await storage.write(key: "firstLogin", value: "false");
+    }else if(firstLogin == "false"){
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+              builder: (context) => WelcomePage()), (Route route) => false);
+    }
+  }
+
   Future<bool> loadUserIfRemembered(BuildContext context) async {
     String? remember = await storage.read(key: "remember");
 
     if (remember == null) {
+      checkFirstLogin(context);
       return false;
     }
 
@@ -145,13 +157,11 @@ class AuthNotifier extends StateNotifier<AsyncValue<AuthState>> {
   Future<void> logout() async {
     LoginType loginType = read(loginProvider.notifier).loginType;
     if (loginType == LoginType.guest) {
-      await Future.delayed(const Duration(seconds: 1));
       state = AsyncValue.data(AuthState.loggedOut);
       read(loginProvider.notifier).logout();
       currentUser = null;
     } else if (loginType == LoginType.user) {
       if (await AuthApiClient.logout()) {
-        await Future.delayed(const Duration(seconds: 1));
         state = AsyncValue.data(AuthState.loggedOut);
         read(loginProvider.notifier).logout();
         currentUser = null;

@@ -1,19 +1,18 @@
-import 'package:bugheist/src/global/variables.dart';
-// import 'package:bugheist/src/pages/home/feed.dart';
-import 'package:bugheist/src/pages/home/issues.dart';
-import 'package:bugheist/src/pages/home/leaderboard.dart';
-import 'package:bugheist/src/pages/home/report_bug.dart';
-import 'package:bugheist/src/providers/authstate_provider.dart';
-import 'package:bugheist/src/providers/login_provider.dart';
-import 'package:bugheist/src/routes/routing.dart';
-import 'package:bugheist/src/util/enums/login_type.dart';
+import 'package:blt/src/global/variables.dart';
+import 'package:blt/src/pages/home/issues.dart';
+import 'package:blt/src/pages/home/leaderboard.dart';
+import 'package:blt/src/pages/home/report_bug.dart';
+import 'package:blt/src/pages/home/start_hunt.dart';
+import 'package:blt/src/providers/authstate_provider.dart';
+import 'package:blt/src/providers/login_provider.dart';
+import 'package:blt/src/routes/routing.dart';
+import 'package:blt/src/util/enums/login_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../components/appbar.dart';
 import '../../pages/welcome.dart';
-
 
 /// Navigator and drawer provider for the main pages:
 /// Issues, Report Bug, Leaderboards and Feed.
@@ -30,15 +29,8 @@ class Home extends ConsumerStatefulWidget {
 
 class _HomeState extends ConsumerState<Home> {
   late int _selectedIndex;
-  String _reportBugState = "Report Issue";
   late PageController _pageController;
 
-  // final List<ConsumerStatefulWidget> _children = [
-  //   // Feed(),
-  //   IssuesPage(),
-  //   ReportBug(selectedWidgetName: ""),
-  //   LeaderBoard()
-  // ];
   void _onItemTapped(int index) {
     setState(
       () {
@@ -63,12 +55,17 @@ class _HomeState extends ConsumerState<Home> {
 
     if (loginState == LoginType.guest) {
       await forgetUser();
-              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-              builder: (context) => WelcomePage(snackBarMessage:"Only Logged in users can start a Bug Hunt")), (Route route) => false);
+      await Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => WelcomePage(
+            snackBarMessage: "Only Logged in users can start a Bug Hunt",
+          ),
+        ),
+        (Route route) => false,
+      );
       await logout();
     } else {
-        _reportBugState="Start Bug Hunt";
-      _onItemTapped(1);
+      _onItemTapped(2);
       Navigator.pop(context);
     }
   }
@@ -91,6 +88,66 @@ class _HomeState extends ConsumerState<Home> {
             },
           )
         : SizedBox();
+  }
+
+  Widget buildLogOUtDialog(){
+    return AlertDialog(
+                title: Text(
+                  'You will be logged out of the app !',
+                   style: GoogleFonts.ubuntu(
+                      textStyle: TextStyle(
+                        color: Color(0xFFDC4654),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                ),
+                content: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(onPressed: () async {
+                          await forgetUser();
+                          await Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                              builder: (context) => WelcomePage()), (Route route) => false);
+                          logout();
+                      },
+                      style: ButtonStyle(
+                        alignment: Alignment.center,
+                        backgroundColor: MaterialStateProperty.all(Color(0xFFDC4654)),
+                      ),
+                      child : Text(
+                        "Logout",
+                          style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                          color: Color.fromRGBO(255, 255, 255, 1),
+                          fontSize: 15,
+                          ),
+                        ),
+                      )
+                      ),
+                      TextButton(
+                        onPressed: (){
+                        Navigator.pop(context);
+                      },
+                      style: ButtonStyle(
+                        alignment: Alignment.center,
+                        backgroundColor: MaterialStateProperty.all(Color(0xFF737373)),
+                      ),
+                      child : Text(
+                        "Cancel",
+                          style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                            color: Color.fromRGBO(255, 255, 255, 1),
+                            fontSize: 15,
+                          ),
+                        ),
+                      )
+                      ),
+                    ],
+                  ),
+                ),
+            );
   }
 
   NetworkImage? buildAvatar() {
@@ -127,9 +184,17 @@ class _HomeState extends ConsumerState<Home> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        forgetUser(); 
-        logout();
-        return true;
+        showGeneralDialog(
+          context: context,
+          barrierLabel: "Barrier",
+          barrierDismissible: true,
+          barrierColor: Colors.black.withOpacity(0.5),
+          transitionDuration: Duration(milliseconds: 400),
+          pageBuilder: (_, __, ___){
+            return buildLogOUtDialog();
+          },
+         );
+        return false;
       },
       child: Scaffold(
         appBar: buildAppBar(context: context),
@@ -168,8 +233,9 @@ class _HomeState extends ConsumerState<Home> {
                   // ...
                   // Then close the drawer
                   await forgetUser();
-              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-              builder: (context) => WelcomePage()), (Route route) => false);
+                  await Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => WelcomePage()),
+                      (Route route) => false);
                   await logout();
                 },
               ),
@@ -179,7 +245,10 @@ class _HomeState extends ConsumerState<Home> {
                   // Update the state of the app
                   // ...
                   // Then close the drawer
-                  Navigator.pop(context);
+                  Navigator.pushNamed(
+                    context,
+                    RouteManager.socialPage
+                  );
                 },
               ),
               ListTile(
@@ -226,34 +295,33 @@ class _HomeState extends ConsumerState<Home> {
                 title: Container(
                   width: double.infinity,
                   height: 50,
-                  child: Builder(
-                    builder: (context) {
-                      return TextButton(
-                        child: Text(
-                          "Start Bug Hunt",
-                          style: GoogleFonts.ubuntu(
-                            textStyle: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
+                  child: Builder(builder: (context) {
+                    return TextButton(
+                      child: Text(
+                        "Start Bug Hunt",
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
                           ),
                         ),
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                          backgroundColor: MaterialStateProperty.all(
-                            Color(0xFFDC4654),
+                      ),
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
-                        onPressed: () async {
-                          startBugHunt(context);
-                        },
-                      );
-                    }
-                  ),
+                        backgroundColor: MaterialStateProperty.all(
+                          Color(0xFFDC4654),
+                        ),
+                      ),
+                      onPressed: () async {
+                        startBugHunt(context);
+                      },
+                    );
+                  }),
                 ),
               ),
             ],
@@ -267,7 +335,8 @@ class _HomeState extends ConsumerState<Home> {
             children: [
               // Feed(),
               IssuesPage(),
-              ReportBug(selectedWidgetName: _reportBugState,),
+              ReportBug(),
+              StartHuntPage(),
               LeaderBoard(),
             ]),
         bottomNavigationBar: BottomNavigationBar(
@@ -284,6 +353,10 @@ class _HomeState extends ConsumerState<Home> {
             BottomNavigationBarItem(
               icon: Icon(Icons.bug_report),
               label: 'Report',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.location_searching),
+              label: 'Bug Hunt',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.leaderboard),
