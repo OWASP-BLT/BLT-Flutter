@@ -16,6 +16,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../global/variables.dart';
 import '../../util/api/issues_api.dart';
 import '../../models/issue_model.dart';
+import '../../util/services/get_apps.dart';
 
 /// Report Bug and Start Bug Hunt Page, namesake, used for
 /// posting bugs, companies and individuals
@@ -27,7 +28,6 @@ class ReportBug extends ConsumerStatefulWidget {
 }
 
 class _ReportBugState extends ConsumerState<ReportBug> {
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -56,13 +56,22 @@ class ReportForm extends ConsumerStatefulWidget {
 
 class _ReportFormState extends ConsumerState<ReportForm> {
   final _descriptionController = TextEditingController();
-  final _titleController = TextEditingController();
+  var _titleController = TextEditingController();
   final _categoryController = TextEditingController();
   int _selectedIssueCategoriesIndex = 0;
   final _formKey = GlobalKey<FormState>();
   File? _image;
   final picker = ImagePicker();
-  List<String> _issueCategories = ["General","Number error","Functional","Performance","Security","Typo","Design","Server down"];
+  List<String> _issueCategories = [
+    "General",
+    "Number error",
+    "Functional",
+    "Performance",
+    "Security",
+    "Typo",
+    "Design",
+    "Server down"
+  ];
 
   Future<void> _pickImageFromGallery() async {
     final imageFile = await picker.pickImage(source: ImageSource.gallery);
@@ -100,40 +109,40 @@ class _ReportFormState extends ConsumerState<ReportForm> {
   }
 
   void showIssueCategories(BuildContext context) {
-    showModalBottomSheet(context: context, 
-    builder: (context){
-      return Container(
-        padding: EdgeInsets.fromLTRB(0,20,0,0),
-        child: ListView.builder(
-          itemCount: 8,
-          itemBuilder: (BuildContext context,index){
-            return ListTile(
-              onTap: (){
-                setState(() {
-                  _selectedIssueCategoriesIndex = index;
-                });
-                _categoryController.text = _issueCategories[index];
-                Navigator.of(context).pop();
-              },
-              title: Text(
-                _issueCategories[index],
-                style: GoogleFonts.ubuntu(
-                      textStyle: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+            child: ListView.builder(
+                itemCount: 8,
+                itemBuilder: (BuildContext context, index) {
+                  return ListTile(
+                    onTap: () {
+                      setState(() {
+                        _selectedIssueCategoriesIndex = index;
+                      });
+                      _categoryController.text = _issueCategories[index];
+                      Navigator.of(context).pop();
+                    },
+                    title: Text(
+                      _issueCategories[index],
+                      style: GoogleFonts.ubuntu(
+                        textStyle: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-              ),
-            );
-          }),
-      );
-    },
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical( 
+                  );
+                }),
+          );
+        },
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
             top: Radius.circular(25.0),
           ),
-    )
-    );
+        ));
   }
 
   void showDuplicateDialog(BuildContext context) {
@@ -282,14 +291,15 @@ class _ReportFormState extends ConsumerState<ReportForm> {
     );
   }
 
-@override
-void initState(){
-  _categoryController.text = _issueCategories[_selectedIssueCategoriesIndex];
-}
+  @override
+  void initState() {
+    _categoryController.text = _issueCategories[_selectedIssueCategoriesIndex];
+  }
 
   @override
   Widget build(BuildContext context) {
     final Size size = widget.size;
+
     return Form(
       key: _formKey,
       child: Column(
@@ -314,35 +324,72 @@ void initState(){
                 ),
                 SizedBox(
                   height: 40,
-                  child: TextFormField(
-                    controller: _titleController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "This field is required";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Enter the URL or app name of the issue ...",
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8.0),
+                  child: Stack(
+                    children: [
+                      TextFormField(
+                        controller: _titleController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "This field is required";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText:
+                              "Enter the URL or app name of the issue ...",
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
                         ),
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8.0),
+                        cursorColor: Color(0xFFDC4654),
+                        style: GoogleFonts.aBeeZee(
+                          textStyle: TextStyle(
+                            fontSize: 12,
+                          ),
                         ),
-                        borderSide: BorderSide(color: Colors.grey),
                       ),
-                    ),
-                    cursorColor: Color(0xFFDC4654),
-                    style: GoogleFonts.aBeeZee(
-                      textStyle: TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
+                      Platform.isAndroid
+                          ? Positioned(
+                              right: 0,
+                              top: 0,
+                              bottom: 0,
+                              child: IconButton(
+                                icon: Icon(Icons.arrow_drop_down),
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide.none,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20),
+                                      ),
+                                    ),
+                                    builder: (context) {
+                                      return Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.8,
+                                        child: AppListWidget(
+                                            titleController: _titleController),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            )
+                          : SizedBox(),
+                    ],
                   ),
                 ),
                 Builder(builder: (context) {
@@ -372,25 +419,25 @@ void initState(){
               children: [
                 Row(
                   children: [
-                TextButton.icon(
-                  label: Text(
-                  "Category",
-                  style: GoogleFonts.ubuntu(
-                    textStyle: TextStyle(
-                      color: Color(0xFFDC4654),
-                      fontSize: 15,
+                    TextButton.icon(
+                      label: Text(
+                        "Category",
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                            color: Color(0xFFDC4654),
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                      icon: Icon(
+                        Icons.arrow_drop_down,
+                      ),
+                      onPressed: () {
+                        showIssueCategories(context);
+                      },
                     ),
-                  ),
+                  ],
                 ),
-                icon: Icon(
-                  Icons.arrow_drop_down,
-                ),
-                onPressed: (){
-                  showIssueCategories(context);
-                },
-                ),
-                
-                  ],),
                 SizedBox(
                   height: 12,
                 ),
@@ -585,6 +632,7 @@ void initState(){
                   if (_image != null) {
                     Issue issue = Issue(
                       user: currentUser!,
+                      // get the controller text from get_apps.dart
                       url: _titleController.text,
                       description: _descriptionController.text,
                       isVerified: false,

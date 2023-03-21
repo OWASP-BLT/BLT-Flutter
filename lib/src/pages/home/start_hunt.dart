@@ -9,6 +9,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pasteboard/pasteboard.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../util/services/get_apps.dart';
+
 /// Start Bug Hunt Page
 /// companies and individuals
 /// should be able to start bughunts.
@@ -57,29 +59,27 @@ class _HuntFormState extends State<HuntForm> {
     });
   }
 
-  Future<File> _convertToImage(Uint8List imageBytes) async{
+  Future<File> _convertToImage(Uint8List imageBytes) async {
     String tempPath = (await getTemporaryDirectory()).path;
     File file = File('$tempPath/profile.png');
-    await file.writeAsBytes(
-        imageBytes.buffer.asUint8List(imageBytes.offsetInBytes, imageBytes.lengthInBytes));
+    await file.writeAsBytes(imageBytes.buffer
+        .asUint8List(imageBytes.offsetInBytes, imageBytes.lengthInBytes));
     return file;
   }
 
-  Future<void> _pasteImageFromClipBoard() async{
+  Future<void> _pasteImageFromClipBoard() async {
     try {
       final imageBytes = await Pasteboard.image;
-      late File? image ;
-      if(imageBytes != null){
+      late File? image;
+      if (imageBytes != null) {
         image = await _convertToImage(imageBytes);
       }
       setState(() {
-        _image = image! ;
+        _image = image!;
       });
-    }
-    catch(e){
+    } catch (e) {
       print('No Image Found On Clipboard');
     }
-
   }
 
   @override
@@ -112,34 +112,69 @@ class _HuntFormState extends State<HuntForm> {
           ),
           SizedBox(
             height: 40,
-            child: TextFormField(
-              controller: _websiteController,
-              decoration: InputDecoration(
-                hintText: "Enter the URL or app name for the hunt ...",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8.0),
+            child: Stack(
+              children: [
+                TextFormField(
+                  controller: _websiteController,
+                  decoration: InputDecoration(
+                    hintText: "Enter the URL or app name for the hunt ...",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
+                      ),
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
+                      ),
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
                   ),
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8.0),
+                  cursorColor: Color(0xFFDC4654),
+                  style: GoogleFonts.aBeeZee(
+                    textStyle: TextStyle(
+                      fontSize: 12,
+                    ),
                   ),
-                  borderSide: BorderSide(color: Colors.grey),
                 ),
-              ),
-              cursorColor: Color(0xFFDC4654),
-              style: GoogleFonts.aBeeZee(
-                textStyle: TextStyle(
-                  fontSize: 12,
-                ),
-              ),
+                Platform.isAndroid
+                    ? Positioned(
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        child: IconButton(
+                          icon: Icon(Icons.arrow_drop_down),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide.none,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                              ),
+                              builder: (context) {
+                                return Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.7,
+                                  child: AppListWidget(
+                                      titleController: _websiteController),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      )
+                    : SizedBox(),
+              ],
             ),
           ),
           Container(
             margin: const EdgeInsets.symmetric(vertical: 8.0),
-            child:Row(
+            child: Row(
               children: [
                 SizedBox(
                   child: TextButton(
@@ -195,28 +230,28 @@ class _HuntFormState extends State<HuntForm> {
             margin: const EdgeInsets.only(bottom: 12.0),
             child: _image.path == ""
                 ? Center(
-              child: Text(
-                'No image selected.',
-                style: GoogleFonts.aBeeZee(
-                  textStyle: TextStyle(
-                    color: Color(0xFF737373),
-                  ),
-                ),
-              ),
-            )
+                    child: Text(
+                      'No image selected.',
+                      style: GoogleFonts.aBeeZee(
+                        textStyle: TextStyle(
+                          color: Color(0xFF737373),
+                        ),
+                      ),
+                    ),
+                  )
                 : Image.file(
-              _image,
-              fit: BoxFit.cover,
-            ),
+                    _image,
+                    fit: BoxFit.cover,
+                  ),
             decoration: BoxDecoration(
               border: _image.path == ""
                   ? Border.all(
-                color: Color(0xFFDC4654),
-                width: 0.5,
-              )
+                      color: Color(0xFFDC4654),
+                      width: 0.5,
+                    )
                   : null,
               borderRadius:
-              _image.path == "" ? BorderRadius.circular(15) : null,
+                  _image.path == "" ? BorderRadius.circular(15) : null,
             ),
           ),
           Container(

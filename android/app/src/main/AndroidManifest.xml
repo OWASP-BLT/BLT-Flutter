@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.apps.blt">
    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+   <uses-permission android:name="android.permission.INTERNET" />
+   <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+
    <application
         android:label="blt"
         android:icon="@mipmap/ic_launcher">

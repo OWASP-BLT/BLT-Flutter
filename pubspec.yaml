@@ -25,6 +25,9 @@ dependencies:
   url_launcher: ^6.1.10
   flutter_inappwebview: ^5.7.2+3
   font_awesome_flutter: ^10.4.0
+  # TODO: Remove this dependency
+  package_info_plus: ^3.0.3
+  device_apps: ^2.2.0
   #flutter_lints: ^1.0.4
 
 dev_dependencies:
