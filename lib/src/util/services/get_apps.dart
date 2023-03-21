@@ -1,12 +1,11 @@
-import 'dart:io';
-
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class AppListWidget extends StatefulWidget {
   TextEditingController titleController;
-  AppListWidget({Key? key, required this.titleController}) : super(key: key);
+  String? packageID;
+  AppListWidget({Key? key, required this.titleController, required this.packageID}) : super(key: key);
   @override
   _AppListWidgetState createState() => _AppListWidgetState();
 }
@@ -59,6 +58,7 @@ class _AppListWidgetState extends State<AppListWidget> {
                 onTap: () {
                   setState(() {
                     widget.titleController.text = app.appName;
+                    widget.packageID = app.packageName;
                     Navigator.pop(context);
                   });
                 },

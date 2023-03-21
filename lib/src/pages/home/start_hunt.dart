@@ -45,8 +45,9 @@ class _HuntFormState extends State<HuntForm> {
   late TextEditingController _websiteController;
   File _image = File("");
   final picker = ImagePicker();
-  int prizeMoney = 100;
+  String? packageID;
 
+  int prizeMoney = 100;
   Future _pickImageFromGallery() async {
     final imageFile = await picker.pickImage(source: ImageSource.gallery);
 
@@ -161,7 +162,9 @@ class _HuntFormState extends State<HuntForm> {
                                   height:
                                       MediaQuery.of(context).size.height * 0.7,
                                   child: AppListWidget(
-                                      titleController: _websiteController),
+                                    titleController: _websiteController,
+                                    packageID: packageID,
+                                  ),
                                 );
                               },
                             );

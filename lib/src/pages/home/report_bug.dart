@@ -56,12 +56,15 @@ class ReportForm extends ConsumerStatefulWidget {
 
 class _ReportFormState extends ConsumerState<ReportForm> {
   final _descriptionController = TextEditingController();
-  var _titleController = TextEditingController();
+  final _titleController = TextEditingController();
   final _categoryController = TextEditingController();
   int _selectedIssueCategoriesIndex = 0;
   final _formKey = GlobalKey<FormState>();
   File? _image;
   final picker = ImagePicker();
+
+  String? packageID;
+
   List<String> _issueCategories = [
     "General",
     "Number error",
@@ -381,7 +384,9 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                                             MediaQuery.of(context).size.height *
                                                 0.8,
                                         child: AppListWidget(
-                                            titleController: _titleController),
+                                          titleController: _titleController,
+                                          packageID: packageID,
+                                        ),
                                       );
                                     },
                                   );
@@ -641,6 +646,8 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                       userAgent:
                           "Dart ${Platform.version.substring(0, 7) + Platform.operatingSystem}",
                       label: _selectedIssueCategoriesIndex,
+                      packageID: packageID,
+                      platform: Platform.isAndroid? "Android" : "IOS"
                     );
                     await IssueApiClient.postIssue(issue, widget.parentContext);
                   } else {

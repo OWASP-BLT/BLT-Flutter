@@ -43,30 +43,34 @@ class Issue {
         : null;
   }
 
-  Issue({
-    this.id,
-    this.user,
-    required this.url,
-    required this.description,
-    this.label,
-    required this.isVerified,
-    this.score,
-    required this.isOpen,
-    this.userAgent,
-    required this.ocr,
-    this.likes,
-    this.flags,
-    this.liked,
-    this.flagged,
-    this.screenshotsLink,
-    this.closedDate,
-    this.githubUrl,
-    this.created,
-    this.lastModified,
-    this.hunt,
-    this.domain,
-    this.closedBy,
-  });
+  String? platform;
+  String? packageID;
+
+  Issue(
+      {this.id,
+      this.user,
+      required this.url,
+      required this.description,
+      this.label,
+      required this.isVerified,
+      this.score,
+      required this.isOpen,
+      this.userAgent,
+      required this.ocr,
+      this.likes,
+      this.flags,
+      this.liked,
+      this.flagged,
+      this.screenshotsLink,
+      this.closedDate,
+      this.githubUrl,
+      this.created,
+      this.lastModified,
+      this.hunt,
+      this.domain,
+      this.closedBy,
+      this.platform,
+      this.packageID});
 
   factory Issue.fromJson(Map<String, dynamic> responseData) {
     return Issue(
@@ -119,4 +123,3 @@ class Issue {
     };
   }
 }
-
