@@ -63,6 +63,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
   File? _image;
   final picker = ImagePicker();
 
+  bool buttonPressed = false;
   String? packageID;
 
   List<String> _issueCategories = [
@@ -329,71 +330,75 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                   height: 40,
                   child: Stack(
                     children: [
-                      TextFormField(
-                        controller: _titleController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "This field is required";
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          hintText:
-                              "Enter the URL or app name of the issue ...",
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8.0),
-                            ),
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8.0),
-                            ),
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                        ),
-                        cursorColor: Color(0xFFDC4654),
-                        style: GoogleFonts.aBeeZee(
-                          textStyle: TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                      Platform.isAndroid
-                          ? Positioned(
-                              right: 0,
-                              top: 0,
-                              bottom: 0,
-                              child: IconButton(
-                                icon: Icon(Icons.arrow_drop_down),
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide.none,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20),
-                                      ),
-                                    ),
-                                    builder: (context) {
-                                      return Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.8,
-                                        child: AppListWidget(
-                                          titleController: _titleController,
-                                          packageID: packageID,
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            )
-                          : SizedBox(),
+                      AppListWidget(
+                          titleController: _titleController,
+                          packageID: packageID,
+                          buttonPressed: buttonPressed),
+                      // TextFormField(
+                      //   controller: _titleController,
+                      //   validator: (value) {
+                      //     if (value == null || value.isEmpty) {
+                      //       return "This field is required";
+                      //     }
+                      //     return null;
+                      //   },
+                      //   decoration: InputDecoration(
+                      //     hintText:
+                      //         "Enter the URL or app name of the issue ...",
+                      //     enabledBorder: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.all(
+                      //         Radius.circular(8.0),
+                      //       ),
+                      //       borderSide: BorderSide(color: Colors.grey),
+                      //     ),
+                      //     focusedBorder: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.all(
+                      //         Radius.circular(8.0),
+                      //       ),
+                      //       borderSide: BorderSide(color: Colors.grey),
+                      //     ),
+                      //   ),
+                      //   cursorColor: Color(0xFFDC4654),
+                      //   style: GoogleFonts.aBeeZee(
+                      //     textStyle: TextStyle(
+                      //       fontSize: 12,
+                      //     ),
+                      //   ),
+                      // ),
+                      // Platform.isAndroid
+                      //     ? Positioned(
+                      //         right: 0,
+                      //         top: 0,
+                      //         bottom: 0,
+                      //         child: IconButton(
+                      //           icon: Icon(Icons.arrow_drop_down),
+                      //           onPressed: () {
+                      //             showModalBottomSheet(
+                      //               context: context,
+                      //               isScrollControlled: true,
+                      //               shape: RoundedRectangleBorder(
+                      //                 side: BorderSide.none,
+                      //                 borderRadius: BorderRadius.only(
+                      //                   topLeft: Radius.circular(20),
+                      //                   topRight: Radius.circular(20),
+                      //                 ),
+                      //               ),
+                      //               builder: (context) {
+                      //                 return Container(
+                      //                   height:
+                      //                       MediaQuery.of(context).size.height *
+                      //                           0.8,
+                      //                   child: AppListWidget(
+                      //                     titleController: _titleController,
+                      //                     packageID: packageID,
+                      //                   ),
+                      //                 );
+                      //               },
+                      //             );
+                      //           },
+                      //         ),
+                      //       )
+                      //     : SizedBox(),
                     ],
                   ),
                 ),
@@ -633,22 +638,24 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                 ),
               ),
               onPressed: () async {
+                setState(() {
+                  buttonPressed = true;
+                });
                 if (_formKey.currentState!.validate()) {
                   if (_image != null) {
                     Issue issue = Issue(
-                      user: currentUser!,
-                      // get the controller text from get_apps.dart
-                      url: _titleController.text,
-                      description: _descriptionController.text,
-                      isVerified: false,
-                      isOpen: true,
-                      ocr: _image!.path,
-                      userAgent:
-                          "Dart ${Platform.version.substring(0, 7) + Platform.operatingSystem}",
-                      label: _selectedIssueCategoriesIndex,
-                      packageID: packageID,
-                      platform: Platform.isAndroid? "Android" : "IOS"
-                    );
+                        user: currentUser!,
+                        // get the controller text from get_apps.dart
+                        url: _titleController.text,
+                        description: _descriptionController.text,
+                        isVerified: false,
+                        isOpen: true,
+                        ocr: _image!.path,
+                        userAgent:
+                            "Dart ${Platform.version.substring(0, 7) + Platform.operatingSystem}",
+                        label: _selectedIssueCategoriesIndex,
+                        packageID: packageID,
+                        platform: Platform.isAndroid ? "Android" : "IOS");
                     await IssueApiClient.postIssue(issue, widget.parentContext);
                   } else {
                     SnackBar cantSnak = SnackBar(

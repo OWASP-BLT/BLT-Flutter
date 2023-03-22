@@ -33,9 +33,11 @@ class _StartHuntPageState extends ConsumerState<StartHuntPage> {
   }
 }
 
+// ignore: must_be_immutable
 class HuntForm extends StatefulWidget {
   final Size size;
-  const HuntForm({Key? key, required this.size}) : super(key: key);
+  bool buttonPressed = false;
+  HuntForm({Key? key, required this.size}) : super(key: key);
 
   @override
   State<HuntForm> createState() => _HuntFormState();
@@ -115,63 +117,10 @@ class _HuntFormState extends State<HuntForm> {
             height: 40,
             child: Stack(
               children: [
-                TextFormField(
-                  controller: _websiteController,
-                  decoration: InputDecoration(
-                    hintText: "Enter the URL or app name for the hunt ...",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
-                      ),
-                      borderSide: BorderSide(color: Colors.grey),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
-                      ),
-                      borderSide: BorderSide(color: Colors.grey),
-                    ),
-                  ),
-                  cursorColor: Color(0xFFDC4654),
-                  style: GoogleFonts.aBeeZee(
-                    textStyle: TextStyle(
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-                Platform.isAndroid
-                    ? Positioned(
-                        right: 0,
-                        top: 0,
-                        bottom: 0,
-                        child: IconButton(
-                          icon: Icon(Icons.arrow_drop_down),
-                          onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide.none,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              builder: (context) {
-                                return Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.7,
-                                  child: AppListWidget(
-                                    titleController: _websiteController,
-                                    packageID: packageID,
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      )
-                    : SizedBox(),
+                AppListWidget(
+                    titleController: _websiteController,
+                    packageID: packageID,
+                    buttonPressed: widget.buttonPressed)
               ],
             ),
           ),
@@ -334,7 +283,11 @@ class _HuntFormState extends State<HuntForm> {
                   Color(0xFFDC4654),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  widget.buttonPressed = true;
+                });
+              },
             ),
           ),
           SizedBox(
