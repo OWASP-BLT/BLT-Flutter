@@ -1,10 +1,13 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/issue_model.dart';
 import '../../components/issuechip.dart';
 import '../../components/issueflag.dart';
 import '../../components/issuelike.dart';
+import '../../util/endpoints/general_endpoints.dart';
 
 /// Popup page when an issue is clicked to be viewed.
 class IssueDetailPage extends StatelessWidget {
@@ -19,6 +22,40 @@ class IssueDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+
+    List<TextSpan> textSpans = [];
+    List<String> parts = issue.description.split("#");
+    textSpans.add(TextSpan(text: parts[0]));
+    for (int i = 1; i < parts.length; i++) {
+      String spacedPart = parts[i].split(" ")[0];
+      bool isId = true;
+      if (spacedPart.isEmpty) isId = false;
+      if (!RegExp(r'^[0-9]+$').hasMatch(spacedPart)) isId = false;
+      if (isId) {
+        textSpans.add(
+          TextSpan(
+            text: "#$spacedPart",
+            style: GoogleFonts.aBeeZee(
+              textStyle: TextStyle(
+                color: Color(0xFF4A93F8),
+                decoration: TextDecoration.underline,
+              ),
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () async {
+                Uri site =
+                    Uri.parse("${GeneralEndPoints.baseUrl}issue/$spacedPart");
+                try {
+                  await launchUrl(site, mode: LaunchMode.externalApplication);
+                } catch (e) {}
+              },
+          ),
+        );
+        textSpans.add(TextSpan(text: parts[i].substring(spacedPart.length)));
+      } else {
+        textSpans.add(TextSpan(text: "#${parts[0]}"));
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -116,8 +153,15 @@ class IssueDetailPage extends StatelessWidget {
               ),
             ),
             Container(
-              child: Text(
-                issue.description,
+              child: RichText(
+                text: TextSpan(
+                  style: GoogleFonts.aBeeZee(
+                    textStyle: TextStyle(
+                      color: Color(0xFF737373),
+                    ),
+                  ),
+                  children: textSpans,
+                ),
               ),
             ),
           ],

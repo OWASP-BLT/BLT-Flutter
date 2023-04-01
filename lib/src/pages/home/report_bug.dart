@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:blt/src/components/tag_issues/issue_tagger.dart';
 import 'package:blt/src/util/api/general_api.dart';
 import 'package:blt/src/util/endpoints/general_endpoints.dart';
 import 'package:flutter/gestures.dart';
@@ -13,7 +14,9 @@ import 'package:pasteboard/pasteboard.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../components/tag_issues/description_text_field.dart';
 import '../../global/variables.dart';
+import '../../providers/issuelist_provider.dart';
 import '../../util/api/issues_api.dart';
 import '../../models/issue_model.dart';
 
@@ -63,6 +66,10 @@ class _ReportFormState extends ConsumerState<ReportForm> {
   File? _image;
   final picker = ImagePicker();
   List<String> _issueCategories = ["General","Number error","Functional","Performance","Security","Typo","Design","Server down"];
+
+  VoidCallback? _dismissOverlay;
+  late final _focusNode = FocusNode();
+
 
   Future<void> _pickImageFromGallery() async {
     final imageFile = await picker.pickImage(source: ImageSource.gallery);
@@ -282,337 +289,353 @@ class _ReportFormState extends ConsumerState<ReportForm> {
     );
   }
 
-@override
-void initState(){
-  _categoryController.text = _issueCategories[_selectedIssueCategoriesIndex];
-}
+  @override
+  void initState(){
+    super.initState();
+    _categoryController.text = _issueCategories[_selectedIssueCategoriesIndex];
+  }
 
   @override
   Widget build(BuildContext context) {
+    final issueState = ref.watch(issueListProvider);
     final Size size = widget.size;
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "App name/ url",
-                  style: GoogleFonts.ubuntu(
-                    textStyle: TextStyle(
-                      color: Color(0xFFDC4654),
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                SizedBox(
-                  height: 40,
-                  child: TextFormField(
-                    controller: _titleController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "This field is required";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Enter the URL or app name of the issue ...",
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8.0),
-                        ),
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8.0),
-                        ),
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                    ),
-                    cursorColor: Color(0xFFDC4654),
-                    style: GoogleFonts.aBeeZee(
-                      textStyle: TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ),
-                Builder(builder: (context) {
-                  return TextButton(
-                    onPressed: () {
-                      showDuplicateDialog(context);
-                    },
-                    child: Text(
-                      "Check for duplicates",
+    var insets = MediaQuery.of(context).viewInsets;
+    return issueState!.when(data: (List<Issue>? issueList) {
+      return GestureDetector(
+        onTap: () {
+          _dismissOverlay?.call();
+        },
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "App name/ url",
                       style: GoogleFonts.ubuntu(
                         textStyle: TextStyle(
                           color: Color(0xFFDC4654),
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
                         ),
                       ),
                     ),
-                  );
-                }),
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+                    SizedBox(
+                      height: 12,
+                    ),
+                    SizedBox(
+                      height: 40,
+                      child: TextFormField(
+                        controller: _titleController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "This field is required";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Enter the URL or app name of the issue ...",
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                        ),
+                        cursorColor: Color(0xFFDC4654),
+                        style: GoogleFonts.aBeeZee(
+                          textStyle: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Builder(builder: (context) {
+                      return TextButton(
+                        onPressed: () {
+                          showDuplicateDialog(context);
+                        },
+                        child: Text(
+                          "Check for duplicates",
+                          style: GoogleFonts.ubuntu(
+                            textStyle: TextStyle(
+                              color: Color(0xFFDC4654),
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                TextButton.icon(
-                  label: Text(
-                  "Category",
-                  style: GoogleFonts.ubuntu(
-                    textStyle: TextStyle(
-                      color: Color(0xFFDC4654),
-                      fontSize: 15,
+                    Row(
+                      children: [
+                        TextButton.icon(
+                          label: Text(
+                            "Category",
+                            style: GoogleFonts.ubuntu(
+                              textStyle: TextStyle(
+                                color: Color(0xFFDC4654),
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                          ),
+                          onPressed: (){
+                            showIssueCategories(context);
+                          },
+                        ),
+
+                      ],),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    SizedBox(
+                      height: 40,
+                      child: TextFormField(
+                        controller: _categoryController,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Description",
+                      style: GoogleFonts.ubuntu(
+                        textStyle: TextStyle(
+                          color: Color(0xFFDC4654),
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    SizedBox(
+                      height: 80,
+                      // child: ,
+                      child: IssueTagger(
+                        onCreate: (onClose) {
+                          _dismissOverlay = onClose;
+                        },
+                        controller: _descriptionController,
+                        issueList: issueList!,
+                        builder: (context, containerKey) {
+                          return DescriptionTextField(
+                            focusNode: _focusNode,
+                            containerKey: containerKey,
+                            insets: insets,
+                            controller: _descriptionController,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    child: TextButton(
+                      child: Text(
+                        "Choose Image",
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        _pickImageFromGallery();
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          Color(0xFFDC4654),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                icon: Icon(
-                  Icons.arrow_drop_down,
-                ),
-                onPressed: (){
-                  showIssueCategories(context);
-                },
-                ),
-                
-                  ],),
-                SizedBox(
-                  height: 12,
-                ),
-                SizedBox(
-                  height: 40,
-                  child: TextFormField(
-                    controller: _categoryController,
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8.0),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  SizedBox(
+                    child: TextButton(
+                      child: Text(
+                        "Choose From Clipboard",
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                          ),
                         ),
-                        borderSide: BorderSide(color: Colors.grey),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8.0),
+                      onPressed: () {
+                        _pasteImageFromClipBoard();
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          Color(0xFFDC4654),
                         ),
-                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                height: 280,
+                width: size.width,
+                child: _image == null
+                    ? Center(
+                  child: Text(
+                    'No image selected.',
+                    style: GoogleFonts.aBeeZee(
+                      textStyle: TextStyle(
+                        color: Color(0xFF737373),
                       ),
                     ),
                   ),
                 )
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Description",
-                  style: GoogleFonts.ubuntu(
+                    : Image.file(
+                  _image!,
+                  fit: BoxFit.cover,
+                ),
+                decoration: BoxDecoration(
+                  border: _image != null
+                      ? Border.all(
+                    color: Color(0xFFDC4654),
+                    width: 0.5,
+                  )
+                      : null,
+                  borderRadius: _image != null ? BorderRadius.circular(15) : null,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Text(
+                  "Note: Adding an issue gives you 3 points!",
+                  style: GoogleFonts.aBeeZee(
                     textStyle: TextStyle(
-                      color: Color(0xFFDC4654),
-                      fontSize: 15,
+                      color: Color(0xFF737373),
+                      fontSize: 12,
+                      fontStyle: FontStyle.italic,
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 12,
-                ),
-                SizedBox(
-                  height: 80,
-                  child: TextFormField(
-                    controller: _descriptionController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "This field is required";
+              ),
+              Container(
+                width: size.width,
+                height: 50,
+                child: TextButton(
+                  child: Text(
+                    "Add Issue",
+                    style: GoogleFonts.ubuntu(
+                      textStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    backgroundColor: MaterialStateProperty.all(
+                      Color(0xFFDC4654),
+                    ),
+                  ),
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      if (_image != null) {
+                        Issue issue = Issue(
+                          user: currentUser!,
+                          url: _titleController.text,
+                          description: _descriptionController.text,
+                          isVerified: false,
+                          isOpen: true,
+                          ocr: _image!.path,
+                          userAgent:
+                          "Dart ${Platform.version.substring(0, 7) + Platform.operatingSystem}",
+                          label: _selectedIssueCategoriesIndex,
+                        );
+                        await IssueApiClient.postIssue(issue, widget.parentContext);
+                      } else {
+                        SnackBar cantSnak = SnackBar(
+                          content:
+                          Text("You need to upload a screenshot of issue!"),
+                        );
+                        ScaffoldMessenger.of(widget.parentContext).showSnackBar(
+                          cantSnak,
+                        );
                       }
-                      return null;
-                    },
-                    maxLines: 5,
-                    decoration: InputDecoration(
-                      hintText: "Enter a description of the issue here ...",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                    ),
-                    style: GoogleFonts.aBeeZee(
-                      textStyle: TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
-                    cursorColor: Color(0xFFDC4654),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Row(
-            children: [
-              SizedBox(
-                child: TextButton(
-                  child: Text(
-                    "Choose Image",
-                    style: GoogleFonts.ubuntu(
-                      textStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    _pickImageFromGallery();
+                    }
                   },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      Color(0xFFDC4654),
-                    ),
-                  ),
                 ),
               ),
               SizedBox(
-                width: 10,
-              ),
-              SizedBox(
-                child: TextButton(
-                  child: Text(
-                    "Choose From Clipboard",
-                    style: GoogleFonts.ubuntu(
-                      textStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    _pasteImageFromClipBoard();
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      Color(0xFFDC4654),
-                    ),
-                  ),
-                ),
+                height: 20.0,
               ),
             ],
           ),
-          Container(
-            height: 280,
-            width: size.width,
-            child: _image == null
-                ? Center(
-                    child: Text(
-                      'No image selected.',
-                      style: GoogleFonts.aBeeZee(
-                        textStyle: TextStyle(
-                          color: Color(0xFF737373),
-                        ),
-                      ),
-                    ),
-                  )
-                : Image.file(
-                    _image!,
-                    fit: BoxFit.cover,
-                  ),
-            decoration: BoxDecoration(
-              border: _image != null
-                  ? Border.all(
-                      color: Color(0xFFDC4654),
-                      width: 0.5,
-                    )
-                  : null,
-              borderRadius: _image != null ? BorderRadius.circular(15) : null,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-            child: Text(
-              "Note: Adding an issue gives you 3 points!",
-              style: GoogleFonts.aBeeZee(
-                textStyle: TextStyle(
-                  color: Color(0xFF737373),
-                  fontSize: 12,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ),
-          ),
-          Container(
-            width: size.width,
-            height: 50,
-            child: TextButton(
-              child: Text(
-                "Add Issue",
-                style: GoogleFonts.ubuntu(
-                  textStyle: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-                backgroundColor: MaterialStateProperty.all(
-                  Color(0xFFDC4654),
-                ),
-              ),
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  if (_image != null) {
-                    Issue issue = Issue(
-                      user: currentUser!,
-                      url: _titleController.text,
-                      description: _descriptionController.text,
-                      isVerified: false,
-                      isOpen: true,
-                      ocr: _image!.path,
-                      userAgent:
-                          "Dart ${Platform.version.substring(0, 7) + Platform.operatingSystem}",
-                      label: _selectedIssueCategoriesIndex,
-                    );
-                    await IssueApiClient.postIssue(issue, widget.parentContext);
-                  } else {
-                    SnackBar cantSnak = SnackBar(
-                      content:
-                          Text("You need to upload a screenshot of issue!"),
-                    );
-                    ScaffoldMessenger.of(widget.parentContext).showSnackBar(
-                      cantSnak,
-                    );
-                  }
-                }
-              },
-            ),
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-        ],
-      ),
-    );
+        ),
+      );
+    }, error: (Object error, StackTrace? stackTrace) {
+      return Center(
+        child: Text(
+          'Something went wrong!',
+          style: TextStyle(fontSize: 18),
+        ),
+      );
+    },
+      loading: () {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },);
+
   }
 }
