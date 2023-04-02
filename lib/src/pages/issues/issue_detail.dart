@@ -128,7 +128,7 @@ class IssueDetailPage extends StatelessWidget {
                             textTheme: TextTheme(
                               bodyMedium: GoogleFonts.aBeeZee(
                                 textStyle: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 12,
                                   color: Color(0xFF737373),
                                 ),
                               ),
