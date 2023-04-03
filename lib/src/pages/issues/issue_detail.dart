@@ -125,6 +125,7 @@ class IssueDetailPage extends StatelessWidget {
                         selectable: true,
                         styleSheet: MarkdownStyleSheet.fromTheme(
                           ThemeData(
+                            fontFamily: GoogleFonts.aBeeZee().fontFamily,
                             textTheme: TextTheme(
                               bodyMedium: GoogleFonts.aBeeZee(
                                 textStyle: TextStyle(
@@ -134,7 +135,7 @@ class IssueDetailPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ),
+                        )
                       )
             ),
           ],

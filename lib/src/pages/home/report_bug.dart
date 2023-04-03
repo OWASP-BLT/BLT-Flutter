@@ -456,7 +456,9 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                   ),
                 ),
                 ToggleSwitch(
-              initialLabelIndex: 0,
+              minHeight: 20,
+              minWidth: 70,
+              initialLabelIndex: _selectedDescriptionLabelIndex.value,
               totalSwitches: 2,
               labels: ['Write', 'Preview'],
               onToggle: (index){
@@ -506,9 +508,11 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                 }
                   return Container(
                     height: 40,
-                    child: Markdown(data: _descriptionController.text,
+                    child: Markdown(
+                      data: _descriptionController.text,
                           styleSheet: MarkdownStyleSheet.fromTheme(
                           ThemeData(
+                            fontFamily: GoogleFonts.aBeeZee().fontFamily,
                             textTheme: TextTheme(
                               bodyMedium: GoogleFonts.aBeeZee(
                                 textStyle: TextStyle(
