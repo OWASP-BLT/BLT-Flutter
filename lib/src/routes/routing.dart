@@ -20,8 +20,7 @@ import '../pages/leaderboards/global_leaderboard.dart';
 import '../pages/issues/issue_detail.dart';
 import '../pages/leaderboards/monthly_leaderboard.dart';
 import '../pages/drawer/social.dart';
-import '../pages/network_error.dart';
-import '../global/variables.dart';
+
 
 /// The managing class for App Navigation, also adds custom page transitions.
 class RouteManager {
@@ -73,9 +72,6 @@ class RouteManager {
       case profilePage:
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) {
-              if(currentUser!.id == null){
-                return NetworkErrorPage();
-              }
               return UserProfile();
           },
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
