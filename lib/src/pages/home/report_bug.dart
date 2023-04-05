@@ -15,7 +15,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../global/variables.dart';
 import '../../util/api/issues_api.dart';
