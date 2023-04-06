@@ -141,9 +141,8 @@ class _MonthlyLeaderBoardPageState extends ConsumerState<MonthlyLeaderBoardPage>
                                 padding: EdgeInsets.fromLTRB(0,20,0,0),
                                 alignment: Alignment.bottomCenter,
                                 child : ListView.builder(
-                            itemCount: 12,
+                            itemCount: DateTime.now().month,
                             itemBuilder: (context,index){
-                              if(DateTime.now().month>index){
                               return ListTile(
                                 onTap: (){
                                   ref.watch(monthlyLeaderBoardProvider.notifier).refreshMonthlyLeaderList(DateTime.now().year,index+1);
@@ -159,19 +158,7 @@ class _MonthlyLeaderBoardPageState extends ConsumerState<MonthlyLeaderBoardPage>
                                     color: Color(0xFF737373),
                                   ),
                                 ),
-                              ));} 
-                              else {
-                              return ListTile(
-                                onTap: (){},
-                                title: Text(
-                                "${monthsInYear[index+1]}",
-                                style: GoogleFonts.aBeeZee(
-                                  textStyle: TextStyle(
-                                    color: Color.fromARGB(255, 194, 194, 194),
-                                  ),
-                                ),
-                              ));
-                              }
+                              )); 
                             },));
                           },
                           );
