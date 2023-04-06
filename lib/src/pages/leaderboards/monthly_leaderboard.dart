@@ -115,38 +115,35 @@ class _MonthlyLeaderBoardPageState extends ConsumerState<MonthlyLeaderBoardPage>
                   ),
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
-                    child: Column( 
-                      
-                      children: [ Text(
+                    child: Text(
                       "These are the most active users on BLT in",
                       style: GoogleFonts.aBeeZee(
                         textStyle: TextStyle(
                           color: Color(0xFF737373),
                         ),
                       ),
-                    ),
-                    TextButton.icon(
+                    )),
+                    Row( 
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [TextButton.icon(
                       onPressed: (){
                         showModalBottomSheet(
                           context: context, 
-                          isScrollControlled: true,
-                          constraints: BoxConstraints(
-                            maxHeight: 250,
-                          ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                            )
+                            borderRadius: BorderRadius.vertical( 
+                                  top: Radius.circular(25.0),
+                                ),
                           ),
                           builder: (BuildContext context){
                             return  
                               Container(
                                 height: 250,
+                                padding: EdgeInsets.fromLTRB(0,20,0,0),
                                 alignment: Alignment.bottomCenter,
                                 child : ListView.builder(
-                            itemCount: DateTime.now().month,
+                            itemCount: 12,
                             itemBuilder: (context,index){
+                              if(DateTime.now().month>index){
                               return ListTile(
                                 onTap: (){
                                   ref.watch(monthlyLeaderBoardProvider.notifier).refreshMonthlyLeaderList(DateTime.now().year,index+1);
@@ -155,7 +152,6 @@ class _MonthlyLeaderBoardPageState extends ConsumerState<MonthlyLeaderBoardPage>
                                   });
                                   Navigator.pop(context);
                                 },
-                                tileColor: Color(0xFFECECEC).withOpacity(0.42),
                                 title: Text(
                                 "${monthsInYear[index+1]}",
                                 style: GoogleFonts.ubuntu(
@@ -163,7 +159,19 @@ class _MonthlyLeaderBoardPageState extends ConsumerState<MonthlyLeaderBoardPage>
                                     color: Color(0xFF737373),
                                   ),
                                 ),
+                              ));} 
+                              else {
+                              return ListTile(
+                                onTap: (){},
+                                title: Text(
+                                "${monthsInYear[index+1]}",
+                                style: GoogleFonts.aBeeZee(
+                                  textStyle: TextStyle(
+                                    color: Color.fromARGB(255, 194, 194, 194),
+                                  ),
+                                ),
                               ));
+                              }
                             },));
                           },
                           );
@@ -184,10 +192,9 @@ class _MonthlyLeaderBoardPageState extends ConsumerState<MonthlyLeaderBoardPage>
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Color(0xFFDC4654)),
                       ),
-                    ),
-                    ]
-                  ),)
-                ],
+                    ),])
+
+          ],
               ),
             ),
             Container(
@@ -198,8 +205,12 @@ class _MonthlyLeaderBoardPageState extends ConsumerState<MonthlyLeaderBoardPage>
                     if(leaderList!.isEmpty){
                     return Center(
                     child: Text(
-                      "Looks Like There isn't any activity in this month .",
-                      textAlign: TextAlign.center,
+                      "Looks like there isn't any activity in this month .",
+                       style: GoogleFonts.aBeeZee(
+                        textStyle: TextStyle(
+                          color: Color(0xFF737373)
+                        )
+                       ),
                     ),
                   );
                     }else{

@@ -309,6 +309,26 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                       );
                       return monthlyLeaderboardList!.when(
                         data: (leaderList) {
+                          if(leaderList!.length == 0){
+                            return InkWell(
+                              onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                RouteManager.monthlyLeaderboardPage,
+                              );
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Text("Looks like there isn't any activity in this month.",
+                              style: GoogleFonts.aBeeZee(
+                                textStyle: TextStyle(
+                                  color: Color(0xFF737373),
+                                )
+                              ),
+                              ))
+                              
+                            );
+                          };
                           return InkWell(
                             onTap: () {
                               Navigator.pushNamed(
@@ -316,9 +336,10 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                 RouteManager.monthlyLeaderboardPage,
                               );
                             },
-                            child: ListView.builder(
+                            child: 
+                               ListView.builder(
                               padding: EdgeInsets.zero,
-                              itemCount: (leaderList!.length < 3 ? leaderList.length : 3),
+                              itemCount: (leaderList.length < 3 ? leaderList.length : 3),
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 return ListTile(
