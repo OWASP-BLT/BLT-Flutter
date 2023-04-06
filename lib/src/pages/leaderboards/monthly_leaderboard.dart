@@ -199,20 +199,29 @@ class _MonthlyLeaderBoardPageState extends ConsumerState<MonthlyLeaderBoardPage>
             ),
             Container(
               height: size.height * 0.8,
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
               child: monthlyLeadersState!.when(
                 data: (List<Leaders>? leaderList){
                     if(leaderList!.isEmpty){
-                    return Center(
-                    child: Text(
+                    return Container (
+                      height: 20,
+                      alignment: Alignment.topCenter,
+                      margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                      child: Card(
+                      semanticContainer: true,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+                        child: Text(
                       "Looks like there isn't any activity in this month .",
                        style: GoogleFonts.aBeeZee(
                         textStyle: TextStyle(
                           color: Color(0xFF737373)
                         )
                        ),
-                    ),
-                  );
+                    ),) 
+                    )
+                    );
+                  
                     }else{
                       final list = leaderList;
                       return Padding(

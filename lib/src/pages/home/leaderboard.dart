@@ -317,15 +317,19 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                 RouteManager.monthlyLeaderboardPage,
                               );
                               },
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: Text("Looks like there isn't any activity in this month.",
+                              child: Center(
+                                child: Card(  
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+                                    child: Text("Looks like there isn't any activity in this month.",
                               style: GoogleFonts.aBeeZee(
                                 textStyle: TextStyle(
                                   color: Color(0xFF737373),
                                 )
                               ),
                               ))
+                              )
+                              )
                               
                             );
                           };
