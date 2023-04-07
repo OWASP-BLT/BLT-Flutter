@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -69,7 +70,8 @@ class _ReportFormState extends ConsumerState<ReportForm> {
   bool duplicateVerified = false;
   bool reportingAnonymously = false;
   final _formKey = GlobalKey<FormState>();
-  File? _image;
+  List<File> _image = [];
+  int shownImage = 0;
   final picker = ImagePicker();
   List<String> _issueCategories = [
     "General",
@@ -83,14 +85,16 @@ class _ReportFormState extends ConsumerState<ReportForm> {
   ];
 
   Future<void> _pickImageFromGallery() async {
-    final imageFile = await picker.pickImage(source: ImageSource.gallery);
-    if (imageFile != null) {
-      var image = File(imageFile.path);
+    final imageFile = await picker.pickMultiImage();
+    if (!imageFile.isEmpty) {
+      var imgs = _image;
+      for (var img in imageFile) {
+        if (imgs.length == 5) break;
+        imgs.add(File(img.path));
+      }
       setState(() {
-        _image = image;
+        _image = imgs;
       });
-    } else {
-      print('No image selected.');
     }
   }
 
@@ -102,20 +106,20 @@ class _ReportFormState extends ConsumerState<ReportForm> {
     return file;
   }
 
-  Future<void> _pasteImageFromClipBoard() async {
-    try {
-      final imageBytes = await Pasteboard.image;
-      late File? image;
-      if (imageBytes != null) {
-        image = await _coverToImage(imageBytes);
-      }
-      setState(() {
-        _image = image;
-      });
-    } catch (e) {
-      print('No Image Found On Clipboard');
-    }
-  }
+  // Future<void> _pasteImageFromClipBoard() async {
+  //   try {
+  //     final imageBytes = await Pasteboard.image;
+  //     late File? image;
+  //     if (imageBytes != null) {
+  //       image = await _coverToImage(imageBytes);
+  //     }
+  //     setState(() {
+  //       _image = image;
+  //     });
+  //   } catch (e) {
+  //     print('No Image Found On Clipboard');
+  //   }
+  // }
 
   void showIssueCategories(BuildContext context) {
     showModalBottomSheet(
@@ -305,7 +309,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
   void initState() {
     super.initState();
     if (widget.reportPageDefaults.sharedMediaFile != null) {
-      _image = File(widget.reportPageDefaults.sharedMediaFile!.path);
+      _image = [File(widget.reportPageDefaults.sharedMediaFile!.path)];
     }
     if (widget.reportPageDefaults.text != null) {
       _titleController.text = widget.reportPageDefaults.text!;
@@ -711,55 +715,125 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
-                  child: InkWell(
-                    onTap: () {
-                      _pickImageFromGallery();
-                    },
-                    child: Ink(
-                      child: (_image == null)
-                          ? Container(
+                  child: SizedBox(
+                    height: 280.0,
+                    child: PageView.builder(
+                      itemCount: min(5, _image.length + 1),
+                      controller: PageController(viewportFraction: 0.7),
+                      onPageChanged: (int index) =>
+                          setState(() => shownImage = index),
+                      itemBuilder: (_, i) {
+                        if (i < _image.length) {
+                          return Transform.scale(
+                            scale: i == shownImage ? 1 : 0.9,
+                            child: Container(
                               height: 280.0,
+                              width: size.width,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(8),
                                 ),
-                                color: Color(0xFFF8D2CD),
                               ),
-                              child: Center(
-                                child: Column(
+                              child: Card(
+                                elevation: 1,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Stack(
                                   children: [
-                                    Spacer(),
-                                    SvgPicture.asset("assets/select_image.svg"),
-                                    SizedBox(
-                                      height: 8.0,
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.file(
+                                        _image[i],
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                      ),
                                     ),
-                                    Text(
-                                      "Select image",
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        width: 30.0,
+                                        height: 30.0,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(15),
+                                          ),
                                           color: Color(0xFFDC4654),
-                                          fontSize: 12,
+                                        ),
+                                        child: IconButton(
+                                          padding: EdgeInsets.zero,
+                                          onPressed: () {
+                                            setState(() {
+                                              _image.removeAt(shownImage);
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                            size: 20.0,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                    Spacer(),
                                   ],
                                 ),
                               ),
-                            )
-                          : Container(
-                              height: 280.0,
-                              width: size.width,
-                              child: Image.file(
-                                _image!,
-                                fit: BoxFit.cover,
+                            ),
+                          );
+                        } else {
+                          return Transform.scale(
+                            scale: i == shownImage ? 1 : 0.9,
+                            child: Card(
+                              elevation: 1,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8),
+                              child: InkWell(
+                                onTap: () {
+                                  _pickImageFromGallery();
+                                },
+                                child: Ink(
+                                  child: Container(
+                                    height: 280.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8),
+                                      ),
+                                      color: Color(0xFFF8D2CD),
+                                    ),
+                                    child: Center(
+                                      child: Column(
+                                        children: [
+                                          Spacer(),
+                                          SvgPicture.asset(
+                                            "assets/select_image.svg",
+                                            width: 45.0,
+                                          ),
+                                          SizedBox(
+                                            height: 16.0,
+                                          ),
+                                          Text(
+                                            "Add images",
+                                            style: GoogleFonts.ubuntu(
+                                              textStyle: TextStyle(
+                                                color: Color(0xFFDC4654),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
+                          );
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -804,14 +878,14 @@ class _ReportFormState extends ConsumerState<ReportForm> {
               ),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  if (_image != null) {
+                  if (_image.isNotEmpty) {
                     Issue issue = Issue(
                       user: currentUser!,
                       url: _titleController.text,
                       description: _descriptionController.text,
                       isVerified: false,
                       isOpen: true,
-                      ocr: _image!.path,
+                      screenshotsLink: _image.map((e) => e.path).toList(),
                       userAgent:
                           "Dart ${Platform.version.substring(0, 7) + Platform.operatingSystem}",
                       label: _selectedIssueCategoriesIndex,
