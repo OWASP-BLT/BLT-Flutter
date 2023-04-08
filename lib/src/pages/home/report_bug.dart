@@ -7,6 +7,7 @@ import 'package:blt/src/util/api/general_api.dart';
 import 'package:blt/src/util/endpoints/general_endpoints.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -68,10 +69,8 @@ class _ReportFormState extends ConsumerState<ReportForm> {
   int _selectedIssueCategoriesIndex = 0;
   ValueNotifier<int> _selectedDescriptionLabelIndex = ValueNotifier(0);
   bool duplicateVerified = false;
-  bool reportingAnonymously = false;
   final _formKey = GlobalKey<FormState>();
   List<File> _image = [];
-  int shownImage = 0;
   final picker = ImagePicker();
   List<String> _issueCategories = [
     "General",
@@ -342,93 +341,47 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                 SizedBox(
                   height: 32,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 40,
-                        child: TextFormField(
-                          controller: _titleController,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "This field is required";
-                            }
-                            return null;
-                          },
-                          onChanged: (v) {
-                            if (duplicateVerified) {
-                              setState(() {
-                                duplicateVerified = false;
-                              });
-                            }
-                          },
-                          decoration: InputDecoration(
-                            hintText: "App name / URL",
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8.0),
-                              ),
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8.0),
-                              ),
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            contentPadding: EdgeInsets.only(
-                                top: 8.0, left: 16.0, right: 16.0),
-                          ),
-                          cursorColor: Color(0xFFDC4654),
-                          style: GoogleFonts.aBeeZee(
-                            textStyle: TextStyle(
-                              fontSize: 12,
-                            ),
-                          ),
+                SizedBox(
+                  height: 40,
+                  child: TextFormField(
+                    controller: _titleController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "This field is required";
+                      }
+                      return null;
+                    },
+                    onChanged: (v) {
+                      if (duplicateVerified) {
+                        setState(() {
+                          duplicateVerified = false;
+                        });
+                      }
+                    },
+                    decoration: InputDecoration(
+                      hintText: "App name / URL",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8.0),
                         ),
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8.0),
+                        ),
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      contentPadding:
+                          EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
+                    ),
+                    cursorColor: Color(0xFFDC4654),
+                    style: GoogleFonts.aBeeZee(
+                      textStyle: TextStyle(
+                        fontSize: 12,
                       ),
                     ),
-                    SizedBox(
-                      width: 16.0,
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: 40,
-                        child: Builder(builder: (context) {
-                          return TextButton(
-                            child: Text(
-                              "Check for Duplicates",
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                              ),
-                              backgroundColor: MaterialStateProperty.all(
-                                duplicateVerified
-                                    ? Color(0xFF50C878)
-                                    : Color(0xFFDC4654),
-                              ),
-                            ),
-                            onPressed: () async {
-                              showDuplicateDialog(context);
-                              setState(() {
-                                duplicateVerified = true;
-                              });
-                            },
-                          );
-                        }),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 SizedBox(
                   height: 16.0,
@@ -496,37 +449,38 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                     Expanded(
                       child: Container(
                         height: 40,
-                        child: TextButton(
-                          child: Text(
-                            reportingAnonymously
-                                ? "Reporting Anonymously"
-                                : "Report Anonymously?",
-                            style: GoogleFonts.ubuntu(
-                              textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
+                        child: Builder(builder: (context) {
+                          return TextButton(
+                            child: Text(
+                              "Check for Duplicates",
+                              style: GoogleFonts.ubuntu(
+                                textStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
                               ),
                             ),
-                          ),
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all(
+                                duplicateVerified
+                                    ? Color(0xFF50C878)
+                                    : Color(0xFFDC4654),
                               ),
                             ),
-                            backgroundColor: MaterialStateProperty.all(
-                              reportingAnonymously
-                                  ? Color(0xFF50C878)
-                                  : Color(0xFFDC4654),
-                            ),
-                          ),
-                          onPressed: () async {
-                            setState(() {
-                              reportingAnonymously = !reportingAnonymously;
-                            });
-                          },
-                        ),
+                            onPressed: () async {
+                              showDuplicateDialog(context);
+                              setState(() {
+                                duplicateVerified = true;
+                              });
+                            },
+                          );
+                        }),
                       ),
                     ),
                   ],
@@ -535,7 +489,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                   height: 16.0,
                 ),
                 Container(
-                  height: 160.0,
+                  height: 225.0,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.all(
@@ -713,192 +667,124 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                     ],
                   ),
                 ),
-                (_image.length == 0)
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 16.0),
-                        child: Container(
-                          height: 280.0,
-                          width: size.width,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: SizedBox(
+                    height: 125.0,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: min(5, _image.length + 1),
+                      itemBuilder: (_, i) {
+                        if (i < _image.length) {
+                          return Container(
+                            width: 125.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8),
+                              ),
                             ),
-                          ),
-                          child: Card(
-                            elevation: 1,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                _pickImageFromGallery();
-                              },
-                              child: Ink(
-                                child: Container(
-                                  height: 280.0,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(8),
+                            child: Card(
+                              elevation: 1,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.file(
+                                      _image[i],
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
                                     ),
-                                    color: Color(0xFFF8D2CD),
                                   ),
-                                  child: Center(
-                                    child: Column(
-                                      children: [
-                                        Spacer(),
-                                        SvgPicture.asset(
-                                          "assets/select_image.svg",
-                                          width: 45.0,
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: 30.0,
+                                      height: 30.0,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(15),
                                         ),
-                                        SizedBox(
-                                          height: 16.0,
+                                        color: Color(0xFFDC4654),
+                                      ),
+                                      child: IconButton(
+                                        padding: EdgeInsets.zero,
+                                        onPressed: () {
+                                          setState(() {
+                                            _image.removeAt(i);
+                                          });
+                                        },
+                                        icon: Icon(
+                                          Icons.close,
+                                          color: Colors.white,
+                                          size: 20.0,
                                         ),
-                                        Text(
-                                          "Add images",
-                                          style: GoogleFonts.ubuntu(
-                                            textStyle: TextStyle(
-                                              color: Color(0xFFDC4654),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        } else {
+                          return SizedBox(
+                            width: 125.0,
+                            child: Card(
+                              elevation: 1,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  _pickImageFromGallery();
+                                },
+                                child: Ink(
+                                  child: Container(
+                                    height: 280.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8),
+                                      ),
+                                      color: Color(0xFFF8D2CD),
+                                    ),
+                                    child: Center(
+                                      child: Column(
+                                        children: [
+                                          Spacer(),
+                                          SvgPicture.asset(
+                                            "assets/select_image.svg",
+                                            width: 45.0,
+                                          ),
+                                          SizedBox(
+                                            height: 16.0,
+                                          ),
+                                          Text(
+                                            "Add images",
+                                            style: GoogleFonts.ubuntu(
+                                              textStyle: TextStyle(
+                                                color: Color(0xFFDC4654),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        Spacer(),
-                                      ],
+                                          Spacer(),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.only(top: 16.0),
-                        child: SizedBox(
-                          height: 280.0,
-                          child: PageView.builder(
-                            itemCount: min(5, _image.length + 1),
-                            controller: PageController(viewportFraction: 0.7),
-                            onPageChanged: (int index) =>
-                                setState(() => shownImage = index),
-                            itemBuilder: (_, i) {
-                              if (i < _image.length) {
-                                return Transform.scale(
-                                  scale: i == shownImage ? 1 : 0.9,
-                                  child: Container(
-                                    height: 280.0,
-                                    width: size.width,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(8),
-                                      ),
-                                    ),
-                                    child: Card(
-                                      elevation: 1,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Stack(
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                            child: Image.file(
-                                              _image[i],
-                                              fit: BoxFit.cover,
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Container(
-                                              width: 30.0,
-                                              height: 30.0,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(15),
-                                                ),
-                                                color: Color(0xFFDC4654),
-                                              ),
-                                              child: IconButton(
-                                                padding: EdgeInsets.zero,
-                                                onPressed: () {
-                                                  setState(() {
-                                                    _image.removeAt(shownImage);
-                                                  });
-                                                },
-                                                icon: Icon(
-                                                  Icons.close,
-                                                  color: Colors.white,
-                                                  size: 20.0,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                return Transform.scale(
-                                  scale: i == shownImage ? 1 : 0.9,
-                                  child: Card(
-                                    elevation: 1,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: InkWell(
-                                      onTap: () {
-                                        _pickImageFromGallery();
-                                      },
-                                      child: Ink(
-                                        child: Container(
-                                          height: 280.0,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(8),
-                                            ),
-                                            color: Color(0xFFF8D2CD),
-                                          ),
-                                          child: Center(
-                                            child: Column(
-                                              children: [
-                                                Spacer(),
-                                                SvgPicture.asset(
-                                                  "assets/select_image.svg",
-                                                  width: 45.0,
-                                                ),
-                                                SizedBox(
-                                                  height: 16.0,
-                                                ),
-                                                Text(
-                                                  "Add images",
-                                                  style: GoogleFonts.ubuntu(
-                                                    textStyle: TextStyle(
-                                                      color: Color(0xFFDC4654),
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Spacer(),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                      ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
