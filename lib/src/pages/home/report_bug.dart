@@ -713,130 +713,192 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: SizedBox(
-                    height: 280.0,
-                    child: PageView.builder(
-                      itemCount: min(5, _image.length + 1),
-                      controller: PageController(viewportFraction: 0.7),
-                      onPageChanged: (int index) =>
-                          setState(() => shownImage = index),
-                      itemBuilder: (_, i) {
-                        if (i < _image.length) {
-                          return Transform.scale(
-                            scale: i == shownImage ? 1 : 0.9,
-                            child: Container(
-                              height: 280.0,
-                              width: size.width,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                              ),
-                              child: Card(
-                                elevation: 1,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: Image.file(
-                                        _image[i],
-                                        fit: BoxFit.cover,
-                                        width: double.infinity,
-                                        height: double.infinity,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        width: 30.0,
-                                        height: 30.0,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(15),
-                                          ),
-                                          color: Color(0xFFDC4654),
-                                        ),
-                                        child: IconButton(
-                                          padding: EdgeInsets.zero,
-                                          onPressed: () {
-                                            setState(() {
-                                              _image.removeAt(shownImage);
-                                            });
-                                          },
-                                          icon: Icon(
-                                            Icons.close,
-                                            color: Colors.white,
-                                            size: 20.0,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                (_image.length == 0)
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: Container(
+                          height: 280.0,
+                          width: size.width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8),
                             ),
-                          );
-                        } else {
-                          return Transform.scale(
-                            scale: i == shownImage ? 1 : 0.9,
-                            child: Card(
-                              elevation: 1,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  _pickImageFromGallery();
-                                },
-                                child: Ink(
-                                  child: Container(
-                                    height: 280.0,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(8),
-                                      ),
-                                      color: Color(0xFFF8D2CD),
+                          ),
+                          child: Card(
+                            elevation: 1,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                _pickImageFromGallery();
+                              },
+                              child: Ink(
+                                child: Container(
+                                  height: 280.0,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8),
                                     ),
-                                    child: Center(
-                                      child: Column(
-                                        children: [
-                                          Spacer(),
-                                          SvgPicture.asset(
-                                            "assets/select_image.svg",
-                                            width: 45.0,
-                                          ),
-                                          SizedBox(
-                                            height: 16.0,
-                                          ),
-                                          Text(
-                                            "Add images",
-                                            style: GoogleFonts.ubuntu(
-                                              textStyle: TextStyle(
-                                                color: Color(0xFFDC4654),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                    color: Color(0xFFF8D2CD),
+                                  ),
+                                  child: Center(
+                                    child: Column(
+                                      children: [
+                                        Spacer(),
+                                        SvgPicture.asset(
+                                          "assets/select_image.svg",
+                                          width: 45.0,
+                                        ),
+                                        SizedBox(
+                                          height: 16.0,
+                                        ),
+                                        Text(
+                                          "Add images",
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                              color: Color(0xFFDC4654),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          Spacer(),
-                                        ],
-                                      ),
+                                        ),
+                                        Spacer(),
+                                      ],
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ),
+                          ),
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: SizedBox(
+                          height: 280.0,
+                          child: PageView.builder(
+                            itemCount: min(5, _image.length + 1),
+                            controller: PageController(viewportFraction: 0.7),
+                            onPageChanged: (int index) =>
+                                setState(() => shownImage = index),
+                            itemBuilder: (_, i) {
+                              if (i < _image.length) {
+                                return Transform.scale(
+                                  scale: i == shownImage ? 1 : 0.9,
+                                  child: Container(
+                                    height: 280.0,
+                                    width: size.width,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8),
+                                      ),
+                                    ),
+                                    child: Card(
+                                      elevation: 1,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            child: Image.file(
+                                              _image[i],
+                                              fit: BoxFit.cover,
+                                              width: double.infinity,
+                                              height: double.infinity,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              width: 30.0,
+                                              height: 30.0,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(15),
+                                                ),
+                                                color: Color(0xFFDC4654),
+                                              ),
+                                              child: IconButton(
+                                                padding: EdgeInsets.zero,
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _image.removeAt(shownImage);
+                                                  });
+                                                },
+                                                icon: Icon(
+                                                  Icons.close,
+                                                  color: Colors.white,
+                                                  size: 20.0,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return Transform.scale(
+                                  scale: i == shownImage ? 1 : 0.9,
+                                  child: Card(
+                                    elevation: 1,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: InkWell(
+                                      onTap: () {
+                                        _pickImageFromGallery();
+                                      },
+                                      child: Ink(
+                                        child: Container(
+                                          height: 280.0,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(8),
+                                            ),
+                                            color: Color(0xFFF8D2CD),
+                                          ),
+                                          child: Center(
+                                            child: Column(
+                                              children: [
+                                                Spacer(),
+                                                SvgPicture.asset(
+                                                  "assets/select_image.svg",
+                                                  width: 45.0,
+                                                ),
+                                                SizedBox(
+                                                  height: 16.0,
+                                                ),
+                                                Text(
+                                                  "Add images",
+                                                  style: GoogleFonts.ubuntu(
+                                                    textStyle: TextStyle(
+                                                      color: Color(0xFFDC4654),
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Spacer(),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                      ),
               ],
             ),
           ),
