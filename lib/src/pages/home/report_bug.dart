@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'dart:typed_data';
-import 'dart:ui';
+import 'dart:math';
+//import 'dart:typed_data';
 
 import 'package:blt/src/util/api/general_api.dart';
 import 'package:blt/src/util/endpoints/general_endpoints.dart';
@@ -10,8 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pasteboard/pasteboard.dart';
-import 'package:path_provider/path_provider.dart';
+//import 'package:pasteboard/pasteboard.dart';
+//import 'package:path_provider/path_provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -37,7 +37,6 @@ class _ReportBugState extends ConsumerState<ReportBug> {
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: ReportForm(
-        size: window.physicalSize / window.devicePixelRatio,
         parentContext: context,
         reportPageDefaults: widget.reportPageDefaults,
       ),
@@ -46,13 +45,11 @@ class _ReportBugState extends ConsumerState<ReportBug> {
 }
 
 class ReportForm extends ConsumerStatefulWidget {
-  final Size size;
   final BuildContext parentContext;
   final ReportPageDefaults reportPageDefaults;
 
   const ReportForm({
     Key? key,
-    required this.size,
     required this.parentContext,
     required this.reportPageDefaults,
   }) : super(key: key);
@@ -67,9 +64,8 @@ class _ReportFormState extends ConsumerState<ReportForm> {
   int _selectedIssueCategoriesIndex = 0;
   ValueNotifier<int> _selectedDescriptionLabelIndex = ValueNotifier(0);
   bool duplicateVerified = false;
-  bool reportingAnonymously = false;
   final _formKey = GlobalKey<FormState>();
-  File? _image;
+  List<File> _image = [];
   final picker = ImagePicker();
   List<String> _issueCategories = [
     "General",
@@ -83,38 +79,88 @@ class _ReportFormState extends ConsumerState<ReportForm> {
   ];
 
   Future<void> _pickImageFromGallery() async {
-    final imageFile = await picker.pickImage(source: ImageSource.gallery);
-    if (imageFile != null) {
-      var image = File(imageFile.path);
-      setState(() {
-        _image = image;
-      });
-    } else {
-      print('No image selected.');
-    }
-  }
-
-  Future<File> _coverToImage(Uint8List imageBytes) async {
-    String tempPath = (await getTemporaryDirectory()).path;
-    File file = File('$tempPath/profile.png');
-    await file.writeAsBytes(imageBytes.buffer
-        .asUint8List(imageBytes.offsetInBytes, imageBytes.lengthInBytes));
-    return file;
-  }
-
-  Future<void> _pasteImageFromClipBoard() async {
-    try {
-      final imageBytes = await Pasteboard.image;
-      late File? image;
-      if (imageBytes != null) {
-        image = await _coverToImage(imageBytes);
+    final imageFile = await picker.pickMultiImage();
+    if (!imageFile.isEmpty) {
+      var imgs = _image;
+      for (var img in imageFile) {
+        if (imgs.length == 5) break;
+        imgs.add(File(img.path));
       }
       setState(() {
-        _image = image;
+        _image = imgs;
       });
-    } catch (e) {
-      print('No Image Found On Clipboard');
     }
+  }
+
+  // Future<File> _coverToImage(Uint8List imageBytes) async {
+  //   String tempPath = (await getTemporaryDirectory()).path;
+  //   File file = File('$tempPath/profile.png');
+  //   await file.writeAsBytes(imageBytes.buffer
+  //       .asUint8List(imageBytes.offsetInBytes, imageBytes.lengthInBytes));
+  //   return file;
+  // }
+
+  // Future<void> _pasteImageFromClipBoard() async {
+  //   try {
+  //     final imageBytes = await Pasteboard.image;
+  //     late File? image;
+  //     if (imageBytes != null) {
+  //       image = await _coverToImage(imageBytes);
+  //     }
+  //     setState(() {
+  //       _image = image;
+  //     });
+  //   } catch (e) {
+  //     print('No Image Found On Clipboard');
+  //   }
+  // }
+
+  void markdownFormatting(String formatter) {
+    int start = _descriptionController.selection.baseOffset;
+    int end = _descriptionController.selection.extentOffset;
+    String text = _descriptionController.text;
+
+    if (end < start) {
+      int temp = start;
+      start = end;
+      end = temp;
+    }
+
+    text = text.substring(0, start) + formatter + text.substring(start, end) + formatter + text.substring(end);
+    _descriptionController.text = text;
+    _descriptionController.selection = TextSelection(baseOffset: start+formatter.length, extentOffset: end+formatter.length);
+  }
+
+  void markdownLink() {
+    int start = _descriptionController.selection.baseOffset;
+    int end = _descriptionController.selection.extentOffset;
+    String text = _descriptionController.text;
+
+    if (end < start) {
+      int temp = start;
+      start = end;
+      end = temp;
+    }
+
+    text = text.substring(0, start) + "[" + text.substring(start, end) + "]()" + text.substring(end);
+    _descriptionController.text = text;
+    _descriptionController.selection = TextSelection(baseOffset: start+1, extentOffset: end+1);
+  }
+
+  void markdownNewLine(String newLineText) {
+    int start = _descriptionController.selection.baseOffset;
+    int end = _descriptionController.selection.extentOffset;
+    String text = _descriptionController.text;
+
+    if (end < start) {
+      int temp = start;
+      start = end;
+      end = temp;
+    }
+
+    text = text.substring(0, start) + "\n" + newLineText + text.substring(start, end) + "\n" + text.substring(end);
+    _descriptionController.text = text;
+    _descriptionController.selection = TextSelection(baseOffset: start+newLineText.length+1, extentOffset: end+newLineText.length+1);
   }
 
   void showIssueCategories(BuildContext context) {
@@ -305,7 +351,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
   void initState() {
     super.initState();
     if (widget.reportPageDefaults.sharedMediaFile != null) {
-      _image = File(widget.reportPageDefaults.sharedMediaFile!.path);
+      _image = [File(widget.reportPageDefaults.sharedMediaFile!.path)];
     }
     if (widget.reportPageDefaults.text != null) {
       _titleController.text = widget.reportPageDefaults.text!;
@@ -314,7 +360,6 @@ class _ReportFormState extends ConsumerState<ReportForm> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = widget.size;
     return Form(
       key: _formKey,
       child: Column(
@@ -338,93 +383,47 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                 SizedBox(
                   height: 32,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 40,
-                        child: TextFormField(
-                          controller: _titleController,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "This field is required";
-                            }
-                            return null;
-                          },
-                          onChanged: (v) {
-                            if (duplicateVerified) {
-                              setState(() {
-                                duplicateVerified = false;
-                              });
-                            }
-                          },
-                          decoration: InputDecoration(
-                            hintText: "App name / URL",
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8.0),
-                              ),
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8.0),
-                              ),
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            contentPadding: EdgeInsets.only(
-                                top: 8.0, left: 16.0, right: 16.0),
-                          ),
-                          cursorColor: Color(0xFFDC4654),
-                          style: GoogleFonts.aBeeZee(
-                            textStyle: TextStyle(
-                              fontSize: 12,
-                            ),
-                          ),
+                SizedBox(
+                  height: 40,
+                  child: TextFormField(
+                    controller: _titleController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "This field is required";
+                      }
+                      return null;
+                    },
+                    onChanged: (v) {
+                      if (duplicateVerified) {
+                        setState(() {
+                          duplicateVerified = false;
+                        });
+                      }
+                    },
+                    decoration: InputDecoration(
+                      hintText: "App name / URL",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8.0),
                         ),
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8.0),
+                        ),
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      contentPadding:
+                          EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
+                    ),
+                    cursorColor: Color(0xFFDC4654),
+                    style: GoogleFonts.aBeeZee(
+                      textStyle: TextStyle(
+                        fontSize: 12,
                       ),
                     ),
-                    SizedBox(
-                      width: 16.0,
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: 40,
-                        child: Builder(builder: (context) {
-                          return TextButton(
-                            child: Text(
-                              "Check for Duplicates",
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                              ),
-                              backgroundColor: MaterialStateProperty.all(
-                                duplicateVerified
-                                    ? Color(0xFF50C878)
-                                    : Color(0xFFDC4654),
-                              ),
-                            ),
-                            onPressed: () async {
-                              showDuplicateDialog(context);
-                              setState(() {
-                                duplicateVerified = true;
-                              });
-                            },
-                          );
-                        }),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 SizedBox(
                   height: 16.0,
@@ -492,37 +491,38 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                     Expanded(
                       child: Container(
                         height: 40,
-                        child: TextButton(
-                          child: Text(
-                            reportingAnonymously
-                                ? "Reporting Anonymously"
-                                : "Report Anonymously?",
-                            style: GoogleFonts.ubuntu(
-                              textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
+                        child: Builder(builder: (context) {
+                          return TextButton(
+                            child: Text(
+                              "Check for Duplicates",
+                              style: GoogleFonts.ubuntu(
+                                textStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
                               ),
                             ),
-                          ),
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all(
+                                duplicateVerified
+                                    ? Color(0xFF50C878)
+                                    : Color(0xFFDC4654),
                               ),
                             ),
-                            backgroundColor: MaterialStateProperty.all(
-                              reportingAnonymously
-                                  ? Color(0xFF50C878)
-                                  : Color(0xFFDC4654),
-                            ),
-                          ),
-                          onPressed: () async {
-                            setState(() {
-                              reportingAnonymously = !reportingAnonymously;
-                            });
-                          },
-                        ),
+                            onPressed: () async {
+                              showDuplicateDialog(context);
+                              setState(() {
+                                duplicateVerified = true;
+                              });
+                            },
+                          );
+                        }),
                       ),
                     ),
                   ],
@@ -531,7 +531,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                   height: 16.0,
                 ),
                 Container(
-                  height: 160.0,
+                  height: 225.0,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.all(
@@ -609,7 +609,9 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                                   IconButton(
                                     padding: EdgeInsets.zero,
                                     constraints: BoxConstraints(),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      markdownFormatting("**");
+                                    },
                                     icon: SvgPicture.asset(
                                       "assets/input_bold.svg",
                                       width: 15.0,
@@ -618,7 +620,9 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                                   IconButton(
                                     padding: EdgeInsets.zero,
                                     constraints: BoxConstraints(),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      markdownFormatting("*");
+                                    },
                                     icon: SvgPicture.asset(
                                       "assets/input_italic.svg",
                                       height: 16.0,
@@ -627,7 +631,20 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                                   IconButton(
                                     padding: EdgeInsets.zero,
                                     constraints: BoxConstraints(),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      markdownFormatting("~~");
+                                    },
+                                    icon: SvgPicture.asset(
+                                      "assets/input_strikethrough.svg",
+                                      height: 17.0,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    padding: EdgeInsets.zero,
+                                    constraints: BoxConstraints(),
+                                    onPressed: () {
+                                      markdownLink();
+                                    },
                                     icon: SvgPicture.asset(
                                       "assets/input_link.svg",
                                       height: 15.0,
@@ -636,16 +653,9 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                                   IconButton(
                                     padding: EdgeInsets.zero,
                                     constraints: BoxConstraints(),
-                                    onPressed: () {},
-                                    icon: SvgPicture.asset(
-                                      "assets/input_image.svg",
-                                      height: 15.0,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    padding: EdgeInsets.zero,
-                                    constraints: BoxConstraints(),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      markdownNewLine("- ");
+                                    },
                                     icon: SvgPicture.asset(
                                       "assets/input_list.svg",
                                       height: 15.0,
@@ -654,7 +664,9 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                                   IconButton(
                                     padding: EdgeInsets.zero,
                                     constraints: BoxConstraints(),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      markdownNewLine("- [ ] ");
+                                    },
                                     icon: SvgPicture.asset(
                                       "assets/input_task.svg",
                                       height: 15.0,
@@ -663,7 +675,9 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                                   IconButton(
                                     padding: EdgeInsets.zero,
                                     constraints: BoxConstraints(),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      markdownNewLine("# ");
+                                    },
                                     icon: SvgPicture.asset(
                                       "assets/input_heading.svg",
                                       height: 15.0,
@@ -711,55 +725,119 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
-                  child: InkWell(
-                    onTap: () {
-                      _pickImageFromGallery();
-                    },
-                    child: Ink(
-                      child: (_image == null)
-                          ? Container(
-                              height: 280.0,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                                color: Color(0xFFF8D2CD),
+                  child: SizedBox(
+                    height: 125.0,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: min(5, _image.length + 1),
+                      itemBuilder: (_, i) {
+                        if (i < _image.length) {
+                          return Container(
+                            width: 125.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8),
                               ),
-                              child: Center(
-                                child: Column(
-                                  children: [
-                                    Spacer(),
-                                    SvgPicture.asset("assets/select_image.svg"),
-                                    SizedBox(
-                                      height: 8.0,
+                            ),
+                            child: Card(
+                              elevation: 1,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.file(
+                                      _image[i],
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
                                     ),
-                                    Text(
-                                      "Select image",
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                          color: Color(0xFFDC4654),
-                                          fontSize: 12,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: 30.0,
+                                      height: 30.0,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(15),
+                                        ),
+                                        color: Color(0xFFDC4654),
+                                      ),
+                                      child: IconButton(
+                                        padding: EdgeInsets.zero,
+                                        onPressed: () {
+                                          setState(() {
+                                            _image.removeAt(i);
+                                          });
+                                        },
+                                        icon: Icon(
+                                          Icons.close,
+                                          color: Colors.white,
+                                          size: 20.0,
                                         ),
                                       ),
                                     ),
-                                    Spacer(),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            )
-                          : Container(
-                              height: 280.0,
-                              width: size.width,
-                              child: Image.file(
-                                _image!,
-                                fit: BoxFit.cover,
+                            ),
+                          );
+                        } else {
+                          return SizedBox(
+                            width: 125.0,
+                            child: Card(
+                              elevation: 1,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8),
+                              child: InkWell(
+                                onTap: () {
+                                  _pickImageFromGallery();
+                                },
+                                child: Ink(
+                                  child: Container(
+                                    height: 280.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8),
+                                      ),
+                                      color: Color(0xFFF8D2CD),
+                                    ),
+                                    child: Center(
+                                      child: Column(
+                                        children: [
+                                          Spacer(),
+                                          SvgPicture.asset(
+                                            "assets/select_image.svg",
+                                            width: 45.0,
+                                          ),
+                                          SizedBox(
+                                            height: 16.0,
+                                          ),
+                                          Text(
+                                            "Add images",
+                                            style: GoogleFonts.ubuntu(
+                                              textStyle: TextStyle(
+                                                color: Color(0xFFDC4654),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
+                          );
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -780,7 +858,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
             ),
           ),
           Container(
-            width: size.width,
+            width: double.infinity,
             height: 50,
             child: TextButton(
               child: Text(
@@ -804,14 +882,14 @@ class _ReportFormState extends ConsumerState<ReportForm> {
               ),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  if (_image != null) {
+                  if (_image.isNotEmpty) {
                     Issue issue = Issue(
                       user: currentUser!,
                       url: _titleController.text,
                       description: _descriptionController.text,
                       isVerified: false,
                       isOpen: true,
-                      ocr: _image!.path,
+                      screenshotsLink: _image.map((e) => e.path).toList(),
                       userAgent:
                           "Dart ${Platform.version.substring(0, 7) + Platform.operatingSystem}",
                       label: _selectedIssueCategoriesIndex,
