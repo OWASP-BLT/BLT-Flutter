@@ -103,7 +103,7 @@ class _MonthlyLeaderBoardPageState
                   width: size.width,
                   color: Theme.of(context).canvasColor,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
@@ -119,84 +119,90 @@ class _MonthlyLeaderBoardPageState
                       ),
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: Column(children: [
-                          Text(
-                            "These are the most active users on BLT in",
-                            style: GoogleFonts.aBeeZee(
-                              textStyle: TextStyle(
-                                color: Color(0xFF737373),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          TextButton.icon(
-                            onPressed: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                constraints: BoxConstraints(
-                                  maxHeight: 250,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "These are the most active users on BLT in",
+                                style: GoogleFonts.aBeeZee(
+                                  textStyle: TextStyle(
+                                    color: Color(0xFF737373),
+                                  ),
                                 ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                )),
-                                builder: (BuildContext context) {
-                                  return Container(
-                                      height: 250,
-                                      alignment: Alignment.bottomCenter,
-                                      child: ListView.builder(
-                                        itemCount: DateTime.now().month,
-                                        itemBuilder: (context, index) {
-                                          return ListTile(
-                                              onTap: () {
-                                                ref
-                                                    .watch(
-                                                        monthlyLeaderBoardProvider
-                                                            .notifier)
-                                                    .refreshMonthlyLeaderList(
-                                                        DateTime.now().year,
-                                                        index + 1);
-                                                setState(() {
-                                                  monthActive = index + 1;
-                                                });
-                                                Navigator.pop(context);
+                              ),
+                              SizedBox(height: 10),
+                              Center(
+                                child: TextButton.icon(
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      constraints: BoxConstraints(
+                                        maxHeight: 250,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                      )),
+                                      builder: (BuildContext context) {
+                                        return Container(
+                                            height: 250,
+                                            alignment: Alignment.bottomCenter,
+                                            child: ListView.builder(
+                                              itemCount: DateTime.now().month,
+                                              itemBuilder: (context, index) {
+                                                return ListTile(
+                                                    onTap: () {
+                                                      ref
+                                                          .watch(
+                                                              monthlyLeaderBoardProvider
+                                                                  .notifier)
+                                                          .refreshMonthlyLeaderList(
+                                                              DateTime.now()
+                                                                  .year,
+                                                              index + 1);
+                                                      setState(() {
+                                                        monthActive = index + 1;
+                                                      });
+                                                      Navigator.pop(context);
+                                                    },
+                                                    tileColor: Color(0xFFECECEC)
+                                                        .withOpacity(0.42),
+                                                    title: Text(
+                                                      "${monthsInYear[index + 1]}",
+                                                      style: GoogleFonts.ubuntu(
+                                                        textStyle: TextStyle(
+                                                          color:
+                                                              Color(0xFF737373),
+                                                        ),
+                                                      ),
+                                                    ));
                                               },
-                                              tileColor: Color(0xFFECECEC)
-                                                  .withOpacity(0.42),
-                                              title: Text(
-                                                "${monthsInYear[index + 1]}",
-                                                style: GoogleFonts.ubuntu(
-                                                  textStyle: TextStyle(
-                                                    color: Color(0xFF737373),
-                                                  ),
-                                                ),
-                                              ));
-                                        },
-                                      ));
-                                },
-                              );
-                            },
-                            icon: Icon(
-                              Icons.calendar_month,
-                              color: Colors.white,
-                            ),
-                            label: Text(
-                              "${monthsInYear[monthActive]}",
-                              style: GoogleFonts.aBeeZee(
-                                textStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
+                                            ));
+                                      },
+                                    );
+                                  },
+                                  icon: Icon(
+                                    Icons.calendar_month,
+                                    color: Colors.white,
+                                  ),
+                                  label: Text(
+                                    "${monthsInYear[monthActive]}",
+                                    style: GoogleFonts.aBeeZee(
+                                      textStyle: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Color(0xFFDC4654)),
+                                  ),
                                 ),
                               ),
-                            ),
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Color(0xFFDC4654)),
-                            ),
-                          ),
-                        ]),
+                            ]),
                       )
                     ],
                   ),
