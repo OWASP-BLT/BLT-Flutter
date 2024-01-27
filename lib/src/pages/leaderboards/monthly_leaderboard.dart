@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/leader_model.dart';
 import '../../constants/monthname_constants.dart';
-/// TEMP
+
 /// Page showing the top contributing users for the current month.
 class MonthlyLeaderBoardPage extends ConsumerStatefulWidget {
   const MonthlyLeaderBoardPage({Key? key}) : super(key: key);
