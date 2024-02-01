@@ -207,7 +207,6 @@ class _HomeState extends ConsumerState<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     return WillPopScope(
       onWillPop: () async {
         showGeneralDialog(
@@ -260,9 +259,8 @@ class _HomeState extends ConsumerState<Home> {
                   // Then close the drawer
                   await forgetUser();
                   await Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) => WelcomePage()),
-                          (Route route) => false);
+                      MaterialPageRoute(builder: (context) => WelcomePage()),
+                      (Route route) => false);
                   await logout();
                 },
               ),
@@ -331,8 +329,8 @@ class _HomeState extends ConsumerState<Home> {
                         ),
                       ),
                       style: ButtonStyle(
-                        shape: MaterialStateProperty.all<
-                            RoundedRectangleBorder>(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),

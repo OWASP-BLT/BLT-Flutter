@@ -1,11 +1,6 @@
-import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:pasteboard/pasteboard.dart';
+import 'package:blt/src/pages/home/home_imports.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Start Bug Hunt Page
@@ -53,29 +48,27 @@ class _HuntFormState extends State<HuntForm> {
     });
   }
 
-  Future<File> _convertToImage(Uint8List imageBytes) async{
+  Future<File> _convertToImage(Uint8List imageBytes) async {
     String tempPath = (await getTemporaryDirectory()).path;
     File file = File('$tempPath/profile.png');
-    await file.writeAsBytes(
-        imageBytes.buffer.asUint8List(imageBytes.offsetInBytes, imageBytes.lengthInBytes));
+    await file.writeAsBytes(imageBytes.buffer
+        .asUint8List(imageBytes.offsetInBytes, imageBytes.lengthInBytes));
     return file;
   }
 
-  Future<void> _pasteImageFromClipBoard() async{
+  Future<void> _pasteImageFromClipBoard() async {
     try {
       final imageBytes = await Pasteboard.image;
-      late File? image ;
-      if(imageBytes != null){
+      late File? image;
+      if (imageBytes != null) {
         image = await _convertToImage(imageBytes);
       }
       setState(() {
-        _image = image! ;
+        _image = image!;
       });
-    }
-    catch(e){
+    } catch (e) {
       print('No Image Found On Clipboard');
     }
-
   }
 
   @override
@@ -134,7 +127,7 @@ class _HuntFormState extends State<HuntForm> {
           ),
           Container(
             margin: const EdgeInsets.symmetric(vertical: 8.0),
-            child:Row(
+            child: Row(
               children: [
                 SizedBox(
                   child: TextButton(
@@ -190,28 +183,28 @@ class _HuntFormState extends State<HuntForm> {
             margin: const EdgeInsets.only(bottom: 12.0),
             child: _image.path == ""
                 ? Center(
-              child: Text(
-                'No image selected.',
-                style: GoogleFonts.aBeeZee(
-                  textStyle: TextStyle(
-                    color: Color(0xFF737373),
-                  ),
-                ),
-              ),
-            )
+                    child: Text(
+                      'No image selected.',
+                      style: GoogleFonts.aBeeZee(
+                        textStyle: TextStyle(
+                          color: Color(0xFF737373),
+                        ),
+                      ),
+                    ),
+                  )
                 : Image.file(
-              _image,
-              fit: BoxFit.cover,
-            ),
+                    _image,
+                    fit: BoxFit.cover,
+                  ),
             decoration: BoxDecoration(
               border: _image.path == ""
                   ? Border.all(
-                color: Color(0xFFDC4654),
-                width: 0.5,
-              )
+                      color: Color(0xFFDC4654),
+                      width: 0.5,
+                    )
                   : null,
               borderRadius:
-              _image.path == "" ? BorderRadius.circular(15) : null,
+                  _image.path == "" ? BorderRadius.circular(15) : null,
             ),
           ),
           Container(

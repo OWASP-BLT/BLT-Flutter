@@ -1,12 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:blt/src/pages/home/home_imports.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../constants/monthname_constants.dart';
-import '../../routes/routing.dart';
-import '../../providers/leaderboards/globalleaderboard_povider.dart';
-import '../../providers/leaderboards/monthlyleaderboard_provider.dart';
-import '../../providers/leaderboards/companyscoreboard_provider.dart';
 
 /// The Leaderboards dashboard page, contains the Global,
 /// Monthly leaderboard, and Company Scoreboard.
@@ -42,8 +35,8 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
         );
       else
         return CircleAvatar(
-          foregroundImage:
-          CachedNetworkImageProvider("https://bhfiles.storage.googleapis.com/" + partUrl),
+          foregroundImage: CachedNetworkImageProvider(
+              "https://bhfiles.storage.googleapis.com/" + partUrl),
           radius: 20,
         );
     } on Exception {
@@ -319,7 +312,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                             },
                             child: ListView.builder(
                               padding: EdgeInsets.zero,
-                              itemCount: (leaderList!.length < 3 ? leaderList.length : 3),
+                              itemCount: (leaderList!.length < 3
+                                  ? leaderList.length
+                                  : 3),
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 return ListTile(
@@ -347,8 +342,7 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                               ? Color(0xFFFFD700)
                                                   .withOpacity(0.42)
                                               : Colors.white,
-                                  leading:
-                                      buildAvatar(leaderList[index].image),
+                                  leading: buildAvatar(leaderList[index].image),
                                   title: Text(
                                     leaderList[index].user,
                                     style: GoogleFonts.ubuntu(

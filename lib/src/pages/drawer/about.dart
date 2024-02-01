@@ -1,10 +1,5 @@
-import 'package:blt/src/components/contributor_card.dart';
-import 'package:blt/src/constants/about_constants.dart';
-import 'package:blt/src/util/api/general_api.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:blt/src/pages/pages_import.dart';
 
 /// Page for describing the BLT project.
 class AboutPage extends StatelessWidget {
@@ -160,15 +155,12 @@ class AboutPage extends StatelessWidget {
                   for (var contributor in snapshot.data!) {
                     contributors.add(InkWell(
                       onTap: () {
-                        Navigator.of(context).push(
-                            new PageRouteBuilder(
-                                opaque: false,
-                                barrierDismissible:true,
-                                pageBuilder: (BuildContext context, _, __) {
-                                  return ContributorCard(contributor: contributor);
-                                }
-                            )
-                        );
+                        Navigator.of(context).push(new PageRouteBuilder(
+                            opaque: false,
+                            barrierDismissible: true,
+                            pageBuilder: (BuildContext context, _, __) {
+                              return ContributorCard(contributor: contributor);
+                            }));
                       },
                       child: Ink(
                         child: Column(
@@ -177,7 +169,8 @@ class AboutPage extends StatelessWidget {
                               tag: "image${contributor["id"]}",
                               child: CircleAvatar(
                                 radius: 32,
-                                backgroundImage: CachedNetworkImageProvider(contributor["img"]!),
+                                backgroundImage: CachedNetworkImageProvider(
+                                    contributor["img"]!),
                               ),
                             ),
                             SizedBox(

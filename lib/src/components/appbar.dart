@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
-import '../routes/routing.dart';
-import '../components/searchbar.dart';
-import '../global/variables.dart';
+import 'package:blt/src/components/components_import.dart';
 
 /// The app's main Appbar
 AppBar buildAppBar({required BuildContext context}) {
@@ -31,13 +27,11 @@ AppBar buildAppBar({required BuildContext context}) {
           Icons.account_circle,
         ),
         onPressed: () {
-          if(currentUser!.id == null){
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: const Text("No profile Found Check Your Connection"),
-                  )
-                );
-                return;
+          if (currentUser!.id == null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text("No profile Found Check Your Connection"),
+            ));
+            return;
           }
           Navigator.of(context).pushNamed(
             RouteManager.profilePage,

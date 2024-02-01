@@ -1,7 +1,5 @@
-import 'package:blt/src/routes/routing.dart';
+import 'package:blt/src/pages/pages_import.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 /// This page is thrown in case when a Navigation exception occurs.
 class ErrorPage extends StatelessWidget {

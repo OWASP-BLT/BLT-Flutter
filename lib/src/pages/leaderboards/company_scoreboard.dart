@@ -1,11 +1,5 @@
-import 'package:blt/src/util/endpoints/leaderboard_endpoints.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:blt/src/pages/leaderboards/leaderboards_imports.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import '../../routes/routing.dart';
-import '../../util/api/company_api.dart';
-import '../../util/api/leaderboard_api.dart';
 
 /// Page showing the top contributing companies on BLT.
 class CompanyScoreBoardPage extends StatefulWidget {

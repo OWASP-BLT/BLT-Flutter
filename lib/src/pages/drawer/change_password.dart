@@ -1,9 +1,6 @@
-import 'package:blt/src/util/api/auth_api.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-//import '../../routes/routing.dart';
+import '../pages_import.dart';
 
 /// The change password page for the app.
 class ChangePasswordPage extends StatefulWidget {
@@ -111,9 +108,7 @@ class ChangePasswordForm extends StatefulWidget {
 class _ChangePasswordFormState extends State<ChangePasswordForm> {
   final _formKey = GlobalKey<FormState>();
 
-  late TextEditingController _oldController,
-      _new1Controller,
-      _new2Controller;
+  late TextEditingController _oldController, _new1Controller, _new2Controller;
 
   @override
   void initState() {
@@ -223,7 +218,8 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
             child: TextButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  bool oldPasswordCorrect = await AuthApiClient.checkPassword(_oldController.text);
+                  bool oldPasswordCorrect =
+                      await AuthApiClient.checkPassword(_oldController.text);
                   if (!oldPasswordCorrect) {
                     SnackBar sentSnack = SnackBar(
                       content: Text("Incorrect old password."),

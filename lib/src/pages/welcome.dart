@@ -1,11 +1,6 @@
-import 'package:blt/src/providers/authstate_provider.dart';
+import 'package:blt/src/pages/pages_import.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../routes/routing.dart';
 
 /// The Landing page for unauthenticated users, or if a
 /// user wants to try the guest mode of the app.
@@ -117,8 +112,8 @@ class _WelcomePageState extends State<WelcomePage> {
                             shadowColor: MaterialStateProperty.all(
                               Colors.black.withOpacity(0.5),
                             ),
-                            shape:
-                                MaterialStateProperty.all<RoundedRectangleBorder>(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
@@ -139,8 +134,10 @@ class _WelcomePageState extends State<WelcomePage> {
                           builder: (BuildContext context, ref, Widget? child) {
                             return TextButton(
                               onPressed: () async {
-                                await ref.read(authStateNotifier.notifier).guestLogin();
-                                 Navigator.of(context).pushNamed(
+                                await ref
+                                    .read(authStateNotifier.notifier)
+                                    .guestLogin();
+                                Navigator.of(context).pushNamed(
                                   RouteManager.homePage,
                                 );
                               },

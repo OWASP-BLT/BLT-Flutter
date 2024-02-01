@@ -1,8 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:blt/src/pages/pages_import.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../models/company_model.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 /// Popup page for viewing company details when a company
 /// is clicked on the Company Scoreboard page.
@@ -20,42 +17,39 @@ class CompanyDetailPage extends StatefulWidget {
 class _CompanyDetailPageState extends State<CompanyDetailPage> {
   late Color companyColor;
 
-  Future<void> redirectEmail(BuildContext context,Company company) async{
+  Future<void> redirectEmail(BuildContext context, Company company) async {
     SnackBar emailSnack = SnackBar(
       content: Text("This company has not provided their email ."),
       duration: Duration(seconds: 2),
-      );
-      if(company.email == null){
-        ScaffoldMessenger.of(context).showSnackBar(emailSnack);
-      }else{
-        String email = Uri.encodeComponent(company.email!);
-        Uri mail = Uri.parse("mailto:${email}");
-          try {
-            await launchUrl(mail);
-          }
-          catch(e){}
-      }
+    );
+    if (company.email == null) {
+      ScaffoldMessenger.of(context).showSnackBar(emailSnack);
+    } else {
+      String email = Uri.encodeComponent(company.email!);
+      Uri mail = Uri.parse("mailto:${email}");
+      try {
+        await launchUrl(mail);
+      } catch (e) {}
+    }
   }
 
-  Future<void> redirectSite(BuildContext context,Company company) async{
+  Future<void> redirectSite(BuildContext context, Company company) async {
     SnackBar siteSnack = SnackBar(
       content: Text("This company has not provided their site ."),
       duration: Duration(seconds: 2),
     );
-          if(company.url == null){
-        ScaffoldMessenger.of(context).showSnackBar(siteSnack);
-      }
-      else{
-        String siteUrl = company.url!;
-        Uri site = Uri.parse(siteUrl);
-          try {
-            await launchUrl(site,mode: LaunchMode.externalApplication,webOnlyWindowName: company.companyName);
-          }
-          catch(e){}
-
-        }
-      }
-  
+    if (company.url == null) {
+      ScaffoldMessenger.of(context).showSnackBar(siteSnack);
+    } else {
+      String siteUrl = company.url!;
+      Uri site = Uri.parse(siteUrl);
+      try {
+        await launchUrl(site,
+            mode: LaunchMode.externalApplication,
+            webOnlyWindowName: company.companyName);
+      } catch (e) {}
+    }
+  }
 
   Widget buildOpenIssueList(Size size) {
     return Container(

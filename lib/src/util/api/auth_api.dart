@@ -1,11 +1,7 @@
 import 'dart:convert';
-
-import 'package:blt/src/models/user_model.dart';
-import 'package:blt/src/util/endpoints/auth_endpoints.dart';
+import 'package:blt/src/util/util_import.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-import '../../global/variables.dart';
 
 /// Class for accessing the auth client.
 class AuthApiClient {
@@ -127,10 +123,7 @@ class AuthApiClient {
     try {
       response = await http.post(
         Uri.parse(AuthEndPoints.emailpasswordLogin),
-        body: {
-          "username": currentUser!.username,
-          "password": password
-        },
+        body: {"username": currentUser!.username, "password": password},
       );
       print(response.body);
       return response.statusCode == 200;
@@ -139,15 +132,13 @@ class AuthApiClient {
   }
 
   /// Change the password of the logged in user.
-  static Future<void> changePassword(String newPassword1, String newPassword2, BuildContext context) async {
+  static Future<void> changePassword(
+      String newPassword1, String newPassword2, BuildContext context) async {
     http.Response? response;
     try {
       response = await http.post(
         Uri.parse(AuthEndPoints.change),
-        body: {
-          "new_password1": newPassword1,
-          "new_password2": newPassword2
-        },
+        body: {"new_password1": newPassword1, "new_password2": newPassword2},
         headers: {
           "Authorization": "Token ${currentUser!.token!}",
         },
