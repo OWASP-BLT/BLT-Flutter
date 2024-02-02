@@ -44,7 +44,6 @@ class IssueDetailPage extends StatelessWidget {
     for (var i = 1; i <= issue.screenshotsLink!.length; i++) {
       validScreenshotIndexes.add(i);
     }
-    print(issue.description);
 
     return Scaffold(
       appBar: AppBar(
