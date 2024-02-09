@@ -266,6 +266,7 @@ class _MonthlyLeaderBoardPageState
                                         fontSize: 12,
                                       ),
                                     ),
+                                    maxLines: 6,
                                   ),
                                   trailing: Text(
                                     "# " + (index + 1).toString(),
