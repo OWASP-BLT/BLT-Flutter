@@ -7,6 +7,7 @@ import '../../routes/routing.dart';
 import '../../providers/leaderboards/globalleaderboard_povider.dart';
 import '../../providers/leaderboards/monthlyleaderboard_provider.dart';
 import '../../providers/leaderboards/companyscoreboard_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// The Leaderboards dashboard page, contains the Global,
 /// Monthly leaderboard, and Company Scoreboard.
@@ -42,8 +43,8 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
         );
       else
         return CircleAvatar(
-          foregroundImage:
-          CachedNetworkImageProvider("https://bhfiles.storage.googleapis.com/" + partUrl),
+          foregroundImage: CachedNetworkImageProvider(
+              "https://bhfiles.storage.googleapis.com/" + partUrl),
           radius: 20,
         );
     } on Exception {
@@ -105,7 +106,7 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
             padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
             alignment: Alignment.centerLeft,
             child: Text(
-              "Leaderboards",
+              AppLocalizations.of(context)!.leaderboards,
               style: GoogleFonts.ubuntu(
                 textStyle: TextStyle(color: Color(0xFF737373), fontSize: 30),
               ),
@@ -114,7 +115,7 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
           Container(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
             child: Text(
-              "Find out the users best at heisting those bugs and companies that are the most active!",
+              AppLocalizations.of(context)!.findOutUsersBest,
               style: GoogleFonts.aBeeZee(
                 textStyle: TextStyle(
                   color: Color(0xFF737373),
@@ -129,7 +130,7 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
               children: [
                 ListTile(
                   title: Text(
-                    "Global Leaderboard",
+                    AppLocalizations.of(context)!.globalLeaderboard,
                     style: GoogleFonts.ubuntu(
                       textStyle: TextStyle(
                         color: Color(0xFFDC4654),
@@ -152,7 +153,7 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                   ),
                 ),
                 Text(
-                  "Find out the best of the best, the all time finest bug finders!",
+                  AppLocalizations.of(context)!.findOutBestOfBest,
                   style: GoogleFonts.aBeeZee(
                     textStyle: TextStyle(
                       color: Color(0xFF737373),
@@ -219,7 +220,7 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                   ),
                                   subtitle: Text(
                                     leaderList[index].score.toString() +
-                                        " points",
+                                        AppLocalizations.of(context)!.points,
                                     style: GoogleFonts.aBeeZee(
                                       textStyle: TextStyle(
                                         color: Color(0xFF737373),
@@ -245,7 +246,7 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                         error: (error, stackTr) {
                           return Center(
                             child: Text(
-                              'Something went wrong!',
+                              AppLocalizations.of(context)!.somethingWentWrong,
                               style: TextStyle(fontSize: 18),
                             ),
                           );
@@ -270,7 +271,7 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
               children: [
                 ListTile(
                   title: Text(
-                    "Monthly Leaderboard",
+                    AppLocalizations.of(context)!.monthlyLeaderboard,
                     style: GoogleFonts.ubuntu(
                       textStyle: TextStyle(
                         color: Color(0xFFDC4654),
@@ -293,7 +294,7 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                   ),
                 ),
                 Text(
-                  "Check the best bug hunters in ${monthsInYear[DateTime.now().month]}.!",
+                  "${AppLocalizations.of(context)!.checkBestBugHuntersIn} ${monthsInYear[DateTime.now().month]}.!",
                   style: GoogleFonts.aBeeZee(
                     textStyle: TextStyle(
                       color: Color(0xFF737373),
@@ -319,7 +320,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                             },
                             child: ListView.builder(
                               padding: EdgeInsets.zero,
-                              itemCount: (leaderList!.length < 3 ? leaderList.length : 3),
+                              itemCount: (leaderList!.length < 3
+                                  ? leaderList.length
+                                  : 3),
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 return ListTile(
@@ -347,8 +350,7 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                               ? Color(0xFFFFD700)
                                                   .withOpacity(0.42)
                                               : Colors.white,
-                                  leading:
-                                      buildAvatar(leaderList[index].image),
+                                  leading: buildAvatar(leaderList[index].image),
                                   title: Text(
                                     leaderList[index].user,
                                     style: GoogleFonts.ubuntu(
@@ -360,7 +362,7 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                   ),
                                   subtitle: Text(
                                     leaderList[index].score.toString() +
-                                        " points",
+                                        AppLocalizations.of(context)!.points,
                                     style: GoogleFonts.aBeeZee(
                                       textStyle: TextStyle(
                                         color: Color(0xFF737373),
@@ -384,9 +386,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                           );
                         },
                         error: (error, stackTr) {
-                          return const Center(
+                          return Center(
                             child: Text(
-                              'Something went wrong!',
+                              AppLocalizations.of(context)!.somethingWentWrong,
                               style: TextStyle(fontSize: 18),
                             ),
                           );
@@ -411,7 +413,7 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
               children: [
                 ListTile(
                   title: Text(
-                    "Company Scoreboard",
+                    AppLocalizations.of(context)!.companyScoreboard,
                     style: GoogleFonts.ubuntu(
                       textStyle: TextStyle(
                         color: Color(0xFFDC4654),
@@ -434,7 +436,7 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                   ),
                 ),
                 Text(
-                  "Take a look at the most active companies on BLT!",
+                  AppLocalizations.of(context)!.takeLookAtMostActive,
                   style: GoogleFonts.aBeeZee(
                     textStyle: TextStyle(
                       color: Color(0xFF737373),
@@ -493,11 +495,11 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                       maxLines: 6,
                                     ),
                                     subtitle: Text(
-                                      "Open: " +
+                                      AppLocalizations.of(context)!.open +
                                           companyData[index]
                                               .openIssues
                                               .toString() +
-                                          "| Closed: " +
+                                          AppLocalizations.of(context)!.closed +
                                           companyData[index]
                                               .closedIssues
                                               .toString(),
@@ -525,9 +527,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                           );
                         },
                         error: (error, stackTr) {
-                          return const Center(
+                          return Center(
                             child: Text(
-                              'Something went wrong!',
+                              AppLocalizations.of(context)!.somethingWentWrong,
                               style: TextStyle(fontSize: 18),
                             ),
                           );
