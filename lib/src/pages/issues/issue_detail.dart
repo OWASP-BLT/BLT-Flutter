@@ -129,7 +129,7 @@ class IssueDetailPage extends StatelessWidget {
             Markdown(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              data: replaceImageTags(issue.description),
+              data: replaceImageTags(issue.title),
               padding: EdgeInsets.all(0),
               selectable: true,
               styleSheet: MarkdownStyleSheet.fromTheme(
@@ -138,7 +138,8 @@ class IssueDetailPage extends StatelessWidget {
                   textTheme: TextTheme(
                     bodyMedium: GoogleFonts.aBeeZee(
                       textStyle: TextStyle(
-                        fontSize: 12,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
                         color: Color(0xFF737373),
                       ),
                     ),
@@ -146,6 +147,43 @@ class IssueDetailPage extends StatelessWidget {
                 ),
               ),
             ),
+            if (issue.description != "")
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  "Description",
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  style: GoogleFonts.ubuntu(
+                    textStyle: TextStyle(
+                      color: Color(0xFFDC4654),
+                      fontSize: 17.5,
+                    ),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            if (issue.description != "")
+              Markdown(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                data: replaceImageTags('${issue.description}'),
+                padding: EdgeInsets.all(0),
+                selectable: true,
+                styleSheet: MarkdownStyleSheet.fromTheme(
+                  ThemeData(
+                    fontFamily: GoogleFonts.aBeeZee().fontFamily,
+                    textTheme: TextTheme(
+                      bodyMedium: GoogleFonts.aBeeZee(
+                        textStyle: TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF737373),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Text(

@@ -98,9 +98,9 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                 return ListTile(
                   leading: Text("#${issue.id}"),
                   title: Text(
-                    (issue.description.length < 24)
-                        ? issue.description
-                        : issue.description.substring(0, 24) + "...",
+                    (issue.title.length < 24)
+                        ? issue.title
+                        : issue.title.substring(0, 24) + "...",
                   ),
                   trailing: IssueStatusChip(
                     issue: issue,
@@ -163,9 +163,9 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                 return ListTile(
                   leading: Text("#${issue.id}"),
                   title: Text(
-                    (issue.description.length < 24)
-                        ? issue.description
-                        : issue.description.substring(0, 24) + "...",
+                    (issue.title.length < 24)
+                        ? issue.title
+                        : issue.title.substring(0, 24) + "...",
                   ),
                   trailing: IssueStatusChip(
                     issue: issue,
@@ -228,9 +228,9 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                 return ListTile(
                   leading: Text("#${issue.id}"),
                   title: Text(
-                    (issue.description.length < 24)
-                        ? issue.description
-                        : issue.description.substring(0, 24) + "...",
+                    (issue.title.length < 24)
+                        ? issue.title
+                        : issue.title.substring(0, 24) + "...",
                   ),
                   trailing: IssueStatusChip(
                     issue: issue,

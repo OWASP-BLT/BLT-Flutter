@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math';
-//import 'dart:typed_data';
 
 import 'package:blt/src/util/api/general_api.dart';
 import 'package:blt/src/util/endpoints/general_endpoints.dart';
@@ -909,6 +908,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                     Issue issue = Issue(
                       user: currentUser!,
                       url: _titleController.text,
+                      title: _titleController.text,
                       description: _descriptionController.text,
                       isVerified: false,
                       isOpen: true,
