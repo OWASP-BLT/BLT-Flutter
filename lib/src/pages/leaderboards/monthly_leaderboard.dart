@@ -7,6 +7,7 @@ import '../../models/leader_model.dart';
 import '../../constants/monthname_constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+
 /// Page showing the top contributing users for the current month.
 class MonthlyLeaderBoardPage extends ConsumerStatefulWidget {
   const MonthlyLeaderBoardPage({Key? key}) : super(key: key);
@@ -120,6 +121,7 @@ class _MonthlyLeaderBoardPageState
                       ),
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
+
                         child: Column(children: [
                           Text(
                             AppLocalizations.of(context)!
@@ -266,6 +268,7 @@ class _MonthlyLeaderBoardPageState
                                         fontSize: 12,
                                       ),
                                     ),
+                                    maxLines: 6,
                                   ),
                                   trailing: Text(
                                     "# " + (index + 1).toString(),
