@@ -128,5 +128,6 @@
   "foundBugOnBLT": "您在BLT上发现了一个漏洞！",
   "reportItOrGoHome": "请随时报告，或返回主页",
   "addIssue": "添加问题",
-  "home": "主页"
+  "home": "主页",
+  "title":"标题" 
 }

@@ -128,5 +128,6 @@
   "foundBugOnBLT": "You have found a bug on BLT!",
   "reportItOrGoHome": "Feel free to report it or go to home",
   "addIssue": "Add Issue",
-  "home": "Home"
+  "home": "Home",
+  "title":"Title"
 }

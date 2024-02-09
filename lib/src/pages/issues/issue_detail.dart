@@ -114,7 +114,7 @@ class IssueDetailPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Text(
-                AppLocalizations.of(context)!.descriptio,
+                AppLocalizations.of(context)!.title,
                 overflow: TextOverflow.ellipsis,
                 softWrap: true,
                 style: GoogleFonts.ubuntu(

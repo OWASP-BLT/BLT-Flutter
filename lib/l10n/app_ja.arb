@@ -128,5 +128,6 @@
   "foundBugOnBLT": "BLTでバグを見つけました！",
   "reportItOrGoHome": "報告してもか、ホームに戻ります",
   "addIssue": "問題を追加",
-  "home": "ホーム"
+  "home": "ホーム",
+  "title": "タイトル"
 }

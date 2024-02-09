@@ -128,5 +128,6 @@
   "foundBugOnBLT": "आपको BLT पर एक बग मिला है!",
   "reportItOrGoHome": "इसे रिपोर्ट करें या घर जाएं",
   "addIssue": "मुद्दा जोड़ें",
-  "home": "होम"
+  "home": "होम",
+  "title":"Title"
 }
