@@ -230,7 +230,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     child: Row(children: [
                       Icon(Icons.flag, color: Colors.grey.shade600),
                       SizedBox(width: 8),
-                      Text('Portguese')
+                      Text('Portuguese')
                     ])),
                 DropdownMenuItem(
                     value: 'fr',
