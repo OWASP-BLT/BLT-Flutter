@@ -202,7 +202,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
     if (_titleController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("URL field is required"),
+          content: Text(AppLocalizations.of(context)!.urlFieldIsRequired),
         ),
       );
       return;
@@ -224,7 +224,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
               if (m == null) {
                 return AlertDialog(
                   title: Text(
-                    'Sweet!',
+                    AppLocalizations.of(context)!.sweet,
                     style: GoogleFonts.ubuntu(
                       textStyle: TextStyle(
                         color: Color(0xFFDC4654),
@@ -234,7 +234,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                     ),
                   ),
                   content: Text(
-                    "We haven't got any bug from this URL till now.",
+                    AppLocalizations.of(context)!.noBugFromURL,
                     style: GoogleFonts.aBeeZee(
                       textStyle: TextStyle(
                         color: Color(0xFF737373),
@@ -245,7 +245,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
               } else {
                 return AlertDialog(
                   title: Text(
-                    'A bug with same URL already exists!',
+                    AppLocalizations.of(context)!.bugWithURLExists,
                     style: GoogleFonts.ubuntu(
                       textStyle: TextStyle(
                         color: Color(0xFFDC4654),
@@ -266,7 +266,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: "Description: ",
+                              text: AppLocalizations.of(context)!.description,
                               style: GoogleFonts.aBeeZee(
                                 textStyle: TextStyle(
                                   color: Color(0xFF737373),
@@ -291,8 +291,8 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                              text:
-                                  "Ensure you are not submitting a duplicate bug by checking here: ",
+                              text: AppLocalizations.of(context)!
+                                  .ensureNotSubmittingDuplicate,
                             ),
                             TextSpan(
                               text:
@@ -370,7 +370,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Report issue",
+                  AppLocalizations.of(context)!.reportIssue,
                   style: GoogleFonts.ubuntu(
                     textStyle: TextStyle(
                       color: Color(0xFFDC4654),
@@ -388,7 +388,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                     controller: _titleController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "This field is required";
+                        return AppLocalizations.of(context)!.requiredField;
                       }
                       return null;
                     },
@@ -400,7 +400,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                       }
                     },
                     decoration: InputDecoration(
-                      hintText: "App name / URL",
+                      hintText: AppLocalizations.of(context)!.appNameOrURL,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(8.0),
@@ -493,7 +493,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                         child: Builder(builder: (context) {
                           return TextButton(
                             child: Text(
-                              "Check for Duplicates",
+                              AppLocalizations.of(context)!.checkForDuplicates,
                               style: GoogleFonts.ubuntu(
                                 textStyle: TextStyle(
                                   color: Colors.white,
@@ -550,14 +550,16 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                                   controller: _descriptionController,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return "This field is required";
+                                      return AppLocalizations.of(context)!
+                                          .requiredField;
                                     }
                                     return null;
                                   },
                                   keyboardType: TextInputType.multiline,
                                   maxLines: null,
                                   decoration: InputDecoration(
-                                    hintText: "Description",
+                                    hintText: AppLocalizations.of(context)!
+                                        .descriptio,
                                     border: InputBorder.none,
                                   ),
                                   style: GoogleFonts.aBeeZee(
@@ -702,8 +704,9 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                                   child: Center(
                                     child: Text(
                                       _selectedDescriptionLabelIndex.value == 1
-                                          ? "Edit"
-                                          : "Preview",
+                                          ? AppLocalizations.of(context)!.edit
+                                          : AppLocalizations.of(context)!
+                                              .preview,
                                       style: GoogleFonts.ubuntu(
                                         textStyle: TextStyle(
                                           color: Color(0xFFDC4654),
@@ -817,7 +820,8 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                                             height: 16.0,
                                           ),
                                           Text(
-                                            "Add images",
+                                            AppLocalizations.of(context)!
+                                                .addImages,
                                             style: GoogleFonts.ubuntu(
                                               textStyle: TextStyle(
                                                 color: Color(0xFFDC4654),
@@ -846,7 +850,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
           Padding(
             padding: EdgeInsets.fromLTRB(0, 16, 0, 16),
             child: Text(
-              "Note: Adding an issue gives you 3 points!",
+              AppLocalizations.of(context)!.noteAddingIssueGivesPoints,
               style: GoogleFonts.aBeeZee(
                 textStyle: TextStyle(
                   color: Color(0xFF737373),
@@ -861,7 +865,7 @@ class _ReportFormState extends ConsumerState<ReportForm> {
             height: 50,
             child: TextButton(
               child: Text(
-                "Add Issue",
+                AppLocalizations.of(context)!.addIssue,
                 style: GoogleFonts.ubuntu(
                   textStyle: TextStyle(
                     color: Colors.white,
@@ -897,8 +901,8 @@ class _ReportFormState extends ConsumerState<ReportForm> {
                     await IssueApiClient.postIssue(issue, widget.parentContext);
                   } else {
                     SnackBar cantSnak = SnackBar(
-                      content:
-                          Text("You need to upload a screenshot of issue!"),
+                      content: Text(
+                          AppLocalizations.of(context)!.needToUploadScreenshot),
                     );
                     ScaffoldMessenger.of(widget.parentContext).showSnackBar(
                       cantSnak,

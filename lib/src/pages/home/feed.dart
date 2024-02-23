@@ -1,6 +1,7 @@
 import 'package:blt/src/pages/pages_import.dart';
 import 'package:flutter/material.dart';
 
+
 /// Page for showing social activity of BLT, new issues,
 /// top premium subscribers.
 class Feed extends ConsumerStatefulWidget {
@@ -24,7 +25,7 @@ class _FeedState extends ConsumerState<Feed> {
         children: [
           FittedBox(
             child: Text(
-              'Goood Afternoon, \n${currentUser!.username}',
+              '${AppLocalizations.of(context)!.goodAfternoon}, \n${currentUser!.username}',
               style: GoogleFonts.ubuntu(
                 textStyle: TextStyle(
                   color: Color(0xFFDC4654),
@@ -37,7 +38,7 @@ class _FeedState extends ConsumerState<Feed> {
             height: 10,
           ),
           Text(
-            "Check the latest happenings in the world of BLT!",
+            AppLocalizations.of(context)!.checkLatestHappenings,
             style: GoogleFonts.aBeeZee(
               textStyle: TextStyle(
                 color: Color(0xFF737373),
@@ -48,7 +49,7 @@ class _FeedState extends ConsumerState<Feed> {
             height: 10,
           ),
           Text(
-            "Latest Issues",
+            AppLocalizations.of(context)!.latestIssues,
             style: GoogleFonts.ubuntu(
               textStyle: TextStyle(
                 color: Color(0xFFDC4654),
@@ -99,7 +100,7 @@ class _FeedState extends ConsumerState<Feed> {
           //   ),
           // ),
           Text(
-            "Bug Socials!",
+            AppLocalizations.of(context)!.bugSocials,
             style: GoogleFonts.ubuntu(
               textStyle: TextStyle(
                 color: Color(0xFFDC4654),
@@ -112,7 +113,7 @@ class _FeedState extends ConsumerState<Feed> {
             height: 10,
           ),
           Text(
-            "Our Sponsors",
+            AppLocalizations.of(context)!.ourSponsors,
             style: GoogleFonts.ubuntu(
               textStyle: TextStyle(
                 color: Color(0xFFDC4654),

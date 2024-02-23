@@ -68,6 +68,8 @@ class AuthApiClient {
           "password2": password,
         },
       );
+      print(response.statusCode);
+      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         SnackBar sentSnack = SnackBar(
           duration: const Duration(seconds: 6),
@@ -123,7 +125,10 @@ class AuthApiClient {
     try {
       response = await http.post(
         Uri.parse(AuthEndPoints.emailpasswordLogin),
-        body: {"username": currentUser!.username, "password": password},
+        body: {
+          "username": currentUser!.username,
+          "password": password,
+        },
       );
       print(response.body);
       return response.statusCode == 200;
@@ -138,7 +143,10 @@ class AuthApiClient {
     try {
       response = await http.post(
         Uri.parse(AuthEndPoints.change),
-        body: {"new_password1": newPassword1, "new_password2": newPassword2},
+        body: {
+          "new_password1": newPassword1,
+          "new_password2": newPassword2,
+        },
         headers: {
           "Authorization": "Token ${currentUser!.token!}",
         },

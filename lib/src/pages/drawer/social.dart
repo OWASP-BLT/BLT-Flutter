@@ -2,6 +2,7 @@ import 'package:blt/src/pages/pages_import.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
+
 class SocialPage extends ConsumerStatefulWidget {
   const SocialPage({Key? key}) : super(key: key);
 
@@ -32,7 +33,7 @@ class _SocialPageState extends ConsumerState<SocialPage> {
               Navigator.of(context).pop();
             },
           ),
-          title: Text("Social"),
+          title: Text(AppLocalizations.of(context)!.social),
           backgroundColor: Color(0xFFDC4654),
         ),
         body: Column(
@@ -47,7 +48,7 @@ class _SocialPageState extends ConsumerState<SocialPage> {
                         top: 10,
                       ),
                       child: Text(
-                        "Join us On :",
+                        AppLocalizations.of(context)!.joinUsOn,
                         style: GoogleFonts.aBeeZee(
                           textStyle: TextStyle(
                             fontSize: 20,
@@ -61,7 +62,7 @@ class _SocialPageState extends ConsumerState<SocialPage> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          redirectSocial(socialUrls["twitter"]);
+                          redirectSocial(socialUrls["X"]);
                         },
                         icon: FaIcon(FontAwesomeIcons.twitter),
                       ),

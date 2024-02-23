@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../pages_import.dart';
 
 /// The change password page for the app.
@@ -131,13 +130,13 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
               controller: _oldController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "This field is required";
+                  return AppLocalizations.of(context)!.requiredField;
                 }
                 return null;
               },
               onChanged: (val) {},
               decoration: InputDecoration(
-                hintText: "Old password",
+                hintText: AppLocalizations.of(context)!.oldPassword,
                 prefixIcon: Icon(Icons.key_rounded),
                 filled: true,
                 border: OutlineInputBorder(
@@ -160,12 +159,12 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
               controller: _new1Controller,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "This field is required";
+                  return AppLocalizations.of(context)!.requiredField;
                 }
                 return null;
               },
               decoration: InputDecoration(
-                hintText: "New password",
+                hintText: AppLocalizations.of(context)!.newPassword,
                 prefixIcon: Icon(Icons.password),
                 filled: true,
                 border: OutlineInputBorder(
@@ -188,14 +187,14 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
               controller: _new2Controller,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "This field is required";
+                  return AppLocalizations.of(context)!.requiredField;
                 } else if (_new1Controller.text != _new2Controller.text) {
-                  return "Passwords don't match";
+                  return AppLocalizations.of(context)!.passwordsDoNotMatch;
                 }
                 return null;
               },
               decoration: InputDecoration(
-                hintText: "Confirm new password",
+                hintText: AppLocalizations.of(context)!.confirmNewPassword,
                 prefixIcon: Icon(Icons.password),
                 filled: true,
                 border: OutlineInputBorder(
@@ -222,7 +221,8 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                       await AuthApiClient.checkPassword(_oldController.text);
                   if (!oldPasswordCorrect) {
                     SnackBar sentSnack = SnackBar(
-                      content: Text("Incorrect old password."),
+                      content: Text(
+                          AppLocalizations.of(context)!.incorrectOldPassword),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(sentSnack);
                     return;
@@ -236,7 +236,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                 }
               },
               child: Text(
-                "Change password",
+                AppLocalizations.of(context)!.changePassword,
                 style: GoogleFonts.ubuntu(
                   textStyle: TextStyle(
                     color: Colors.white,

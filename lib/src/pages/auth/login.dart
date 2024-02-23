@@ -132,7 +132,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
     );
     if (value == null || value.isEmpty || !regex.hasMatch(value))
-      return 'Enter a valid email address';
+      return AppLocalizations.of(context)!.validEmail;
     else
       return null;
   }
@@ -158,12 +158,12 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               controller: _userController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "This field is required";
+                  return AppLocalizations.of(context)!.requiredField;
                 }
                 return null;
               },
               decoration: InputDecoration(
-                hintText: "Username",
+                hintText: AppLocalizations.of(context)!.username,
                 prefixIcon: Icon(Icons.person),
                 filled: true,
                 border: OutlineInputBorder(
@@ -182,7 +182,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               controller: _passwordController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "This field is required";
+                  return AppLocalizations.of(context)!.requiredField;
                 }
                 return null;
               },
@@ -198,7 +198,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 }
               },
               decoration: InputDecoration(
-                hintText: "Password",
+                hintText: AppLocalizations.of(context)!.password,
                 prefixIcon: Icon(Icons.key_rounded),
                 filled: true,
                 border: OutlineInputBorder(
@@ -227,9 +227,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                     });
                   },
                 ),
-                Text(
-                  "Remember me",
-                ),
+                Text(AppLocalizations.of(context)!.rememberMe),
               ],
             ),
           ),
@@ -250,7 +248,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 }
               },
               child: Text(
-                "Login",
+                AppLocalizations.of(context)!.login,
                 style: GoogleFonts.ubuntu(
                   textStyle: TextStyle(
                     color: Colors.white,
@@ -280,13 +278,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 RouteManager.forgotPage,
               );
             },
-            child: Text("Forgot Password?"),
+            child: Text(AppLocalizations.of(context)!.forgotPassword),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "New User?",
+                AppLocalizations.of(context)!.newUserQuestion,
               ),
               TextButton(
                 onPressed: () {
@@ -294,7 +292,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                     RouteManager.signupPage,
                   );
                 },
-                child: Text("Sign Up"),
+                child: Text(AppLocalizations.of(context)!.signUp),
               )
             ],
           )

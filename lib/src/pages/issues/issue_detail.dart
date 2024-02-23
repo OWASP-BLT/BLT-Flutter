@@ -55,7 +55,7 @@ class IssueDetailPage extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        title: Text("Issue #${issue.id}"),
+        title: Text("${AppLocalizations.of(context)!.issue} #${issue.id}"),
         actions: [
           IssueLikeButton(
             issue: issue,
@@ -74,7 +74,7 @@ class IssueDetailPage extends StatelessWidget {
           children: <Widget>[
             Container(
               child: Text(
-                "Issue #${issue.id}",
+                "${AppLocalizations.of(context)!.issue} #${issue.id}",
                 style: GoogleFonts.ubuntu(
                   textStyle: TextStyle(
                     color: Color(0xFF737373),
@@ -87,7 +87,7 @@ class IssueDetailPage extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    "Created On ${issue.created_date}",
+                    "${AppLocalizations.of(context)!.createdOn} ${issue.created_date}",
                     overflow: TextOverflow.ellipsis,
                     softWrap: true,
                     style: GoogleFonts.aBeeZee(
@@ -107,7 +107,7 @@ class IssueDetailPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Text(
-                "Title",
+                AppLocalizations.of(context)!.title,
                 overflow: TextOverflow.ellipsis,
                 softWrap: true,
                 style: GoogleFonts.ubuntu(
@@ -180,7 +180,7 @@ class IssueDetailPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Text(
-                "Screenshots",
+                AppLocalizations.of(context)!.screenshots,
                 overflow: TextOverflow.ellipsis,
                 softWrap: true,
                 style: GoogleFonts.ubuntu(

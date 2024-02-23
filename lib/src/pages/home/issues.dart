@@ -72,7 +72,7 @@ class IssuesPageState extends ConsumerState<IssuesPage>
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
                       child: Text(
-                        'Issues',
+                        AppLocalizations.of(context)!.issues,
                         style: GoogleFonts.ubuntu(
                           textStyle: TextStyle(
                             color: Color(0xFF737373),
@@ -84,7 +84,7 @@ class IssuesPageState extends ConsumerState<IssuesPage>
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
                       child: Text(
-                        "Check out the latest issues found and reported, maybe find a fix too?",
+                        AppLocalizations.of(context)!.checkLatestIssues,
                         style: GoogleFonts.aBeeZee(
                           textStyle: TextStyle(
                             color: Color(0xFF737373),
@@ -103,7 +103,7 @@ class IssuesPageState extends ConsumerState<IssuesPage>
                     if (issueList!.isEmpty) {
                       return Center(
                         child: Text(
-                          "Looks like there aren't many bugs :) \n Yay!",
+                          "${AppLocalizations.of(context)!.notManyBugs}:) \n ${AppLocalizations.of(context)!.yay}",
                           textAlign: TextAlign.center,
                         ),
                       );
@@ -122,7 +122,7 @@ class IssuesPageState extends ConsumerState<IssuesPage>
                   error: (Object error, StackTrace? stackTrace) {
                     return Center(
                       child: Text(
-                        'Something went wrong!',
+                        AppLocalizations.of(context)!.somethingWentWrong,
                         style: TextStyle(fontSize: 18),
                       ),
                     );

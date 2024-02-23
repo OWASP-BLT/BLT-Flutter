@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../pages_import.dart';
 
+
 /// Page stating the legal Terms and Conditions and Privacy
 /// Policy applying to the BLT project.
 class LegalPage extends StatelessWidget {
@@ -18,7 +19,7 @@ class LegalPage extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        title: Text("Terms of Service"),
+        title: Text(AppLocalizations.of(context)!.termsOfService),
         backgroundColor: Color(0xFFDC4654),
       ),
       body: SingleChildScrollView(
@@ -36,7 +37,7 @@ class LegalPage extends StatelessWidget {
             Container(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
               child: Text(
-                "By using the BLT app, you agree to the following terms and conditions and privacy policy. ",
+                AppLocalizations.of(context)!.byUsingBLTAppAgree,
                 style: GoogleFonts.aBeeZee(
                   textStyle: TextStyle(
                     color: Color(0xFF737373),
@@ -48,7 +49,7 @@ class LegalPage extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
               alignment: Alignment.centerLeft,
               child: Text(
-                "Terms and Conditions",
+                AppLocalizations.of(context)!.termsAndConditions,
                 style: GoogleFonts.ubuntu(
                   textStyle: TextStyle(
                     color: Color(0xFFDC4654),
@@ -94,7 +95,7 @@ class LegalPage extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
               alignment: Alignment.centerLeft,
               child: Text(
-                "Privacy Policy",
+                AppLocalizations.of(context)!.privacyPolicy,
                 style: GoogleFonts.ubuntu(
                   textStyle: TextStyle(
                     color: Color(0xFFDC4654),

@@ -1,6 +1,7 @@
 import 'package:blt/src/pages/pages_import.dart';
 import 'package:flutter/material.dart';
 
+
 /// Popup page for viewing company details when a company
 /// is clicked on the Company Scoreboard page.
 class CompanyDetailPage extends StatefulWidget {
@@ -19,7 +20,7 @@ class _CompanyDetailPageState extends State<CompanyDetailPage> {
 
   Future<void> redirectEmail(BuildContext context, Company company) async {
     SnackBar emailSnack = SnackBar(
-      content: Text("This company has not provided their email ."),
+      content: Text(AppLocalizations.of(context)!.companyEmailNotProvided),
       duration: Duration(seconds: 2),
     );
     if (company.email == null) {
@@ -35,7 +36,7 @@ class _CompanyDetailPageState extends State<CompanyDetailPage> {
 
   Future<void> redirectSite(BuildContext context, Company company) async {
     SnackBar siteSnack = SnackBar(
-      content: Text("This company has not provided their site ."),
+      content: Text(AppLocalizations.of(context)!.companySiteNotProvided),
       duration: Duration(seconds: 2),
     );
     if (company.url == null) {
@@ -63,8 +64,8 @@ class _CompanyDetailPageState extends State<CompanyDetailPage> {
       child: Center(
         child: Text(
           widget.company.openIssues > 0
-              ? "Unable to get info"
-              : "No open issues!",
+              ? AppLocalizations.of(context)!.unableToGetInfo
+              : AppLocalizations.of(context)!.noOpenIssues,
           style: GoogleFonts.aBeeZee(
             textStyle: TextStyle(
               color: Color(0xFF737373),
@@ -87,8 +88,8 @@ class _CompanyDetailPageState extends State<CompanyDetailPage> {
       child: Center(
         child: Text(
           widget.company.closedIssues > 0
-              ? "Unable to get info"
-              : "No closed issues!",
+              ? AppLocalizations.of(context)!.unableToGetInfo
+              : AppLocalizations.of(context)!.noOpenIssues,
           style: GoogleFonts.aBeeZee(
             textStyle: TextStyle(
               color: Color(0xFF737373),
@@ -195,7 +196,7 @@ class _CompanyDetailPageState extends State<CompanyDetailPage> {
                             vertical: 5.0,
                           ),
                           child: Text(
-                            "Top tester: ${widget.company.topTester}",
+                            "${AppLocalizations.of(context)!.topTester}: ${widget.company.topTester}",
                             style: GoogleFonts.aBeeZee(
                               textStyle: TextStyle(
                                 color: Color(0xFF737373),
@@ -217,7 +218,7 @@ class _CompanyDetailPageState extends State<CompanyDetailPage> {
                               color: Colors.white,
                             ),
                             label: Text(
-                              "Email",
+                              AppLocalizations.of(context)!.email,
                               style: GoogleFonts.aBeeZee(
                                 textStyle: TextStyle(
                                   color: Colors.white,
@@ -240,7 +241,7 @@ class _CompanyDetailPageState extends State<CompanyDetailPage> {
                               color: Colors.white,
                             ),
                             label: Text(
-                              "Site",
+                              AppLocalizations.of(context)!.site,
                               style: GoogleFonts.aBeeZee(
                                 textStyle: TextStyle(
                                   color: Colors.white,
@@ -281,7 +282,7 @@ class _CompanyDetailPageState extends State<CompanyDetailPage> {
                                     ),
                                   ),
                                   Text(
-                                    "Open Issues",
+                                    AppLocalizations.of(context)!.openIssues,
                                     style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
                                         color: companyColor,
@@ -316,7 +317,7 @@ class _CompanyDetailPageState extends State<CompanyDetailPage> {
                                     ),
                                   ),
                                   Text(
-                                    "Closed Issues",
+                                    AppLocalizations.of(context)!.closedIssues,
                                     style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
                                         color: companyColor,

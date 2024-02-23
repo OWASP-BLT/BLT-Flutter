@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:blt/src/pages/home/home_imports.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Start Bug Hunt Page
 /// companies and individuals
@@ -86,7 +87,7 @@ class _HuntFormState extends State<HuntForm> {
           Padding(
             padding: const EdgeInsets.only(top: 12.0),
             child: Text(
-              "App name/ url",
+              AppLocalizations.of(context)!.appNameOrURL,
               style: GoogleFonts.ubuntu(
                 textStyle: TextStyle(
                   color: Color(0xFFDC4654),
@@ -103,7 +104,7 @@ class _HuntFormState extends State<HuntForm> {
             child: TextFormField(
               controller: _websiteController,
               decoration: InputDecoration(
-                hintText: "Enter the URL or app name for the hunt ...",
+                hintText: AppLocalizations.of(context)!.enterURLorAppName,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(8.0),
@@ -132,7 +133,7 @@ class _HuntFormState extends State<HuntForm> {
                 SizedBox(
                   child: TextButton(
                     child: Text(
-                      "Choose Image",
+                      AppLocalizations.of(context)!.chooseImage,
                       style: GoogleFonts.ubuntu(
                         textStyle: TextStyle(
                           color: Colors.white,
@@ -156,7 +157,7 @@ class _HuntFormState extends State<HuntForm> {
                 SizedBox(
                   child: TextButton(
                     child: Text(
-                      "Choose From Clipboard",
+                      AppLocalizations.of(context)!.chooseFromClipboard,
                       style: GoogleFonts.ubuntu(
                         textStyle: TextStyle(
                           color: Colors.white,
@@ -184,7 +185,7 @@ class _HuntFormState extends State<HuntForm> {
             child: _image.path == ""
                 ? Center(
                     child: Text(
-                      'No image selected.',
+                      AppLocalizations.of(context)!.noImageSelected,
                       style: GoogleFonts.aBeeZee(
                         textStyle: TextStyle(
                           color: Color(0xFF737373),
@@ -213,7 +214,7 @@ class _HuntFormState extends State<HuntForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Set Prize Money",
+                  AppLocalizations.of(context)!.setPrizeMoney,
                   style: GoogleFonts.ubuntu(
                     textStyle: TextStyle(
                       color: Color(0xFFDC4654),
@@ -224,7 +225,7 @@ class _HuntFormState extends State<HuntForm> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Text(
-                    "This amount will be rewarded to the users who hunt bugs succesfully for your app/website",
+                    AppLocalizations.of(context)!.rewardToUsersHuntingBugs,
                     style: GoogleFonts.aBeeZee(
                       textStyle: TextStyle(
                         color: Color(0xFF737373),
@@ -265,7 +266,7 @@ class _HuntFormState extends State<HuntForm> {
             height: 50,
             child: TextButton(
               child: Text(
-                "Start Hunt!",
+                AppLocalizations.of(context)!.startHunt,
                 style: GoogleFonts.ubuntu(
                   textStyle: TextStyle(
                     color: Colors.white,

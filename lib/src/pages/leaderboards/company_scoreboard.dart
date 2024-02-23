@@ -65,7 +65,7 @@ class _CompanyScoreBoardPageState extends State<CompanyScoreBoardPage> {
             Navigator.of(context).pop();
           },
         ),
-        title: Text("Company Scoreboard"),
+        title: Text(AppLocalizations.of(context)!.companyScoreboard),
         backgroundColor: Color(0xFFDC4654),
       ),
       body: SingleChildScrollView(
@@ -81,7 +81,7 @@ class _CompanyScoreBoardPageState extends State<CompanyScoreBoardPage> {
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
                     child: Text(
-                      'Company Scoreboards',
+                      AppLocalizations.of(context)!.companyScoreboard,
                       style: GoogleFonts.ubuntu(
                         textStyle: TextStyle(
                           color: Color(0xFF737373),
@@ -93,7 +93,7 @@ class _CompanyScoreBoardPageState extends State<CompanyScoreBoardPage> {
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
                     child: Text(
-                      "These are the most active companies that are on BLT.",
+                      AppLocalizations.of(context)!.theseAreMostActiveCompanies,
                       style: GoogleFonts.aBeeZee(
                         textStyle: TextStyle(
                           color: Color(0xFF737373),
@@ -114,7 +114,7 @@ class _CompanyScoreBoardPageState extends State<CompanyScoreBoardPage> {
                     if (snapshot.hasError) {
                       return Center(
                         child: Text(
-                          'Something went wrong!',
+                          AppLocalizations.of(context)!.somethingWentWrong,
                           style: TextStyle(fontSize: 18),
                         ),
                       );
@@ -169,9 +169,9 @@ class _CompanyScoreBoardPageState extends State<CompanyScoreBoardPage> {
                                   maxLines: 6,
                                 ),
                                 subtitle: Text(
-                                  "Open: " +
+                                  AppLocalizations.of(context)!.open +
                                       list[index].openIssues.toString() +
-                                      "| Closed: " +
+                                      AppLocalizations.of(context)!.closed +
                                       list[index].closedIssues.toString(),
                                   style: GoogleFonts.aBeeZee(
                                     textStyle: TextStyle(
