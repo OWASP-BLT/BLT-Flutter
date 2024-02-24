@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../models/issue_model.dart';
 import '../../components/issuechip.dart';
@@ -61,7 +62,7 @@ class IssueDetailPage extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        title: Text("Issue #${issue.id}"),
+        title: Text("${AppLocalizations.of(context)!.issue} #${issue.id}"),
         actions: [
           IssueLikeButton(
             issue: issue,
@@ -80,7 +81,7 @@ class IssueDetailPage extends StatelessWidget {
           children: <Widget>[
             Container(
               child: Text(
-                "Issue #${issue.id}",
+                "${AppLocalizations.of(context)!.issue} #${issue.id}",
                 style: GoogleFonts.ubuntu(
                   textStyle: TextStyle(
                     color: Color(0xFF737373),
@@ -93,7 +94,7 @@ class IssueDetailPage extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    "Created On ${issue.created_date}",
+                    "${AppLocalizations.of(context)!.createdOn} ${issue.created_date}",
                     overflow: TextOverflow.ellipsis,
                     softWrap: true,
                     style: GoogleFonts.aBeeZee(
@@ -113,7 +114,7 @@ class IssueDetailPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Text(
-                "Description",
+                AppLocalizations.of(context)!.title,
                 overflow: TextOverflow.ellipsis,
                 softWrap: true,
                 style: GoogleFonts.ubuntu(
@@ -128,7 +129,7 @@ class IssueDetailPage extends StatelessWidget {
             Markdown(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              data: replaceImageTags(issue.description),
+              data: replaceImageTags(issue.title),
               padding: EdgeInsets.all(0),
               selectable: true,
               styleSheet: MarkdownStyleSheet.fromTheme(
@@ -137,7 +138,8 @@ class IssueDetailPage extends StatelessWidget {
                   textTheme: TextTheme(
                     bodyMedium: GoogleFonts.aBeeZee(
                       textStyle: TextStyle(
-                        fontSize: 12,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
                         color: Color(0xFF737373),
                       ),
                     ),
@@ -145,10 +147,47 @@ class IssueDetailPage extends StatelessWidget {
                 ),
               ),
             ),
+            if (issue.description != "")
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  "Description",
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  style: GoogleFonts.ubuntu(
+                    textStyle: TextStyle(
+                      color: Color(0xFFDC4654),
+                      fontSize: 17.5,
+                    ),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            if (issue.description != "")
+              Markdown(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                data: replaceImageTags('${issue.description}'),
+                padding: EdgeInsets.all(0),
+                selectable: true,
+                styleSheet: MarkdownStyleSheet.fromTheme(
+                  ThemeData(
+                    fontFamily: GoogleFonts.aBeeZee().fontFamily,
+                    textTheme: TextTheme(
+                      bodyMedium: GoogleFonts.aBeeZee(
+                        textStyle: TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF737373),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Text(
-                "Screenshots",
+                AppLocalizations.of(context)!.screenshots,
                 overflow: TextOverflow.ellipsis,
                 softWrap: true,
                 style: GoogleFonts.ubuntu(
