@@ -1,7 +1,7 @@
 name: blt
 description: The BLT-Flutter App
 
-version: 1.0.4+1
+version: 1.0.5+1
 publish_to: none
 
 environment:
@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
   flutter_markdown: ^0.6.14
   google_fonts: ">=3.0.1 <5.0.0"
-  http: ^0.13.1
+  http: ^1.1.0
   image_picker: ^0.8.4+4
   receive_sharing_intent:
     git:
