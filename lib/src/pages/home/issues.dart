@@ -108,7 +108,6 @@ class IssuesPageState extends ConsumerState<IssuesPage>
                         ),
                       );
                     } else {
-                      print(issueList.length);
                       return ListView.builder(
                         controller: _scrollController,
                         itemCount: issueList.length,
