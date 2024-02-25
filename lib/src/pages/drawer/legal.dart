@@ -12,6 +12,7 @@ class LegalPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -23,7 +24,8 @@ class LegalPage extends StatelessWidget {
           },
         ),
         title: Text(AppLocalizations.of(context)!.termsOfService),
-        backgroundColor: Color(0xFFDC4654),
+        backgroundColor:
+            isDarkMode ? Color.fromRGBO(58, 21, 31, 1) : Color(0xFFDC4654),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20),
@@ -33,7 +35,7 @@ class LegalPage extends StatelessWidget {
             Container(
               padding: EdgeInsets.fromLTRB(0, 36, 0, 24),
               child: SvgPicture.asset(
-                'assets/blt_logo_dark.svg',
+                isDarkMode ? 'assets/blt_logo_dark.svg' : 'assets/blt_logo.svg',
                 width: 169.42,
               ),
             ),

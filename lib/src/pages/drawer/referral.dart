@@ -22,6 +22,7 @@ class _ReferralPageState extends State<ReferralPage> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
@@ -34,7 +35,8 @@ class _ReferralPageState extends State<ReferralPage> {
           },
         ),
         title: Text(AppLocalizations.of(context)!.invite),
-        backgroundColor: Color(0xFFDC4654),
+        backgroundColor:
+            isDarkMode ? Color.fromRGBO(58, 21, 31, 1) : Color(0xFFDC4654),
       ),
       body: SingleChildScrollView(
         child: Container(

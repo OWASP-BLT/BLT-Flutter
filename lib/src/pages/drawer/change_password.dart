@@ -17,6 +17,7 @@ class ChangePasswordPage extends StatefulWidget {
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +40,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           Container(
             width: size.width,
             height: size.height,
-            color: Color(0xFFDC4654),
+            color:
+                isDarkMode ? Color.fromRGBO(58, 21, 31, 1) : Color(0xFFDC4654),
             child: Column(
               children: [
                 SizedBox(

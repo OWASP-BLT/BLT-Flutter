@@ -27,6 +27,7 @@ class _SocialPageState extends ConsumerState<SocialPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -38,7 +39,8 @@ class _SocialPageState extends ConsumerState<SocialPage> {
             },
           ),
           title: Text(AppLocalizations.of(context)!.social),
-          backgroundColor: Color(0xFFDC4654),
+          backgroundColor:
+              isDarkMode ? Color.fromRGBO(58, 21, 31, 1) : Color(0xFFDC4654),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
