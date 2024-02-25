@@ -8,3 +8,4 @@ export 'package:blt/src/providers/leaderboards/monthlyleaderboard_provider.dart'
 export 'package:flutter_riverpod/flutter_riverpod.dart';
 export '../../models/leader_model.dart';
 export '../../constants/monthname_constants.dart';
+export 'package:flutter_gen/gen_l10n/app_localizations.dart';

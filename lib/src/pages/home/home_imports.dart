@@ -36,3 +36,4 @@ export 'package:flutter_svg/flutter_svg.dart';
 export 'package:url_launcher/url_launcher.dart';
 export 'package:flutter_markdown/flutter_markdown.dart';
 export 'package:pasteboard/pasteboard.dart';
+export 'package:flutter_gen/gen_l10n/app_localizations.dart';
