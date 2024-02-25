@@ -3,9 +3,10 @@ import 'package:blt/src/components/components_import.dart';
 
 /// The app's main Appbar
 AppBar buildAppBar({required BuildContext context}) {
+  final isDarkMode = Theme.of(context).brightness == Brightness.dark;
   return AppBar(
     title: SvgPicture.asset(
-      'assets/blt_logo.svg',
+      isDarkMode ? 'assets/blt_logo_dark.svg' : 'assets/blt_logo.svg',
       fit: BoxFit.cover,
       height: 30,
     ),
@@ -13,18 +14,19 @@ AppBar buildAppBar({required BuildContext context}) {
       IconButton(
         icon: Icon(
           Icons.search,
+          color: isDarkMode ? Colors.grey[350] : Colors.red,
         ),
         onPressed: () {
           showSearch(
             context: context,
             delegate: BLTSearchDelegate(),
           );
-          // do something
         },
       ),
       IconButton(
         icon: Icon(
           Icons.account_circle,
+          color: isDarkMode ? Colors.grey[350] : Colors.red,
         ),
         onPressed: () {
           if (currentUser!.id == null) {
@@ -36,12 +38,15 @@ AppBar buildAppBar({required BuildContext context}) {
           Navigator.of(context).pushNamed(
             RouteManager.profilePage,
           );
-          // do something
         },
       )
     ],
     elevation: 0,
-    backgroundColor: Theme.of(context).canvasColor,
-    iconTheme: IconThemeData(color: Color(0xFFDC4654)),
+    backgroundColor: isDarkMode
+        ? Color.fromRGBO(58, 21, 31, 1)
+        : Theme.of(context).canvasColor,
+    iconTheme: isDarkMode
+        ? IconThemeData(color: Colors.grey[350])
+        : IconThemeData(color: Color(0xFFDC4654)),
   );
 }

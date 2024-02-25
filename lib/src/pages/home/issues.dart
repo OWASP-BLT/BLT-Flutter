@@ -51,8 +51,12 @@ class IssuesPageState extends ConsumerState<IssuesPage>
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final issueState = ref.watch(issueListProvider);
+    final isDarkMode = ref.watch(darkModeProvider);
 
     return Scaffold(
+      backgroundColor: isDarkMode.isDarkMode
+          ? Color.fromRGBO(34, 22, 23, 1)
+          : Theme.of(context).canvasColor,
       body: RefreshIndicator(
         onRefresh: () async {
           ref.read(issueListProvider.notifier).refreshIssueList();
@@ -65,7 +69,9 @@ class IssuesPageState extends ConsumerState<IssuesPage>
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 width: size.width,
-                color: Theme.of(context).canvasColor,
+                color: isDarkMode.isDarkMode
+                    ? Color.fromRGBO(34, 22, 23, 1)
+                    : Theme.of(context).canvasColor,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

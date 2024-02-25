@@ -87,6 +87,7 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -205,7 +206,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                     leaderList[index].user,
                                     style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
-                                        color: Color(0xFFDC4654),
+                                        color: isDarkMode
+                                            ? Colors.white
+                                            : Color(0xFFDC4654),
                                       ),
                                     ),
                                     maxLines: 6,
@@ -215,7 +218,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                         AppLocalizations.of(context)!.points,
                                     style: GoogleFonts.aBeeZee(
                                       textStyle: TextStyle(
-                                        color: Color(0xFF737373),
+                                        color: isDarkMode
+                                            ? Colors.grey[400]
+                                            : Color(0xFF737373),
                                         fontSize: 12,
                                       ),
                                     ),
@@ -224,7 +229,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                     "# " + (index + 1).toString(),
                                     style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
-                                        color: Color(0xFF737373),
+                                        color: isDarkMode
+                                            ? Colors.grey[400]
+                                            : Color(0xFF737373),
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -347,7 +354,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                     leaderList[index].user,
                                     style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
-                                        color: Color(0xFFDC4654),
+                                        color: isDarkMode
+                                            ? Colors.white
+                                            : Color(0xFFDC4654),
                                       ),
                                     ),
                                     maxLines: 6,
@@ -357,7 +366,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                         AppLocalizations.of(context)!.points,
                                     style: GoogleFonts.aBeeZee(
                                       textStyle: TextStyle(
-                                        color: Color(0xFF737373),
+                                        color: isDarkMode
+                                            ? Colors.grey[400]
+                                            : Color(0xFF737373),
                                         fontSize: 12,
                                       ),
                                     ),
@@ -366,7 +377,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                     "# " + (index + 1).toString(),
                                     style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
-                                        color: Color(0xFF737373),
+                                        color: isDarkMode
+                                            ? Colors.grey[400]
+                                            : Color(0xFF737373),
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -487,7 +500,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                     leaderList[index].user,
                                     style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
-                                        color: Color(0xFFDC4654),
+                                        color: isDarkMode
+                                            ? Colors.white
+                                            : Color(0xFFDC4654),
                                       ),
                                     ),
                                     maxLines: 6,
@@ -497,7 +512,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                         " points",
                                     style: GoogleFonts.aBeeZee(
                                       textStyle: TextStyle(
-                                        color: Color(0xFF737373),
+                                        color: isDarkMode
+                                            ? Colors.grey[400]
+                                            : Color(0xFF737373),
                                         fontSize: 12,
                                       ),
                                     ),
@@ -506,7 +523,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                     "# " + (index + 1).toString(),
                                     style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
-                                        color: Color(0xFF737373),
+                                        color: isDarkMode
+                                            ? Colors.grey[400]
+                                            : Color(0xFF737373),
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                       ),

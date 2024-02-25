@@ -13,6 +13,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -35,7 +36,8 @@ class _SignUpPageState extends State<SignUpPage> {
           Container(
             width: size.width,
             height: size.height,
-            color: Color(0xFFDC4654),
+            color:
+                isDarkMode ? Color.fromRGBO(34, 22, 23, 1) : Color(0xFFDC4654),
             child: Column(
               children: [
                 SizedBox(
@@ -68,7 +70,9 @@ class _SignUpPageState extends State<SignUpPage> {
               width: size.width,
               height: size.height * 0.65,
               decoration: BoxDecoration(
-                color: Theme.of(context).canvasColor,
+                color: isDarkMode
+                    ? Color.fromRGBO(42, 38, 38, 1)
+                    : Theme.of(context).canvasColor,
                 boxShadow: [
                   BoxShadow(
                     spreadRadius: 10,
