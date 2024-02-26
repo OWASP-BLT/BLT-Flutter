@@ -6,6 +6,7 @@ export 'package:blt/src/pages/home/leaderboard.dart';
 export 'package:blt/src/pages/home/report_bug.dart';
 export 'package:blt/src/pages/home/start_hunt.dart';
 export 'package:blt/src/providers/authstate_provider.dart';
+export 'package:blt/src/providers//dark_mode_provider.dart';
 export 'package:blt/src/providers/login_provider.dart';
 export 'package:blt/src/routes/routing.dart';
 export 'package:blt/src/util/enums/login_type.dart';
