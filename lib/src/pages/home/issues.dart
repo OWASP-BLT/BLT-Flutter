@@ -1,13 +1,5 @@
-import 'package:blt/src/providers/issuelist_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../../components/issue_intro_card.dart';
+import 'package:blt/src/pages/home/home_imports.dart';
 import 'package:flutter/material.dart';
-
-import '../../models/issue_model.dart';
-import '../../util/endpoints/issue_endpoints.dart';
 
 /// Issues page for viewing all the issues posted via the website and app.
 class IssuesPage extends ConsumerStatefulWidget {
@@ -59,8 +51,12 @@ class IssuesPageState extends ConsumerState<IssuesPage>
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final issueState = ref.watch(issueListProvider);
+    final isDarkMode = ref.watch(darkModeProvider);
 
     return Scaffold(
+      backgroundColor: isDarkMode.isDarkMode
+          ? Color.fromRGBO(34, 22, 23, 1)
+          : Theme.of(context).canvasColor,
       body: RefreshIndicator(
         onRefresh: () async {
           ref.read(issueListProvider.notifier).refreshIssueList();
@@ -73,7 +69,9 @@ class IssuesPageState extends ConsumerState<IssuesPage>
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 width: size.width,
-                color: Theme.of(context).canvasColor,
+                color: isDarkMode.isDarkMode
+                    ? Color.fromRGBO(34, 22, 23, 1)
+                    : Theme.of(context).canvasColor,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -120,8 +118,12 @@ class IssuesPageState extends ConsumerState<IssuesPage>
                         controller: _scrollController,
                         itemCount: issueList.length,
                         itemBuilder: (context, index) {
+                          final currentIssue = issueList[index];
+                          if (currentIssue.screenshotsLink!.isEmpty) {
+                            return Container();
+                          }
                           return IssueCard(
-                            issue: issueList[index],
+                            issue: currentIssue,
                           );
                         },
                       );

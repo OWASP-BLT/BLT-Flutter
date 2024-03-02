@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../pages_import.dart';
+
 
 /// Page stating the legal Terms and Conditions and Privacy
 /// Policy applying to the BLT project.
@@ -33,7 +30,7 @@ class LegalPage extends StatelessWidget {
             Container(
               padding: EdgeInsets.fromLTRB(0, 36, 0, 24),
               child: SvgPicture.asset(
-                'assets/blt_logo.svg',
+                'assets/blt_logo_dark.svg',
                 width: 169.42,
               ),
             ),

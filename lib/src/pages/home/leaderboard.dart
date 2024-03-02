@@ -1,13 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:blt/src/pages/home/home_imports.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../constants/monthname_constants.dart';
-import '../../routes/routing.dart';
-import '../../providers/leaderboards/globalleaderboard_povider.dart';
-import '../../providers/leaderboards/monthlyleaderboard_provider.dart';
-import '../../providers/leaderboards/companyscoreboard_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// The Leaderboards dashboard page, contains the Global,
 /// Monthly leaderboard, and Company Scoreboard.
@@ -95,6 +87,7 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -213,7 +206,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                     leaderList[index].user,
                                     style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
-                                        color: Color(0xFFDC4654),
+                                        color: isDarkMode
+                                            ? Colors.white
+                                            : Color(0xFFDC4654),
                                       ),
                                     ),
                                     maxLines: 6,
@@ -223,7 +218,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                         AppLocalizations.of(context)!.points,
                                     style: GoogleFonts.aBeeZee(
                                       textStyle: TextStyle(
-                                        color: Color(0xFF737373),
+                                        color: isDarkMode
+                                            ? Colors.grey[400]
+                                            : Color(0xFF737373),
                                         fontSize: 12,
                                       ),
                                     ),
@@ -232,7 +229,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                     "# " + (index + 1).toString(),
                                     style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
-                                        color: Color(0xFF737373),
+                                        color: isDarkMode
+                                            ? Colors.grey[400]
+                                            : Color(0xFF737373),
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -355,7 +354,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                     leaderList[index].user,
                                     style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
-                                        color: Color(0xFFDC4654),
+                                        color: isDarkMode
+                                            ? Colors.white
+                                            : Color(0xFFDC4654),
                                       ),
                                     ),
                                     maxLines: 6,
@@ -365,7 +366,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                         AppLocalizations.of(context)!.points,
                                     style: GoogleFonts.aBeeZee(
                                       textStyle: TextStyle(
-                                        color: Color(0xFF737373),
+                                        color: isDarkMode
+                                            ? Colors.grey[400]
+                                            : Color(0xFF737373),
                                         fontSize: 12,
                                       ),
                                     ),
@@ -374,7 +377,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                     "# " + (index + 1).toString(),
                                     style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
-                                        color: Color(0xFF737373),
+                                        color: isDarkMode
+                                            ? Colors.grey[400]
+                                            : Color(0xFF737373),
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -495,7 +500,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                     leaderList[index].user,
                                     style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
-                                        color: Color(0xFFDC4654),
+                                        color: isDarkMode
+                                            ? Colors.white
+                                            : Color(0xFFDC4654),
                                       ),
                                     ),
                                     maxLines: 6,
@@ -505,7 +512,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                         " points",
                                     style: GoogleFonts.aBeeZee(
                                       textStyle: TextStyle(
-                                        color: Color(0xFF737373),
+                                        color: isDarkMode
+                                            ? Colors.grey[400]
+                                            : Color(0xFF737373),
                                         fontSize: 12,
                                       ),
                                     ),
@@ -514,7 +523,9 @@ class _LeaderBoardState extends ConsumerState<LeaderBoard> {
                                     "# " + (index + 1).toString(),
                                     style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
-                                        color: Color(0xFF737373),
+                                        color: isDarkMode
+                                            ? Colors.grey[400]
+                                            : Color(0xFF737373),
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                       ),
