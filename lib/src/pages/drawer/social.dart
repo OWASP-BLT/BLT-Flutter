@@ -76,13 +76,13 @@ class _SocialPageState extends ConsumerState<SocialPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(FontAwesomeIcons.twitter,
+                              Icon(FontAwesomeIcons.xTwitter,
                                   color: Colors.white),
                               SizedBox(
                                 width: 20,
                               ),
                               Text(
-                                "Twitter",
+                                "X",
                                 style: GoogleFonts.aBeeZee(
                                   textStyle: TextStyle(
                                     fontSize: 20,
