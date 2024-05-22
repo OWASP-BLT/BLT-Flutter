@@ -8,7 +8,7 @@ class CompanyDetailWithIssues extends ConsumerStatefulWidget {
   CompanyDetailWithIssuesState createState() => CompanyDetailWithIssuesState();
 }
 
-ScrollController _scrollController = new ScrollController();
+// ScrollController _scrollController = new ScrollController();
 
 class CompanyDetailWithIssuesState
     extends ConsumerState<CompanyDetailWithIssues>

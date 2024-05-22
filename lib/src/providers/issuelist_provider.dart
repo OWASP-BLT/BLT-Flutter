@@ -107,12 +107,13 @@ class IssueByStatusListProvider
 
   Future<List<Issue>> getMoreIssues(String status, String? url) async {
     List<Issue> issues = [];
+    _cacheState();
     try {
       final IssueData? issueData =
           await IssueApiClient.getIssueByStatus(status, url ?? "");
       issues = issueData?.issueList ?? [];
     } catch (e) {
-      // Handle the error appropriately
+      _handleException(e);
       throw e;
     }
     return issues;
