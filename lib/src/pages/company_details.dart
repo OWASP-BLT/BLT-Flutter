@@ -225,7 +225,7 @@ class _CompanyDetailPageState extends State<CompanyDetailPage> {
                               ),
                             ),
                             style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
+                              backgroundColor: WidgetStateProperty.all(
                                 companyColor,
                               ),
                             ),
@@ -248,7 +248,7 @@ class _CompanyDetailPageState extends State<CompanyDetailPage> {
                               ),
                             ),
                             style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
+                              backgroundColor: WidgetStateProperty.all(
                                 companyColor,
                               ),
                             ),

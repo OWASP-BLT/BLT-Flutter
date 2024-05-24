@@ -151,7 +151,7 @@ class _HuntFormState extends State<HuntForm> {
                       _pickImageFromGallery();
                     },
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
+                      backgroundColor: WidgetStateProperty.all(
                         isDarkMode
                             ? Color.fromRGBO(126, 33, 58, 1)
                             : Color(0xFFDC4654),
@@ -177,7 +177,7 @@ class _HuntFormState extends State<HuntForm> {
                       _pasteImageFromClipBoard();
                     },
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
+                      backgroundColor: WidgetStateProperty.all(
                         isDarkMode
                             ? Color.fromRGBO(126, 33, 58, 1)
                             : Color(0xFFDC4654),
@@ -287,12 +287,12 @@ class _HuntFormState extends State<HuntForm> {
                 ),
               ),
               style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-                backgroundColor: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(
                   isDarkMode
                       ? Color.fromRGBO(126, 33, 58, 1)
                       : Color(0xFFDC4654),
