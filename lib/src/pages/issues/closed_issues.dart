@@ -1,26 +1,34 @@
 import 'package:blt/src/pages/home/home_imports.dart';
 
-/// Issues page for viewing all the issues posted via the website and app.
-class IssuesPage extends ConsumerStatefulWidget {
-  const IssuesPage({Key? key}) : super(key: key);
+/// Issues page for viewing all the Closed issues for a company posted via the website and app.
+class ClosedIssuesPage extends ConsumerStatefulWidget {
+  const ClosedIssuesPage({required this.company, Key? key});
+  final Company company;
 
   @override
-  IssuesPageState createState() => IssuesPageState();
+  ClosedIssuesPageState createState() => ClosedIssuesPageState();
 }
 
 ScrollController _scrollController = new ScrollController();
 
-class IssuesPageState extends ConsumerState<IssuesPage>
+class ClosedIssuesPageState extends ConsumerState<ClosedIssuesPage>
     with TickerProviderStateMixin {
   late AnimationController animationController;
-  late String paginatedUrl;
+
+  late var closedIssuesListProvider = StateNotifierProvider<
+      IssueByStatusListProvider, AsyncValue<List<Issue>?>?>((ref) {
+    return IssueByStatusListProvider(
+        ref.read, 'closed', widget.company.url ?? "");
+  });
+  // late String paginatedUrl;
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   @override
   void initState() {
-    paginatedUrl = IssueEndPoints.issues;
+    // paginatedUrl =
+    //     IssueEndPoints.issues + "/?status=open&domain=${widget.company.url}";
 
     animationController =
         AnimationController(duration: new Duration(seconds: 2), vsync: this);
@@ -42,23 +50,48 @@ class IssuesPageState extends ConsumerState<IssuesPage>
   }
 
   void loadMoreIssues() {
-    paginatedUrl = ref.watch(issueListProvider.notifier).nxtUrl!;
-    ref.watch(issueListProvider.notifier).getMoreIssues(paginatedUrl);
+    // paginatedUrl = ref
+    //     .watch(
+    //         closedIssuesListProvider({"url": widget.company.url ?? ""}).notifier)
+    //     .nxtUrl!;
+    ref
+        .watch(closedIssuesListProvider.notifier)
+        .getMoreIssues("closed", widget.company.url ?? "");
   }
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final issueState = ref.watch(issueListProvider);
+
+    final issueState = ref.watch(closedIssuesListProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: isDarkMode
           ? Color.fromRGBO(34, 22, 23, 1)
           : Theme.of(context).canvasColor,
+      appBar: AppBar(
+        backgroundColor: Color(0xFFDC4654),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: Text(
+          "Closed Issues",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+        ),
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
-          ref.read(issueListProvider.notifier).refreshIssueList();
+          ref.read(closedIssuesListProvider.notifier).refreshIssueList();
         },
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -77,7 +110,7 @@ class IssuesPageState extends ConsumerState<IssuesPage>
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
                       child: Text(
-                        AppLocalizations.of(context)!.issues,
+                        "Closed Issues",
                         style: GoogleFonts.ubuntu(
                           textStyle: TextStyle(
                             color: Color(0xFF737373),
@@ -89,7 +122,7 @@ class IssuesPageState extends ConsumerState<IssuesPage>
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
                       child: Text(
-                        AppLocalizations.of(context)!.checkLatestIssues,
+                        "Check out the closed issues found and reported by ${widget.company.companyName}. Maybe find a fix too?",
                         style: GoogleFonts.aBeeZee(
                           textStyle: TextStyle(
                             color: Color(0xFF737373),
