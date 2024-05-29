@@ -36,6 +36,7 @@ android {
         applicationId "com.apps.blt"
         minSdkVersion 21
         targetSdkVersion 33
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         vectorDrawables.useSupportLibrary = true

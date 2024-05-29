@@ -124,7 +124,7 @@ class _HomeState extends ConsumerState<Home> {
                 },
                 style: ButtonStyle(
                   alignment: Alignment.center,
-                  backgroundColor: MaterialStateProperty.all(Color(0xFFDC4654)),
+                  backgroundColor: WidgetStateProperty.all(Color(0xFFDC4654)),
                 ),
                 child: Text(
                   AppLocalizations.of(context)!.logout,
@@ -141,7 +141,7 @@ class _HomeState extends ConsumerState<Home> {
                 },
                 style: ButtonStyle(
                   alignment: Alignment.center,
-                  backgroundColor: MaterialStateProperty.all(Color(0xFF737373)),
+                  backgroundColor: WidgetStateProperty.all(Color(0xFF737373)),
                 ),
                 child: Text(
                   AppLocalizations.of(context)!.cancel,
@@ -314,6 +314,19 @@ class _HomeState extends ConsumerState<Home> {
                 },
               ),
               ListTile(
+                title: Text("Companies"),
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    RouteManager.companiesListPage,
+                  );
+
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                },
+              ),
+              ListTile(
                 title: Text(AppLocalizations.of(context)!.companyDashboard),
                 onTap: () {
                   Navigator.pushNamed(
@@ -350,13 +363,12 @@ class _HomeState extends ConsumerState<Home> {
                         ),
                       ),
                       style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
-                        backgroundColor: MaterialStateProperty.all(
+                        backgroundColor: WidgetStateProperty.all(
                           isDarkMode.isDarkMode
                               ? Color.fromRGBO(126, 33, 58, 1)
                               : Color(0xFFDC4654),
