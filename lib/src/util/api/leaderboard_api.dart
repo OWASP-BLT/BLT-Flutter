@@ -69,7 +69,6 @@ class LeaderboardApiClient {
   }
 
   static Future<List<Company>> getScoreBoardData(String? paginatedUrl) async {
-    print(paginatedUrl);
     var req = await http.get(
       Uri.parse(paginatedUrl!),
     );
