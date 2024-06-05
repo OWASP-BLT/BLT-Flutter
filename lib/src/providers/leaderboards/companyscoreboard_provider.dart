@@ -26,8 +26,6 @@ class CompanyScoreboardNotifier
           await LeaderboardApiClient.getScoreBoardData(
         LeaderboardEndpoints.companyScoreboard,
       );
-      print("object");
-      print(companyData);
 
       state = AsyncValue.data(companyData);
     } catch (e) {
