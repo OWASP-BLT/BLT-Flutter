@@ -21,7 +21,6 @@ class CompanyScoreboardNotifier
   /// Default call for getting companies
   /// when the provider is initialized.
   Future<void> _retrieveCompanyList() async {
-    print("object");
     try {
       final List<Company>? companyData =
           await LeaderboardApiClient.getScoreBoardData(
