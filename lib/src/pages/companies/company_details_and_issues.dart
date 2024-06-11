@@ -1,5 +1,5 @@
 import 'package:blt/src/pages/home/home_imports.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:primer_progress_bar/primer_progress_bar.dart';
 
 class CompanyDetailWithIssues extends ConsumerStatefulWidget {
   const CompanyDetailWithIssues({super.key, required this.company});
@@ -18,11 +18,11 @@ class CompanyDetailWithIssuesState
   late String paginatedUrl;
   late Color companyColor;
   List<Issue> openIssues = [], closedIssues = [];
+  List<Segment> segments = [];
   bool loading = true;
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  int touchedIndex = -1;
 
   @override
   void initState() {
@@ -53,58 +53,26 @@ class CompanyDetailWithIssuesState
     response =
         await IssueApiClient.getIssueByStatus("closed", widget.company.url!);
     closedIssues = response!.issueList ?? [];
+
+    // intialize the segments
+    segments = [
+      Segment(
+        value: closedIssues.length,
+        color: Color.fromARGB(255, 101, 205, 105),
+        label: Text(
+          "Closed",
+        ),
+      ),
+      Segment(
+        value: openIssues.length,
+        color: Colors.deepOrange,
+        label: Text(
+          "Open",
+        ),
+      ),
+    ];
     setState(() {
       loading = false;
-    });
-  }
-
-  List<PieChartSectionData> showingSections() {
-    return List.generate(2, (i) {
-      final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 20.0 : 16.0;
-      final radius = isTouched ? 110.0 : 100.0;
-      const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
-      var closedPerc =
-          ((closedIssues.length / (openIssues.length + closedIssues.length)) *
-              100);
-      var openPerc =
-          ((openIssues.length / (openIssues.length + closedIssues.length)) *
-              100);
-
-      switch (i) {
-        case 0:
-          return PieChartSectionData(
-            color: const Color.fromARGB(255, 231, 101, 91),
-            value: openPerc,
-            title: '${openPerc.toStringAsFixed(2)}%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xffffffff),
-              shadows: shadows,
-            ),
-            badgePositionPercentageOffset: .98,
-          );
-
-        case 1:
-          return PieChartSectionData(
-            color: Color.fromARGB(255, 101, 205, 105),
-            value: closedPerc,
-            title: '${closedPerc.toStringAsFixed(2)}%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xffffffff),
-              shadows: shadows,
-            ),
-            badgePositionPercentageOffset: .98,
-          );
-
-        default:
-          throw Exception('Oh no');
-      }
     });
   }
 
@@ -218,77 +186,33 @@ class CompanyDetailWithIssuesState
                 }),
               ),
               SizedBox(height: 20),
-              // Pie Chart Representation
+              //  Progress Representation
               if (closedIssues.length != 0 || openIssues.length != 0) ...[
-                Row(
-                  children: [
-                    Container(
-                      height: 15,
-                      width: 15,
-                      color: const Color.fromARGB(255, 231, 101, 91),
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      "Issues Open",
-                      style: GoogleFonts.aBeeZee(
-                        textStyle: TextStyle(
-                          color: Color(0xFF737373),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Container(
-                      height: 15,
-                      width: 15,
-                      color: const Color.fromARGB(255, 101, 205, 105),
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      "Issues Closed",
-                      style: GoogleFonts.aBeeZee(
-                        textStyle: TextStyle(
-                          color: Color(0xFF737373),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                AspectRatio(
-                  aspectRatio: 1.3,
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: PieChart(
-                      PieChartData(
-                        pieTouchData: PieTouchData(
-                          touchCallback:
-                              (FlTouchEvent event, pieTouchResponse) {
-                            setState(() {
-                              if (!event.isInterestedForInteractions ||
-                                  pieTouchResponse == null ||
-                                  pieTouchResponse.touchedSection == null) {
-                                touchedIndex = -1;
-                                return;
-                              }
-                              touchedIndex = pieTouchResponse
-                                  .touchedSection!.touchedSectionIndex;
-                            });
-                          },
-                        ),
-                        borderData: FlBorderData(
-                          show: false,
-                        ),
-                        sectionsSpace: 0,
-                        centerSpaceRadius: 0,
-                        sections: showingSections(),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Progress",
+                    style: GoogleFonts.ubuntu(
+                      textStyle: TextStyle(
+                        color: Color(0xFFDC4654),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
+                SizedBox(height: 20),
+                PrimerProgressBar(
+                  segments: segments,
+                  legendEllipsisBuilder: DefaultLegendEllipsisBuilder(
+                    segments: segments,
+                    color: Colors.grey,
+                    label: const Text("Other"),
+                    valueLabelBuilder: (value) => Text("$value%"),
+                  ),
+                ),
+                SizedBox(height: 10),
               ],
-
               // Open Issues list
               Container(
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
