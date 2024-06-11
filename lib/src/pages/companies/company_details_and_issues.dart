@@ -153,8 +153,70 @@ class CompanyDetailWithIssuesState
                     ),
                   ),
                 ),
-                SizedBox(height: 8),
+                SizedBox(height: 10),
               ],
+              Container(
+                width: double.infinity,
+                height: 50,
+                child: Builder(builder: (context) {
+                  return TextButton(
+                    onPressed: () async {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Scaffold(
+                            appBar: AppBar(
+                              backgroundColor: companyColor,
+                              leading: IconButton(
+                                icon: Icon(
+                                  Icons.arrow_back_ios_new_rounded,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              centerTitle: true,
+                              title: Text(
+                                "Report Issue",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                            body: ReportBug(
+                              reportPageDefaults: ReportPageDefaults(),
+                              company: company,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Report Issue",
+                      style: GoogleFonts.ubuntu(
+                        textStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                    style: ButtonStyle(
+                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      backgroundColor: WidgetStateProperty.all(
+                        isDarkMode
+                            ? Color.fromRGBO(126, 33, 58, 1)
+                            : Color(0xFFDC4654),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+              SizedBox(height: 10),
               Container(
                 width: double.infinity,
                 height: 50,
@@ -238,7 +300,7 @@ class CompanyDetailWithIssuesState
                     valueLabelBuilder: (value) => Text("$value%"),
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
               ],
               // Open Issues list
               Container(
@@ -255,7 +317,7 @@ class CompanyDetailWithIssuesState
                             style: GoogleFonts.ubuntu(
                               textStyle: TextStyle(
                                 color: Color(0xFFDC4654),
-                                fontSize: 16,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -393,7 +455,7 @@ class CompanyDetailWithIssuesState
                                   style: GoogleFonts.ubuntu(
                                     textStyle: TextStyle(
                                       color: Color(0xFFDC4654),
-                                      fontSize: 16,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
