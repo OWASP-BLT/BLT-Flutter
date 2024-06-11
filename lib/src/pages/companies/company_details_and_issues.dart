@@ -1,4 +1,5 @@
 import 'package:blt/src/pages/home/home_imports.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class CompanyDetailWithIssues extends ConsumerStatefulWidget {
   const CompanyDetailWithIssues({super.key, required this.company});
@@ -16,11 +17,12 @@ class CompanyDetailWithIssuesState
   late AnimationController animationController;
   late String paginatedUrl;
   late Color companyColor;
-  late List<Issue> openIssues, closedIssues;
+  List<Issue> openIssues = [], closedIssues = [];
   bool loading = true;
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  int touchedIndex = -1;
 
   @override
   void initState() {
@@ -48,13 +50,61 @@ class CompanyDetailWithIssuesState
     IssueData? response =
         await IssueApiClient.getIssueByStatus("open", widget.company.url!);
     openIssues = response!.issueList ?? [];
-    print(openIssues.length);
     response =
         await IssueApiClient.getIssueByStatus("closed", widget.company.url!);
     closedIssues = response!.issueList ?? [];
-    print(closedIssues.length);
     setState(() {
       loading = false;
+    });
+  }
+
+  List<PieChartSectionData> showingSections() {
+    return List.generate(2, (i) {
+      final isTouched = i == touchedIndex;
+      final fontSize = isTouched ? 20.0 : 16.0;
+      final radius = isTouched ? 110.0 : 100.0;
+      const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
+      var closedPerc =
+          ((closedIssues.length / (openIssues.length + closedIssues.length)) *
+              100);
+      var openPerc =
+          ((openIssues.length / (openIssues.length + closedIssues.length)) *
+              100);
+
+      switch (i) {
+        case 0:
+          return PieChartSectionData(
+            color: const Color.fromARGB(255, 231, 101, 91),
+            value: openPerc,
+            title: '${openPerc.toStringAsFixed(2)}%',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+              shadows: shadows,
+            ),
+            badgePositionPercentageOffset: .98,
+          );
+
+        case 1:
+          return PieChartSectionData(
+            color: Color.fromARGB(255, 101, 205, 105),
+            value: closedPerc,
+            title: '${closedPerc.toStringAsFixed(2)}%',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+              shadows: shadows,
+            ),
+            badgePositionPercentageOffset: .98,
+          );
+
+        default:
+          throw Exception('Oh no');
+      }
     });
   }
 
@@ -167,7 +217,77 @@ class CompanyDetailWithIssuesState
                   );
                 }),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
+              // Pie Chart Representation
+              if (closedIssues.length != 0 || openIssues.length != 0) ...[
+                Row(
+                  children: [
+                    Container(
+                      height: 15,
+                      width: 15,
+                      color: const Color.fromARGB(255, 231, 101, 91),
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      "Issues Open",
+                      style: GoogleFonts.aBeeZee(
+                        textStyle: TextStyle(
+                          color: Color(0xFF737373),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(
+                      height: 15,
+                      width: 15,
+                      color: const Color.fromARGB(255, 101, 205, 105),
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      "Issues Closed",
+                      style: GoogleFonts.aBeeZee(
+                        textStyle: TextStyle(
+                          color: Color(0xFF737373),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                AspectRatio(
+                  aspectRatio: 1.3,
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: PieChart(
+                      PieChartData(
+                        pieTouchData: PieTouchData(
+                          touchCallback:
+                              (FlTouchEvent event, pieTouchResponse) {
+                            setState(() {
+                              if (!event.isInterestedForInteractions ||
+                                  pieTouchResponse == null ||
+                                  pieTouchResponse.touchedSection == null) {
+                                touchedIndex = -1;
+                                return;
+                              }
+                              touchedIndex = pieTouchResponse
+                                  .touchedSection!.touchedSectionIndex;
+                            });
+                          },
+                        ),
+                        borderData: FlBorderData(
+                          show: false,
+                        ),
+                        sectionsSpace: 0,
+                        centerSpaceRadius: 0,
+                        sections: showingSections(),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
 
               // Open Issues list
               Container(
