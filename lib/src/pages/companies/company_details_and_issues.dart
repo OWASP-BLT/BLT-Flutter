@@ -216,37 +216,37 @@ class CompanyDetailWithIssuesState
                   );
                 }),
               ),
-              SizedBox(height: 10),
-              Container(
-                width: double.infinity,
-                height: 50,
-                child: Builder(builder: (context) {
-                  return TextButton(
-                    child: Text(
-                      "Subscribe",
-                      style: GoogleFonts.ubuntu(
-                        textStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                    style: ButtonStyle(
-                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                      backgroundColor: WidgetStateProperty.all(
-                        isDarkMode
-                            ? Color.fromRGBO(126, 33, 58, 1)
-                            : Color(0xFFDC4654),
-                      ),
-                    ),
-                    onPressed: () async {},
-                  );
-                }),
-              ),
+              // SizedBox(height: 10),
+              // Container(
+              //   width: double.infinity,
+              //   height: 50,
+              //   child: Builder(builder: (context) {
+              //     return TextButton(
+              //       child: Text(
+              //         "Subscribe",
+              //         style: GoogleFonts.ubuntu(
+              //           textStyle: TextStyle(
+              //             color: Colors.white,
+              //             fontSize: 20,
+              //           ),
+              //         ),
+              //       ),
+              //       style: ButtonStyle(
+              //         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+              //           RoundedRectangleBorder(
+              //             borderRadius: BorderRadius.circular(8.0),
+              //           ),
+              //         ),
+              //         backgroundColor: WidgetStateProperty.all(
+              //           isDarkMode
+              //               ? Color.fromRGBO(126, 33, 58, 1)
+              //               : Color(0xFFDC4654),
+              //         ),
+              //       ),
+              //       onPressed: () async {},
+              //     );
+              //   }),
+              // ),
               SizedBox(height: 20),
               Align(
                 alignment: Alignment.centerLeft,
