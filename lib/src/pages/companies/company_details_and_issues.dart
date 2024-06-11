@@ -248,33 +248,36 @@ class CompanyDetailWithIssuesState
               //   }),
               // ),
               SizedBox(height: 20),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "About Us:",
-                  style: GoogleFonts.ubuntu(
-                    textStyle: TextStyle(
-                      color: Color(0xFFDC4654),
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+              // About Us Section: only if have a desc
+              if (company.description != null) ...[
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "About Us:",
+                    style: GoogleFonts.ubuntu(
+                      textStyle: TextStyle(
+                        color: Color(0xFFDC4654),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 10),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "${company.description}",
-                  style: GoogleFonts.aBeeZee(
-                    textStyle: TextStyle(
-                      color: Color(0xFF737373),
+                SizedBox(height: 10),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "${company.description}",
+                    style: GoogleFonts.aBeeZee(
+                      textStyle: TextStyle(
+                        color: Color(0xFF737373),
+                      ),
                     ),
+                    textAlign: TextAlign.justify,
                   ),
-                  textAlign: TextAlign.justify,
                 ),
-              ),
-              SizedBox(height: 20),
+                SizedBox(height: 20),
+              ],
               //  Progress Representation
               if (closedIssues.length != 0 || openIssues.length != 0) ...[
                 Align(
