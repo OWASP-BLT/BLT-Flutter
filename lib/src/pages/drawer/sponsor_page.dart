@@ -16,7 +16,7 @@ class _SponsorPageState extends State<SponsorPage>
     {
       "title": "Ant Tier",
       "svg": "assets/ant.svg",
-      "subtitle": "\$20 or more",
+      "subtitle": "\$10 or more",
     },
     {
       "title": "Flea Tier",
@@ -31,7 +31,7 @@ class _SponsorPageState extends State<SponsorPage>
     {
       "title": "Wasp Tier",
       "svg": "assets/wasp.svg",
-      "subtitle": "\$200 or more",
+      "subtitle": "\$500 or more",
     }
   ];
 
@@ -52,7 +52,7 @@ class _SponsorPageState extends State<SponsorPage>
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final Size size = MediaQuery.of(context).size;
+    // final Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: isDarkMode
           ? Color.fromRGBO(34, 22, 23, 1)
@@ -172,58 +172,6 @@ class _SponsorPageState extends State<SponsorPage>
                 ),
                 onPressed: () async {},
               ),
-              // Container(
-              // height: size.height * 0.8,
-              // padding: EdgeInsets.symmetric(horizontal: 20),
-              // child: issueState!.when(
-              //   data: (List<Company>? companyList) {
-              //     if (companyList!.isEmpty) {
-              //       return Center(
-              //         child: Text(
-              //           "No companies found !!",
-              //           textAlign: TextAlign.center,
-              //         ),
-              //       );
-              //     } else {
-              //       return ListView.separated(
-              //         controller: _scrollController,
-              //         itemCount: companyList.length,
-              //         shrinkWrap: true,
-              //         physics: NeverScrollableScrollPhysics(),
-              //         itemBuilder: (context, index) {
-              //           final company = companyList[index];
-              //           return CompanyListElement(
-              //             company: company,
-              //           );
-              //         },
-              //         separatorBuilder: (BuildContext context, int index) {
-              //           return SizedBox(height: 10);
-              //         },
-              //       );
-              //     }
-              //   },
-              //   error: (Object error, StackTrace? stackTrace) {
-              //     return Center(
-              //       child: Text(
-              //         AppLocalizations.of(context)!.somethingWentWrong,
-              //         style: TextStyle(fontSize: 18),
-              //       ),
-              //     );
-              //   },
-              //   loading: () {
-              //     return Center(
-              //       child: CircularProgressIndicator(
-              //         valueColor: animationController.drive(
-              //           ColorTween(
-              //             begin: Colors.blueAccent,
-              //             end: Colors.red,
-              //           ),
-              //         ),
-              //       ),
-              //     );
-              //   },
-              // ),
-              // ),
             ],
           ),
         ),
@@ -263,8 +211,10 @@ class UnselectedSponsorTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   child: SvgPicture.asset(
                     sponsor["svg"],
-                    color:
-                        isDarkMode ? Color.fromARGB(255, 212, 212, 212) : null,
+                    colorFilter: isDarkMode
+                        ? ColorFilter.mode(
+                            Color.fromARGB(255, 212, 212, 212), BlendMode.srcIn)
+                        : null,
                   ),
                 ),
               ),
@@ -335,7 +285,9 @@ class SelectedSponsorTile extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                       child: SvgPicture.asset(
                         sponsor["svg"],
-                        color: isDarkMode ? Colors.white : null,
+                        colorFilter: isDarkMode
+                            ? ColorFilter.mode(Colors.white, BlendMode.srcIn)
+                            : null,
                       ),
                     ),
                   ),
