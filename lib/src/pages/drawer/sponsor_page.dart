@@ -1,5 +1,4 @@
 import 'package:blt/src/pages/drawer/drawer_imports.dart';
-import 'package:flutter/material.dart';
 
 class SponsorPage extends StatefulWidget {
   const SponsorPage({super.key});
@@ -11,27 +10,33 @@ class SponsorPage extends StatefulWidget {
 class _SponsorPageState extends State<SponsorPage>
     with TickerProviderStateMixin {
   late AnimationController animationController;
+  Map<String, dynamic>? intent;
   int selected = -1;
+
   final List<dynamic> tiers = [
     {
       "title": "Ant Tier",
       "svg": "assets/ant.svg",
-      "subtitle": "\$10 or more",
+      "subtitle": "Join the Colony - \$10",
+      "option": 0,
     },
     {
       "title": "Flea Tier",
       "svg": "assets/flea.svg",
-      "subtitle": "\$50 or more",
+      "subtitle": "Leap into Action - \$50",
+      "option": 2,
     },
     {
       "title": "Scorpion Tier",
       "svg": "assets/scorpion.svg",
-      "subtitle": "\$100 or more",
+      "subtitle": "Strike with Power - \$100",
+      "option": 3,
     },
     {
       "title": "Wasp Tier",
       "svg": "assets/wasp.svg",
-      "subtitle": "\$500 or more",
+      "subtitle": "Rule the Hive - \$500",
+      "option": 4,
     }
   ];
 
@@ -170,7 +175,29 @@ class _SponsorPageState extends State<SponsorPage>
                         : Color(0xFFDC4654),
                   ),
                 ),
-                onPressed: () async {},
+                onPressed: () {
+                  if (selected == -1) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "Please choose a tier before proceeding to payment.",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: isDarkMode
+                            ? Color.fromRGBO(126, 33, 58, 1)
+                            : Color(0xFFDC4654),
+                      ),
+                    );
+                  } else {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => OWASPDonationWebView(
+                          selectedIndex: tiers[selected]["option"],
+                        ),
+                      ),
+                    );
+                  }
+                },
               ),
             ],
           ),
@@ -275,7 +302,7 @@ class SelectedSponsorTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width: size.width * 0.5,
+              // width: size.width * 0.5,
               child: Row(
                 children: [
                   SizedBox(
