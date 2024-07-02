@@ -1,4 +1,3 @@
-// import 'package:blt/src/constants/socialurls_constants.dart';
 import 'package:blt/src/pages/home/home_imports.dart';
 
 /// Navigator and drawer provider for the main pages:
