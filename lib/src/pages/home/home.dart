@@ -392,13 +392,13 @@ class _HomeState extends ConsumerState<Home> {
             );
           },
           backgroundColor: isDarkMode.isDarkMode
-              ? Color.fromRGBO(126, 33, 58, 1)
-              : Color(0xFFDC4654),
-          child: Icon(
-            Icons.message_outlined,
-            color: !isDarkMode.isDarkMode
-                ? Color.fromRGBO(47, 39, 41, 1)
-                : Color.fromARGB(255, 224, 224, 224),
+              ? Color.fromRGBO(94, 15, 36, 1)
+              : Color.fromARGB(255, 246, 219, 221),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset("assets/logo.png"),
+            ),
           ),
         ),
         body: PageView(
