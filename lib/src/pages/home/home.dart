@@ -368,10 +368,6 @@ class _HomeState extends ConsumerState<Home> {
                         ),
                       ),
                       onPressed: () {
-                        // await launchUrl(
-                        //   Uri.parse(socialUrls["sponsor"]!),
-                        //   mode: LaunchMode.externalApplication,
-                        // );
                         Navigator.pushNamed(
                           context,
                           RouteManager.sponsorPage,
