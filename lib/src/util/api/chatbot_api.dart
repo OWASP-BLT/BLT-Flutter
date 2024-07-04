@@ -13,7 +13,7 @@ class ChatBotApiClient {
       );
 
       var json = jsonDecode(response.body);
-      if (json["error"] != "" || json["error"] != null)
+      if (json["answer"] == "" || json["answer"] == null)
         return "err: ${json["error"]}";
 
       return "res: ${json["answer"]}";
