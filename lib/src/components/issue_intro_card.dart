@@ -35,12 +35,15 @@ class IssueCard extends StatelessWidget {
                 height: 0.214 * size.height,
                 child: AspectRatio(
                   aspectRatio: size.width / 0.214 * size.height,
-                  child: CachedNetworkImage(
-                    imageUrl: (issue.screenshotsLink!.isNotEmpty)
-                        ? issue.screenshotsLink![0]
-                        : "https://salonlfc.com/wp-content/uploads/2018/01/image-not-found-1-scaled-1150x647.png",
-                    fit: BoxFit.cover,
-                  ),
+                  child: (issue.screenshotsLink!.isNotEmpty)
+                      ? CachedNetworkImage(
+                          imageUrl: issue.screenshotsLink![0],
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
+                          "assets/image-not-found.png",
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
               Container(
