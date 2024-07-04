@@ -1,6 +1,4 @@
-import 'package:blt/src/util/api/chatbot_api.dart';
-import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
+import 'package:blt/src/pages/pages_import.dart';
 
 class ChatBotPage extends StatefulWidget {
   const ChatBotPage({super.key});
