@@ -165,13 +165,8 @@ class _ShowIssueListState extends State<ShowIssueList> {
       itemCount: widget.issueList.length,
       itemBuilder: (context, index) {
         final currentIssue = widget.issueList[index];
-        if (widget.isTesting != null && widget.isTesting == true) {
-          return ListTile(
-            title: Text(currentIssue.title),
-            subtitle: Text(currentIssue.description!),
-          );
-        }
         return IssueCard(
+          isTesting: widget.isTesting,
           issue: currentIssue,
         );
       },

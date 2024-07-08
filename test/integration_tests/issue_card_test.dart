@@ -13,6 +13,7 @@ void main() {
       domain: 3,
       isOpen: true,
       screenshotsLink: [],
+      likes: 0,
       isVerified: false,
     );
 
