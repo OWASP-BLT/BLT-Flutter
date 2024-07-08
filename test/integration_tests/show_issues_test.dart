@@ -1,7 +1,7 @@
 import '../test_imports.dart';
 
 void main() {
-  testWidgets("Issue list integration", (WidgetTester tester) async {
+  testWidgets("Issue List Test", (WidgetTester tester) async {
     final mockIssueList = [
       Issue(
         id: 1,

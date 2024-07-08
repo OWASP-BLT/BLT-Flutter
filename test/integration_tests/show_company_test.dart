@@ -1,7 +1,7 @@
 import '../test_imports.dart';
 
 void main() {
-  testWidgets("Company List Integration", (WidgetTester tester) async {
+  testWidgets("Company List Test", (WidgetTester tester) async {
     final mockcompanyList = [
       Company(
         1,
