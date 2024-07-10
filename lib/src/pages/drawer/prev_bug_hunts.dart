@@ -1,18 +1,17 @@
 import 'package:blt/src/pages/drawer/drawer_imports.dart';
 
-class ShowBugHunts extends ConsumerStatefulWidget {
-  const ShowBugHunts({Key? key}) : super(key: key);
+class PreviousBugHunts extends ConsumerStatefulWidget {
+  const PreviousBugHunts({Key? key}) : super(key: key);
 
   @override
-  _ShowBugHuntsState createState() => _ShowBugHuntsState();
+  _PreviousBugHuntsState createState() => _PreviousBugHuntsState();
 }
 
 ScrollController _scrollController = new ScrollController();
 
-class _ShowBugHuntsState extends ConsumerState<ShowBugHunts>
+class _PreviousBugHuntsState extends ConsumerState<PreviousBugHunts>
     with TickerProviderStateMixin {
   late AnimationController animationController;
-
   @override
   void initState() {
     animationController =
@@ -25,7 +24,7 @@ class _ShowBugHuntsState extends ConsumerState<ShowBugHunts>
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final Size size = MediaQuery.of(context).size;
-    final bugHuntList = ref.watch(bugHuntListProvider);
+    final bugHuntList = ref.watch(prevBugHuntListProvider);
 
     return Scaffold(
       backgroundColor: isDarkMode
@@ -44,46 +43,30 @@ class _ShowBugHuntsState extends ConsumerState<ShowBugHunts>
           },
         ),
         title: Text(
-          "Bug Hunts",
+          "Previous Bug Hunts",
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: BugHuntSearchDelegate(),
-              );
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 12),
-            child: IconButton(
-              icon: Icon(
-                Icons.history_rounded,
-                color: Colors.white,
-                size: 24,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  RouteManager.showPrevBugHunt,
-                );
-              },
-            ),
-          )
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(
+        //       Icons.search,
+        //       color: Colors.white,
+        //     ),
+        //     onPressed: () {
+        //       showSearch(
+        //         context: context,
+        //         delegate: BugHuntSearchDelegate(),
+        //       );
+        //     },
+        //   ),
+        // ],
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          ref.read(bugHuntListProvider.notifier).refreshBugHuntList();
+          ref.read(prevBugHuntListProvider.notifier).refreshPrevBugHuntList();
         },
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -102,7 +85,7 @@ class _ShowBugHuntsState extends ConsumerState<ShowBugHunts>
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
                       child: Text(
-                        "Bug Hunts",
+                        "Previous Bug Hunts",
                         style: GoogleFonts.ubuntu(
                           textStyle: TextStyle(
                             color: Color(0xFF737373),
@@ -114,7 +97,7 @@ class _ShowBugHuntsState extends ConsumerState<ShowBugHunts>
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
                       child: Text(
-                        "Check out the list of awesome active and upcoming Bug Hunts. Maybe try to participate in them too?",
+                        "Check out the list of awesome Previous Bug Hunts going on. Maybe try to participate in them too?",
                         style: GoogleFonts.aBeeZee(
                           textStyle: TextStyle(
                             color: Color(0xFF737373),
@@ -133,7 +116,7 @@ class _ShowBugHuntsState extends ConsumerState<ShowBugHunts>
                     if (bugHuntsList!.isEmpty) {
                       return Center(
                         child: Text(
-                          "No Bug Hunts found !!",
+                          "No Previous Bug Hunts found !!",
                           textAlign: TextAlign.center,
                         ),
                       );
