@@ -1,3 +1,4 @@
+import 'package:blt/src/pages/drawer/contributors.dart';
 import 'package:blt/src/routes/routes_import.dart';
 
 /// The managing class for App Navigation, also adds custom page transitions.
@@ -29,6 +30,7 @@ class RouteManager {
   static const String showBugHunt = "/showBugHunt";
   static const String showPrevBugHunt = "/showPrevBugHunt";
   static const String bugHuntDescPageHunt = "/bugHuntDescPage";
+  static const String contributorsPage = "/contributors";
 
   /// Route generator, finds a requested route or throws the
   /// error page in case of route not found.
@@ -539,6 +541,26 @@ class RouteManager {
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
               BugHuntDescriptionPage(hunt: arguments as BugHunt),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0);
+            const end = Offset.zero;
+            const curve = Curves.ease;
+
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+          transitionDuration: const Duration(milliseconds: 750),
+        );
+
+      case contributorsPage:
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              ContributorsPage(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(1.0, 0);
             const end = Offset.zero;

@@ -270,32 +270,6 @@ class _HomeState extends ConsumerState<Home> {
                 },
               ),
               ListTile(
-                title: Text(AppLocalizations.of(context)!.termsOfService),
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    RouteManager.legalPage,
-                  );
-
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                },
-              ),
-              ListTile(
-                title: Text(AppLocalizations.of(context)!.aboutUs),
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    RouteManager.aboutPage,
-                  );
-
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                },
-              ),
-              ListTile(
                 title: Text("Bug Hunts"),
                 onTap: () {
                   Navigator.pushNamed(
@@ -328,10 +302,33 @@ class _HomeState extends ConsumerState<Home> {
                     context,
                     RouteManager.companyDashboardPage,
                   );
-
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
+                },
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.termsOfService),
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    RouteManager.legalPage,
+                  );
+                },
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.aboutUs),
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    RouteManager.aboutPage,
+                  );
+                },
+              ),
+              ListTile(
+                title: Text("Projects"),
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    RouteManager.contributorsPage,
+                  );
                 },
               ),
               SwitchListTile(
