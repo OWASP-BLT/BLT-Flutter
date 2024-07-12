@@ -64,3 +64,13 @@ class Contributors {
     return json.map((data) => Contributors.fromJson(data)).toList();
   }
 }
+// {
+//   "login": "Uttkarsh-raj",
+//   "id": 106571927,
+//   "avatar_url": "https://avatars.githubusercontent.com/u/106571927?v=4",
+//   "url": "https://api.github.com/users/Uttkarsh-raj",
+//   "location": "Bangalore, India",
+//   "email": null,
+//   "bio": null,
+//   "twitter_username": "__uttkarsh__",
+// }

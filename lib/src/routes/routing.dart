@@ -1,3 +1,5 @@
+import 'package:blt/src/models/contributors_model.dart';
+import 'package:blt/src/pages/contributors_info.dart';
 import 'package:blt/src/pages/drawer/contributors.dart';
 import 'package:blt/src/routes/routes_import.dart';
 
@@ -31,6 +33,7 @@ class RouteManager {
   static const String showPrevBugHunt = "/showPrevBugHunt";
   static const String bugHuntDescPageHunt = "/bugHuntDescPage";
   static const String contributorsPage = "/contributors";
+  static const String contributorInfo = "/contributorInfo";
 
   /// Route generator, finds a requested route or throws the
   /// error page in case of route not found.
@@ -561,6 +564,27 @@ class RouteManager {
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
               ContributorsPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0);
+            const end = Offset.zero;
+            const curve = Curves.ease;
+
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+          transitionDuration: const Duration(milliseconds: 750),
+        );
+      case contributorInfo:
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              ContributorsInfoPage(
+            contributors: arguments as List<Contributors>,
+          ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(1.0, 0);
             const end = Offset.zero;

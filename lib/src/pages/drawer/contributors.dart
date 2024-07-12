@@ -1,5 +1,5 @@
 import 'package:blt/src/models/contributors_model.dart';
-import 'package:blt/src/models/gihub_project_model.dart';
+import 'package:blt/src/models/project_model.dart';
 import 'package:blt/src/pages/drawer/drawer_imports.dart';
 import 'package:blt/src/util/api/github_apis.dart';
 
@@ -27,14 +27,14 @@ class _ContributorsPageState extends State<ContributorsPage>
       owner: "OWASP-BLT",
       name: "BLT-FLutter",
       desc: "The official OWASP BLT App repository/ Heist 'em bugs!",
-      logoUrl: "",
+      logoUrl: "https://avatars.githubusercontent.com/u/160347863?s=48&v=4",
     ),
     Project(
       owner: "OWASP-BLT",
       name: "BLT-Bacon",
       desc:
           "Bacon is a OWASP BLT Private Chain based on POA consensus that rewards bug testers",
-      logoUrl: "",
+      logoUrl: "https://avatars.githubusercontent.com/u/160347863?s=48&v=4",
     )
   ];
   @override
@@ -114,11 +114,13 @@ class _ContributorsPageState extends State<ContributorsPage>
                   ],
                 ),
               ),
+              SizedBox(height: size.height * 0.008),
               ListView.separated(
                 shrinkWrap: true,
                 itemCount: projects.length,
                 physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) => SizedBox(height: 10),
+                separatorBuilder: (context, index) =>
+                    SizedBox(height: size.height * 0.025),
                 itemBuilder: (context, index) {
                   return PojectsSection(project: projects[index]);
                 },
@@ -140,13 +142,14 @@ class PojectsSection extends StatefulWidget {
 }
 
 class _PojectsSectionState extends State<PojectsSection> {
-  late Future _getObj;
+  List<Contributors> contributors = [];
 
   void getContributors() async {
-    _getObj = GithubApis.getContributors(
+    contributors = await GithubApis.getContributors(
       widget.project.name,
       widget.project.owner,
     );
+    setState(() {});
   }
 
   CircleAvatar buildAvatar(String partUrl) {
@@ -192,15 +195,28 @@ class _PojectsSectionState extends State<PojectsSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.project.name,
-          style: GoogleFonts.ubuntu(
-            textStyle: TextStyle(
-              color: Color(0xFFDC4654),
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+        Row(
+          children: [
+            SizedBox(
+              height: 25,
+              width: 25,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: CachedNetworkImage(imageUrl: widget.project.logoUrl),
+              ),
             ),
-          ),
+            SizedBox(width: 5),
+            Text(
+              widget.project.name,
+              style: GoogleFonts.ubuntu(
+                textStyle: TextStyle(
+                  color: Color(0xFFDC4654),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
         ),
         SizedBox(height: size.height * 0.01),
         Text(
@@ -212,102 +228,84 @@ class _PojectsSectionState extends State<PojectsSection> {
           ),
           textAlign: TextAlign.justify,
         ),
-        Container(
-          height: size.height * 0.3,
-          child: FutureBuilder(
-            future: _getObj,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text(
-                      AppLocalizations.of(context)!.somethingWentWrong,
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  );
-                } else if (snapshot.hasData) {
-                  final list = snapshot.data as List<Contributors>;
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 0.0,
-                      vertical: 20.0,
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: ListView.builder(
-                        itemCount: (list.length > 3) ? 3 : list.length,
-                        itemBuilder: (context, index) {
-                          int title = index + 1;
-                          return ListTile(
-                            onTap: () {},
-                            shape: RoundedRectangleBorder(
-                              borderRadius: index == 0
-                                  ? BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(15),
-                                    )
-                                  : index ==
-                                          ((list.length > 3)
-                                              ? 2
-                                              : list.length - 1)
-                                      ? BorderRadius.only(
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10),
-                                        )
-                                      : BorderRadius.only(
-                                          topLeft: Radius.circular(0),
-                                        ),
-                            ),
-                            tileColor: title == 1
-                                ? Color(0xFFC9AE5D).withOpacity(0.42)
-                                : title == 2
-                                    ? Color(0xFFADD8E6).withOpacity(0.42)
-                                    : title == 3
-                                        ? Color(0xFFFFD700).withOpacity(0.42)
-                                        : Colors.white,
-                            leading: buildAvatar(list[index].image),
-                            title: Text(
-                              list[index].name,
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                  color: Color(0xFFDC4654),
-                                ),
-                              ),
-                              maxLines: 6,
-                            ),
-                            subtitle: Text(
-                              list[index].contributions.toString() +
-                                  " contributions",
-                              style: GoogleFonts.aBeeZee(
-                                textStyle: TextStyle(
-                                  color: Color(0xFF737373),
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                            trailing: Text(
-                              "# " + (index + 1).toString(),
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                  color: Color(0xFF737373),
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
+        SizedBox(height: size.height * 0.015),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              RouteManager.contributorInfo,
+              arguments: contributors,
+            );
+          },
+          child: Container(
+            height: size.height * 0.07,
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Color.fromARGB(255, 250, 247, 241),
+              boxShadow: [
+                BoxShadow(
+                  offset: Offset(0, 1),
+                  color: Color.fromARGB(255, 200, 200, 200),
+                  spreadRadius: 0.1,
+                  blurRadius: 10,
+                )
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "Contributors",
+                      style: GoogleFonts.ubuntu(
+                        textStyle: TextStyle(
+                          color: Color(0xFFDC4654),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  );
-                }
-              }
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            },
+                    SizedBox(width: size.width * 0.04),
+                    ListView.separated(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount:
+                          (contributors.length > 3) ? 3 : contributors.length,
+                      itemBuilder: (context, index) => CircleAvatar(
+                        backgroundImage: CachedNetworkImageProvider(
+                          contributors[index].image,
+                        ),
+                        radius: size.width * 0.045,
+                      ),
+                      separatorBuilder: (context, index) => SizedBox(width: 4),
+                    ),
+                    if (contributors.length > 3) ...[
+                      SizedBox(width: 5),
+                      Text(
+                        "+${contributors.length - 3} others",
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                            color: Color(0xFFDC4654),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ]
+                  ],
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Color(0xFFDC4654),
+                  size: 20,
+                )
+              ],
+            ),
           ),
-        )
+        ),
+        SizedBox(height: size.height * 0.01),
       ],
     );
   }
