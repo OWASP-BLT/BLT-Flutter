@@ -1,7 +1,4 @@
-import 'package:blt/src/models/contributors_model.dart';
-import 'package:blt/src/models/project_model.dart';
 import 'package:blt/src/pages/drawer/drawer_imports.dart';
-import 'package:blt/src/util/api/github_apis.dart';
 
 class ContributorsPage extends StatefulWidget {
   const ContributorsPage({super.key});
@@ -10,7 +7,7 @@ class ContributorsPage extends StatefulWidget {
   State<ContributorsPage> createState() => _ContributorsPageState();
 }
 
-ScrollController _scrollController = new ScrollController();
+// ScrollController _scrollController = new ScrollController();
 
 class _ContributorsPageState extends State<ContributorsPage>
     with TickerProviderStateMixin {
@@ -190,7 +187,7 @@ class _PojectsSectionState extends State<PojectsSection> {
 
   @override
   Widget build(BuildContext context) {
-    // final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final Size size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,10 +228,12 @@ class _PojectsSectionState extends State<PojectsSection> {
         SizedBox(height: size.height * 0.015),
         GestureDetector(
           onTap: () {
+            Project copyProject = widget.project;
+            copyProject.contributors = contributors;
             Navigator.pushNamed(
               context,
               RouteManager.contributorInfo,
-              arguments: contributors,
+              arguments: copyProject,
             );
           },
           child: Container(
@@ -242,11 +241,15 @@ class _PojectsSectionState extends State<PojectsSection> {
             padding: EdgeInsets.all(12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: Color.fromARGB(255, 250, 247, 241),
+              color: isDarkMode
+                  ? Color.fromRGBO(56, 24, 27, 1)
+                  : Color.fromARGB(255, 250, 247, 241),
               boxShadow: [
                 BoxShadow(
                   offset: Offset(0, 1),
-                  color: Color.fromARGB(255, 200, 200, 200),
+                  color: isDarkMode
+                      ? Colors.white.withOpacity(0.3)
+                      : Color.fromARGB(255, 200, 200, 200),
                   spreadRadius: 0.1,
                   blurRadius: 10,
                 )

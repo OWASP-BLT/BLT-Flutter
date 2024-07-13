@@ -1,10 +1,8 @@
-import 'package:blt/src/models/contributors_model.dart';
 import 'package:blt/src/pages/pages_import.dart';
-import 'package:blt/src/util/api/github_apis.dart';
 
 class ContributorsInfoPage extends StatefulWidget {
-  const ContributorsInfoPage({super.key, required this.contributors});
-  final List<Contributors> contributors;
+  const ContributorsInfoPage({super.key, required this.project});
+  final Project project;
 
   @override
   State<ContributorsInfoPage> createState() => _ContributorsInfoPageState();
@@ -90,33 +88,38 @@ class _ContributorsInfoPageState extends State<ContributorsInfoPage> {
                   childAspectRatio: size.height * 0.001,
                   mainAxisSpacing: size.height * 0.01,
                 ),
-                itemCount: widget.contributors.length,
+                itemCount: widget.project.contributors?.length,
                 itemBuilder: (context, index) => Ink(
                   child: InkWell(
                     onTap: () {
-                      Navigator.of(context).push(new PageRouteBuilder(
+                      Navigator.of(context).push(
+                        new PageRouteBuilder(
                           opaque: false,
                           barrierDismissible: true,
                           pageBuilder: (BuildContext context, _, __) {
                             return ContributorCard(
-                                contributor: widget.contributors[index]);
-                          }));
+                              contributor: widget.project.contributors![index],
+                            );
+                          },
+                        ),
+                      );
                     },
                     child: Ink(
                       child: Column(
                         children: [
                           Hero(
-                            tag: "image${widget.contributors[index].name}",
+                            tag:
+                                "image${widget.project.contributors?[index].image}",
                             child: CircleAvatar(
                               backgroundImage: NetworkImage(
-                                widget.contributors[index].image,
+                                widget.project.contributors![index].image,
                               ),
                               radius: size.height * 0.027,
                             ),
                           ),
                           SizedBox(height: 2),
                           Text(
-                            widget.contributors[index].name,
+                            widget.project.contributors![index].name,
                             maxLines: 2,
                             textAlign: TextAlign.center,
                             style: GoogleFonts.aBeeZee(
@@ -150,29 +153,29 @@ class ContributorCard extends StatefulWidget {
 }
 
 class _ContributorCardState extends State<ContributorCard> {
-  Contributors? contributor;
-  bool loading = true;
-  void getContributorInfo() async {
-    setState(() {
-      loading = true;
-    });
-    contributor = await GithubApis.getContributorsInfoFromID(
-      widget.contributor.id,
-    );
-    print(contributor);
-    setState(() {
-      loading = false;
-    });
-  }
+  // bool loading = true;
+  // void getContributorInfo() async {
+  //   setState(() {
+  //     loading = true;
+  //   });
+  //   contributor = await GithubApis.getContributorsInfoFromID(
+  //     widget.contributor.id,
+  //   );
+  //   print(contributor);
+  //   setState(() {
+  //     loading = false;
+  //   });
+  // }
 
   @override
   void initState() {
-    getContributorInfo();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pop();
@@ -193,216 +196,123 @@ class _ContributorCardState extends State<ContributorCard> {
                         blurRadius: 15.0,
                       ),
                     ]),
-                height: 480.0,
+                height: size.height * 0.23,
                 child: Stack(
                   children: [
-                    Column(
+                    Row(
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: Color(0xFFDC4654),
+                            color: isDarkMode
+                                ? Color.fromRGBO(58, 21, 31, 1)
+                                : Color(0xFFDC4654),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
+                              bottomLeft: Radius.circular(20),
                             ),
                           ),
-                          height: 80,
+                          width: size.width * 0.2,
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: isDarkMode
+                                ? Color.fromRGBO(34, 22, 23, 1)
+                                : Theme.of(context).canvasColor,
                             borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
                               bottomRight: Radius.circular(20),
+                              topRight: Radius.circular(20),
                             ),
                           ),
-                          height: 400,
+                          width: size.width * 0.64,
                         ),
                       ],
                     ),
-                    (loading)
-                        ? Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 45.0,
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: 32.0,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: size.height * 0.058,
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: size.width * 0.09,
+                            ),
+                            CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 43.0,
+                              child: Hero(
+                                tag: "image${widget.contributor.image}",
+                                child: CircleAvatar(
+                                  radius: 40,
+                                  backgroundImage: CachedNetworkImageProvider(
+                                    widget.contributor.image,
                                   ),
-                                  CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    radius: 35.0,
-                                    child: Hero(
-                                      tag: "image${widget.contributor.name}",
-                                      child: CircleAvatar(
-                                        radius: 32,
-                                        backgroundImage:
-                                            CachedNetworkImageProvider(
-                                          widget.contributor.image,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: size.width * 0.05,
+                            ),
+                            Container(
+                              // height: size.height * 0.2,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Hero(
+                                    tag: "name${widget.contributor.name}",
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: Text(
+                                        widget.contributor.name,
+                                        style: GoogleFonts.aBeeZee(
+                                          textStyle: TextStyle(
+                                            color: Colors.red,
+                                          ),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18.0,
                                         ),
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: 16.0,
+                                  Text(
+                                    '${widget.contributor.contributions} contributions',
+                                    style: GoogleFonts.aBeeZee(
+                                      textStyle: TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16.0,
+                                    ),
                                   ),
-                                  Container(
-                                    height: 64.0,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          height: 8.0,
-                                        ),
-                                        Hero(
-                                          tag: "name${widget.contributor.name}",
-                                          child: Material(
-                                            color: Colors.transparent,
-                                            child: Text(
-                                              widget.contributor.name,
-                                              style: GoogleFonts.aBeeZee(
-                                                textStyle: TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18.0,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 8.0,
-                                        ),
-                                      ],
+                                  IconButton(
+                                    onPressed: () async {
+                                      Uri site = Uri.parse(
+                                          widget.contributor.githubUrl);
+                                      try {
+                                        await launchUrl(site,
+                                            mode:
+                                                LaunchMode.externalApplication);
+                                      } catch (e) {}
+                                    },
+                                    icon: SvgPicture.asset(
+                                      "assets/GitHub.svg",
+                                      height: 35,
+                                      colorFilter: isDarkMode
+                                          ? ColorFilter.mode(
+                                              Color.fromARGB(
+                                                  255, 212, 212, 212),
+                                              BlendMode.srcIn)
+                                          : null,
                                     ),
                                   ),
                                 ],
                               ),
-
-                              if (contributor?.bio != null &&
-                                  contributor?.bio != "") ...[
-                                SizedBox(
-                                  height: 16.0,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 32.0),
-                                  child: Text(
-                                    '${contributor?.bio}',
-                                    style: GoogleFonts.aBeeZee(
-                                      textStyle: TextStyle(
-                                        color: Color(0xFF737373),
-                                      ),
-                                      fontSize: 14.0,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                              if (contributor?.location != null &&
-                                  contributor?.location != "") ...[
-                                SizedBox(
-                                  height: 16.0,
-                                ),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 32.0,
-                                    ),
-                                    Icon(
-                                      Icons.location_pin,
-                                      color: Color(0xFF737373),
-                                      size: 28.0,
-                                    ),
-                                    SizedBox(
-                                      width: 4.0,
-                                    ),
-                                    Text(
-                                      '${contributor?.location}',
-                                      style: GoogleFonts.aBeeZee(
-                                        textStyle: TextStyle(
-                                          color: Color(0xFF737373),
-                                        ),
-                                        fontSize: 14.0,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                              // Spacer(),
-                              // Row(
-                              //   children: [
-                              //     SizedBox(
-                              //       width: 24.0,
-                              //     ),
-                              //     IconButton(
-                              //       onPressed: () async {
-                              //         Uri site = Uri.parse(contributor["twitter"]!);
-                              //         try {
-                              //           await launchUrl(site,
-                              //               mode: LaunchMode.externalApplication);
-                              //         } catch (e) {}
-                              //       },
-                              //       icon: SvgPicture.asset(
-                              //         "assets/twitter.svg",
-                              //         height: 64.0,
-                              //       ),
-                              //     ),
-                              //     IconButton(
-                              //       onPressed: () async {
-                              //         Uri site = Uri.parse(contributor["linkedin"]!);
-                              //         try {
-                              //           await launchUrl(site,
-                              //               mode: LaunchMode.externalApplication);
-                              //         } catch (e) {}
-                              //       },
-                              //       icon: SvgPicture.asset(
-                              //         "assets/linkedin.svg",
-                              //         height: 64.0,
-                              //       ),
-                              //     ),
-                              //     IconButton(
-                              //       onPressed: () async {
-                              //         Uri site = Uri.parse(contributor["website"]!);
-                              //         try {
-                              //           await launchUrl(site,
-                              //               mode: LaunchMode.externalApplication);
-                              //         } catch (e) {}
-                              //       },
-                              //       icon: SvgPicture.asset(
-                              //         "assets/website.svg",
-                              //         height: 64.0,
-                              //       ),
-                              //     ),
-                              //     IconButton(
-                              //       onPressed: () async {
-                              //         await Clipboard.setData(ClipboardData(
-                              //             text: contributor["bch_addr"]!));
-                              //         ScaffoldMessenger.of(context).showSnackBar(
-                              //           SnackBar(
-                              //             content: Text(
-                              //                 "Bitcoin cash address copied to clipboard!"),
-                              //           ),
-                              //         );
-                              //       },
-                              //       icon: SvgPicture.asset(
-                              //         "assets/bitcoin.svg",
-                              //         height: 64.0,
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
-                              // SizedBox(
-                              //   height: 32.0,
-                              // ),
-                            ],
-                          ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
                 )),
           ),

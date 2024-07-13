@@ -1,6 +1,3 @@
-import 'package:blt/src/models/contributors_model.dart';
-import 'package:blt/src/pages/contributors_info.dart';
-import 'package:blt/src/pages/drawer/contributors.dart';
 import 'package:blt/src/routes/routes_import.dart';
 
 /// The managing class for App Navigation, also adds custom page transitions.
@@ -583,7 +580,7 @@ class RouteManager {
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
               ContributorsInfoPage(
-            contributors: arguments as List<Contributors>,
+            project: arguments as Project,
           ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(1.0, 0);
