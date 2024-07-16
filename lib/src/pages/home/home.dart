@@ -260,15 +260,15 @@ class _HomeState extends ConsumerState<Home> {
                   await logout();
                 },
               ),
-              ListTile(
-                title: Text(AppLocalizations.of(context)!.social),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pushNamed(context, RouteManager.socialPage);
-                },
-              ),
+              // ListTile(
+              //   title: Text(AppLocalizations.of(context)!.social),
+              //   onTap: () {
+              //     // Update the state of the app
+              //     // ...
+              //     // Then close the drawer
+              //     Navigator.pushNamed(context, RouteManager.socialPage);
+              //   },
+              // ),
               ListTile(
                 title: Text("Bug Hunts"),
                 onTap: () {
@@ -305,6 +305,15 @@ class _HomeState extends ConsumerState<Home> {
                 },
               ),
               ListTile(
+                title: Text("Projects"),
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    RouteManager.contributorsPage,
+                  );
+                },
+              ),
+              ListTile(
                 title: Text(AppLocalizations.of(context)!.termsOfService),
                 onTap: () {
                   Navigator.pushNamed(
@@ -319,15 +328,6 @@ class _HomeState extends ConsumerState<Home> {
                   Navigator.pushNamed(
                     context,
                     RouteManager.aboutPage,
-                  );
-                },
-              ),
-              ListTile(
-                title: Text("Projects"),
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    RouteManager.contributorsPage,
                   );
                 },
               ),
