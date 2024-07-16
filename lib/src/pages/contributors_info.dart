@@ -55,7 +55,7 @@ class _ContributorsInfoPageState extends State<ContributorsInfoPage> {
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
                       child: Text(
-                        "Contributors",
+                        "${widget.project.name} Contributors",
                         style: GoogleFonts.ubuntu(
                           textStyle: TextStyle(
                             color: Color(0xFF737373),
