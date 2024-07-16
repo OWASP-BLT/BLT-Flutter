@@ -288,7 +288,7 @@ class _ContributorCardState extends State<ContributorCard> {
                                   IconButton(
                                     onPressed: () async {
                                       Uri site = Uri.parse(
-                                          widget.contributor.githubUrl);
+                                          "https://github.com/${widget.contributor.name}");
                                       try {
                                         await launchUrl(site,
                                             mode:
