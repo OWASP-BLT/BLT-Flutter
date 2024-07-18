@@ -25,7 +25,7 @@ class ProjectListProvider extends StateNotifier<AsyncValue<List<Project>?>?> {
     }
   }
 
-  Future<void> refreshIssueList() async {
+  Future<void> refreshProjectList() async {
     state = const AsyncValue.loading();
     try {
       await _retrieveProjectList();

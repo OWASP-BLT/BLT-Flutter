@@ -54,94 +54,99 @@ class _ContributorsPageState extends ConsumerState<ContributorsPage>
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: size.width,
-                color: isDarkMode
-                    ? Color.fromRGBO(34, 22, 23, 1)
-                    : Theme.of(context).canvasColor,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-                      child: Text(
-                        "Projects",
-                        style: GoogleFonts.ubuntu(
-                          textStyle: TextStyle(
-                            color: Color(0xFF737373),
-                            fontSize: 25,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          ref.read(projectListProvider.notifier).refreshProjectList();
+        },
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: size.width,
+                  color: isDarkMode
+                      ? Color.fromRGBO(34, 22, 23, 1)
+                      : Theme.of(context).canvasColor,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+                        child: Text(
+                          "Projects",
+                          style: GoogleFonts.ubuntu(
+                            textStyle: TextStyle(
+                              color: Color(0xFF737373),
+                              fontSize: 25,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
-                      child: Text(
-                        "Check out the list of awesome projects we have. Maybe contribute and become a contributor too?",
-                        style: GoogleFonts.aBeeZee(
-                          textStyle: TextStyle(
-                            color: Color(0xFF737373),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
+                        child: Text(
+                          "Check out the list of awesome projects we have. Maybe contribute and become a contributor too?",
+                          style: GoogleFonts.aBeeZee(
+                            textStyle: TextStyle(
+                              color: Color(0xFF737373),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: size.height * 0.008),
-              Container(
-                child: projects!.when(
-                  data: (List<Project>? projectList) {
-                    if (projectList!.isEmpty) {
+                SizedBox(height: size.height * 0.008),
+                Container(
+                  child: projects!.when(
+                    data: (List<Project>? projectList) {
+                      if (projectList!.isEmpty) {
+                        return Center(
+                          child: Text(
+                            "${AppLocalizations.of(context)!.notManyBugs}:) \n ${AppLocalizations.of(context)!.yay}",
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      } else {
+                        return ListView.separated(
+                          shrinkWrap: true,
+                          itemCount: projectList.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: size.height * 0.025),
+                          itemBuilder: (context, index) {
+                            return ProjectSection(project: projectList[index]);
+                          },
+                        );
+                      }
+                    },
+                    error: (Object error, StackTrace? stackTrace) {
                       return Center(
                         child: Text(
-                          "${AppLocalizations.of(context)!.notManyBugs}:) \n ${AppLocalizations.of(context)!.yay}",
-                          textAlign: TextAlign.center,
+                          AppLocalizations.of(context)!.somethingWentWrong,
+                          style: TextStyle(fontSize: 18),
                         ),
                       );
-                    } else {
-                      return ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: projectList.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        separatorBuilder: (context, index) =>
-                            SizedBox(height: size.height * 0.025),
-                        itemBuilder: (context, index) {
-                          return ProjectSection(project: projectList[index]);
-                        },
-                      );
-                    }
-                  },
-                  error: (Object error, StackTrace? stackTrace) {
-                    return Center(
-                      child: Text(
-                        AppLocalizations.of(context)!.somethingWentWrong,
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    );
-                  },
-                  loading: () {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        valueColor: animationController.drive(
-                          ColorTween(
-                            begin: Colors.blueAccent,
-                            end: Colors.red,
+                    },
+                    loading: () {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          valueColor: animationController.drive(
+                            ColorTween(
+                              begin: Colors.blueAccent,
+                              end: Colors.red,
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

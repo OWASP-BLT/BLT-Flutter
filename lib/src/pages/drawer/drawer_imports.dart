@@ -23,4 +23,3 @@ export '../../routes/routing.dart';
 export 'package:blt/src/models/contributors_model.dart';
 export 'package:blt/src/models/project_model.dart';
 export 'package:blt/src/util/api/github_apis.dart';
-export 'package:blt/src/providers/contributors_info_cache.dart';
