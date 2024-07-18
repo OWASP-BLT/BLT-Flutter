@@ -1,7 +1,7 @@
-import 'dart:convert';
-
 import 'package:blt/src/models/project_model.dart';
 import 'package:http/http.dart' as http;
+
+import '../util_import.dart';
 
 class ProjectAPiClient {
   ProjectAPiClient._();
@@ -9,7 +9,7 @@ class ProjectAPiClient {
   static Future<List<Project>?> getAllProjects() async {
     List<Project> projects = [];
     try {
-      var uri = "http://192.168.56.1:8000/api/v1/" + "projects/";
+      var uri = GeneralEndPoints.apiBaseUrl + "projects/";
       var response = await http.get(Uri.parse(uri));
       var json_res = json.decode(response.body);
       print(json_res);

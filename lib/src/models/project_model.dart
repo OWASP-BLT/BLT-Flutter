@@ -1,5 +1,7 @@
 import 'package:blt/src/models/contributors_model.dart';
 
+import '../util/util_import.dart';
+
 class Project {
   final int id;
   final String name;
@@ -61,7 +63,7 @@ class Project {
       wiki_url: json['wiki_url'] != null ? json['wiki_url'] as String : "",
       homepage_url:
           json['homepage_url'] != null ? json['homepage_url'] as String : "",
-      logo: json['logo'] as String,
+      logo: GeneralEndPoints.baseUrl + json['logo'],
       created: json['created'] != null ? DateTime.parse(json['created']) : null,
       contributors: json['contributors'] != null
           ? Contributors.fromSnapshot(json['contributors'])

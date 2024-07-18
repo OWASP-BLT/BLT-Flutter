@@ -1,29 +1,22 @@
 import 'package:blt/src/pages/drawer/drawer_imports.dart';
-import 'package:blt/src/util/api/project_apis.dart';
+import 'package:blt/src/providers/projects_provider.dart';
 
-class ContributorsPage extends StatefulWidget {
+class ContributorsPage extends ConsumerStatefulWidget {
   const ContributorsPage({super.key});
 
   @override
-  State<ContributorsPage> createState() => _ContributorsPageState();
+  _ContributorsPageState createState() => _ContributorsPageState();
 }
 
-class _ContributorsPageState extends State<ContributorsPage>
+class _ContributorsPageState extends ConsumerState<ContributorsPage>
     with TickerProviderStateMixin {
   late AnimationController animationController;
-  List<Project> projects = [];
   @override
   void initState() {
     animationController =
         AnimationController(duration: new Duration(seconds: 2), vsync: this);
     animationController.repeat();
-    printData();
     super.initState();
-  }
-
-  printData() async {
-    var poject = await ProjectAPiClient.getAllProjects();
-    print(poject);
   }
 
   @override
@@ -36,6 +29,7 @@ class _ContributorsPageState extends State<ContributorsPage>
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final Size size = MediaQuery.of(context).size;
+    var projects = ref.watch(projectListProvider);
     return Scaffold(
       backgroundColor: isDarkMode
           ? Color.fromRGBO(34, 22, 23, 1)
@@ -102,15 +96,50 @@ class _ContributorsPageState extends State<ContributorsPage>
                 ),
               ),
               SizedBox(height: size.height * 0.008),
-              ListView.separated(
-                shrinkWrap: true,
-                itemCount: projects.length,
-                physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) =>
-                    SizedBox(height: size.height * 0.025),
-                itemBuilder: (context, index) {
-                  return ProjectsSection(project: projects[index]);
-                },
+              Container(
+                child: projects!.when(
+                  data: (List<Project>? projectList) {
+                    if (projectList!.isEmpty) {
+                      return Center(
+                        child: Text(
+                          "${AppLocalizations.of(context)!.notManyBugs}:) \n ${AppLocalizations.of(context)!.yay}",
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    } else {
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: projectList.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: size.height * 0.025),
+                        itemBuilder: (context, index) {
+                          return ProjectSection(project: projectList[index]);
+                        },
+                      );
+                    }
+                  },
+                  error: (Object error, StackTrace? stackTrace) {
+                    return Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.somethingWentWrong,
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    );
+                  },
+                  loading: () {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor: animationController.drive(
+                          ColorTween(
+                            begin: Colors.blueAccent,
+                            end: Colors.red,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),
@@ -120,15 +149,21 @@ class _ContributorsPageState extends State<ContributorsPage>
   }
 }
 
-class ProjectsSection extends ConsumerStatefulWidget {
-  const ProjectsSection({super.key, required this.project});
+class ProjectSection extends StatefulWidget {
+  const ProjectSection({super.key, required this.project});
   final Project project;
-
   @override
-  ProjectsSectionState createState() => ProjectsSectionState();
+  State<ProjectSection> createState() => _ProjectSectionState();
 }
 
-class ProjectsSectionState extends ConsumerState<ProjectsSection> {
+class _ProjectSectionState extends State<ProjectSection> {
+  List<Contributors>? contributors = [];
+  @override
+  void initState() {
+    contributors = widget.project.contributors;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
@@ -171,111 +206,85 @@ class ProjectsSectionState extends ConsumerState<ProjectsSection> {
           textAlign: TextAlign.justify,
         ),
         SizedBox(height: size.height * 0.015),
-        FutureBuilder<List<Contributors>>(
-          future: ref
-              .read(contributorsProvider)
-              .getContributorsInfo(widget.project),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    'Something went wrong!',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                );
-              } else if (snapshot.hasData) {
-                List<Contributors> contributors = snapshot.data ?? [];
-                return GestureDetector(
-                  onTap: () {
-                    Project copyProject = widget.project;
-                    copyProject.contributors = contributors;
-                    Navigator.pushNamed(
-                      context,
-                      RouteManager.contributorInfo,
-                      arguments: copyProject,
-                    );
-                  },
-                  child: Container(
-                    height: size.height * 0.07,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: isDarkMode
-                          ? Color.fromRGBO(56, 24, 27, 1)
-                          : Color.fromARGB(255, 250, 247, 241),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 1),
-                          color: isDarkMode
-                              ? Colors.white.withOpacity(0.3)
-                              : Color.fromARGB(255, 200, 200, 200),
-                          spreadRadius: 0.1,
-                          blurRadius: 10,
-                        )
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              "Contributors",
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                  color: Color(0xFFDC4654),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: size.width * 0.04),
-                            ListView.separated(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: (contributors.length > 3)
-                                  ? 3
-                                  : contributors.length,
-                              itemBuilder: (context, index) => CircleAvatar(
-                                backgroundImage: CachedNetworkImageProvider(
-                                  contributors[index].image,
-                                ),
-                                radius: size.width * 0.045,
-                              ),
-                              separatorBuilder: (context, index) =>
-                                  SizedBox(width: 4),
-                            ),
-                            if (contributors.length > 3) ...[
-                              SizedBox(width: 5),
-                              Text(
-                                "+${contributors.length - 3} others",
-                                style: GoogleFonts.ubuntu(
-                                  textStyle: TextStyle(
-                                    color: Color(0xFFDC4654),
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ]
-                          ],
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          color: Color(0xFFDC4654),
-                          size: 20,
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              }
-            }
-            return Center(
-              child: CircularProgressIndicator(),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              RouteManager.contributorInfo,
+              arguments: widget.project,
             );
           },
+          child: Container(
+            height: size.height * 0.07,
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: isDarkMode
+                  ? Color.fromRGBO(56, 24, 27, 1)
+                  : Color.fromARGB(255, 250, 247, 241),
+              boxShadow: [
+                BoxShadow(
+                  offset: Offset(0, 1),
+                  color: isDarkMode
+                      ? Colors.white.withOpacity(0.3)
+                      : Color.fromARGB(255, 200, 200, 200),
+                  spreadRadius: 0.1,
+                  blurRadius: 10,
+                )
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "Contributors",
+                      style: GoogleFonts.ubuntu(
+                        textStyle: TextStyle(
+                          color: Color(0xFFDC4654),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: size.width * 0.04),
+                    ListView.separated(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount:
+                          (contributors!.length > 3) ? 3 : contributors!.length,
+                      itemBuilder: (context, index) => CircleAvatar(
+                        backgroundImage: CachedNetworkImageProvider(
+                          contributors![index].image,
+                        ),
+                        radius: size.width * 0.045,
+                      ),
+                      separatorBuilder: (context, index) => SizedBox(width: 4),
+                    ),
+                    if (contributors!.length > 3) ...[
+                      SizedBox(width: 5),
+                      Text(
+                        "+${contributors!.length - 3} others",
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                            color: Color(0xFFDC4654),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ]
+                  ],
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Color(0xFFDC4654),
+                  size: 20,
+                )
+              ],
+            ),
+          ),
         ),
         SizedBox(height: size.height * 0.01),
       ],
