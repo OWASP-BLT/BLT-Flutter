@@ -1,4 +1,5 @@
 import 'package:blt/src/pages/drawer/drawer_imports.dart';
+import 'package:blt/src/util/api/project_apis.dart';
 
 class ContributorsPage extends StatefulWidget {
   const ContributorsPage({super.key});
@@ -10,34 +11,19 @@ class ContributorsPage extends StatefulWidget {
 class _ContributorsPageState extends State<ContributorsPage>
     with TickerProviderStateMixin {
   late AnimationController animationController;
-  List<Project> projects = [
-    Project(
-      owner: "OWASP-BLT",
-      name: "BLT",
-      desc:
-          "OWASP-BLT BLT is a bug logging tool to report issues and get points, companies are held accountable.",
-      logoUrl: "https://avatars.githubusercontent.com/u/160347863?s=48&v=4",
-    ),
-    Project(
-      owner: "OWASP-BLT",
-      name: "BLT-FLutter",
-      desc: "The official OWASP BLT App repository Heist'em bugs!",
-      logoUrl: "https://avatars.githubusercontent.com/u/160347863?s=48&v=4",
-    ),
-    Project(
-      owner: "OWASP-BLT",
-      name: "BLT-Bacon",
-      desc:
-          "Bacon is a OWASP BLT Private Chain based on POA consensus that rewards bug testers",
-      logoUrl: "https://avatars.githubusercontent.com/u/160347863?s=48&v=4",
-    ),
-  ];
+  List<Project> projects = [];
   @override
   void initState() {
     animationController =
         AnimationController(duration: new Duration(seconds: 2), vsync: this);
     animationController.repeat();
+    printData();
     super.initState();
+  }
+
+  printData() async {
+    var poject = await ProjectAPiClient.getAllProjects();
+    print(poject);
   }
 
   @override
@@ -158,7 +144,7 @@ class ProjectsSectionState extends ConsumerState<ProjectsSection> {
               width: 25,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(4),
-                child: CachedNetworkImage(imageUrl: widget.project.logoUrl),
+                child: CachedNetworkImage(imageUrl: widget.project.logo),
               ),
             ),
             SizedBox(width: 5),
@@ -176,7 +162,7 @@ class ProjectsSectionState extends ConsumerState<ProjectsSection> {
         ),
         SizedBox(height: size.height * 0.01),
         Text(
-          widget.project.desc,
+          widget.project.description,
           style: GoogleFonts.aBeeZee(
             textStyle: TextStyle(
               color: Color(0xFF737373),

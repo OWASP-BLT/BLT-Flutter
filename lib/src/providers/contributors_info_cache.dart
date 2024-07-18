@@ -11,11 +11,13 @@ class ContributorsInfoNotifier extends ChangeNotifier {
     if (contributorsInfo.containsKey(project.name)) {
       return contributorsInfo[project.name] ?? [];
     }
-    var contributors = await GithubApis.getContributors(
-      project.name,
-      project.owner,
-    );
-    contributorsInfo[project.name] = contributors;
-    return contributorsInfo[project.name] ?? [];
+    // var contributors = await GithubApis.getContributors(
+    //   project.name,
+    //   project.owner,
+    // );
+    // contributorsInfo[project.name] = contributors;
+    // return contributorsInfo[project.name] ?? [];
+    print("*******************Change this to fetch the values****************");
+    return [];
   }
 }
