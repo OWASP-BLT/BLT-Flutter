@@ -270,7 +270,7 @@ class _HomeState extends ConsumerState<Home> {
               //   },
               // ),
               ListTile(
-                title: Text("Bug Hunts"),
+                title: Text("Bug Bounties"),
                 onTap: () {
                   Navigator.pushNamed(
                     context,
