@@ -17,7 +17,7 @@ dependencies:
   receive_sharing_intent:
     git:
       url: https://github.com/Thogsit/receive_sharing_intent
-  shared_preferences: ^2.0.5
+  shared_preferences: ^2.3.0
   flutter_svg: ">=1.0.3 <3.0.0"
   flutter_riverpod: ^1.0.3
   intl: 
