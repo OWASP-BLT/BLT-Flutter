@@ -12,7 +12,6 @@ class ProjectAPiClient {
       var uri = GeneralEndPoints.apiBaseUrl + "projects/";
       var response = await http.get(Uri.parse(uri));
       var json_res = json.decode(response.body);
-      print(json_res);
       projects = Project.fromSnapshot(json_res['projects']);
     } catch (e) {
       print(projects);
