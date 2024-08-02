@@ -15,6 +15,7 @@ class ProjectAPiClient {
       print(json_res);
       projects = Project.fromSnapshot(json_res['projects']);
     } catch (e) {
+      print(projects);
       print(e);
     }
     return projects;

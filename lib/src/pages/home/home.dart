@@ -1,4 +1,5 @@
 import 'package:blt/src/pages/home/home_imports.dart';
+import 'package:blt/src/util/services/permission_handlers.dart';
 
 /// Navigator and drawer provider for the main pages:
 /// Issues, Report Bug, Leaderboards and Feed.
@@ -169,6 +170,8 @@ class _HomeState extends ConsumerState<Home> {
     );
     super.initState();
 
+    requestStoragePermission();
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ReportPageDefaults defaults = await receiveSharedIntent();
       if (defaults.sharedMediaFile != null || defaults.text != null) {
@@ -270,7 +273,7 @@ class _HomeState extends ConsumerState<Home> {
               //   },
               // ),
               ListTile(
-                title: Text("Bug Hunts"),
+                title: Text("Bug Bounties"),
                 onTap: () {
                   Navigator.pushNamed(
                     context,
