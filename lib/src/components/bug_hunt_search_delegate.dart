@@ -1,7 +1,7 @@
-import 'package:blt/src/components/components_import.dart';
+import './components_import.dart';
 
 /// The search bar of app for searching issues based on keyword.
-class BLTSearchDelegate extends SearchDelegate {
+class BugHuntSearchDelegate extends SearchDelegate {
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -32,7 +32,8 @@ class BLTSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    Future _getObj = IssueApiClient.searchIssueByKeyWord(query);
+    Future _getObj =
+        BugHuntApiClient.searchBugHunts(client: null, search: query);
 
     ScrollController _scrollController = new ScrollController();
 
@@ -50,11 +51,11 @@ class BLTSearchDelegate extends SearchDelegate {
           } else if (snapshot.hasData) {
             return ListView.builder(
               padding: EdgeInsets.symmetric(horizontal: 20),
-              itemCount: (snapshot.data! as IssueData).issueList!.length,
+              itemCount: snapshot.data.length,
               controller: _scrollController,
               itemBuilder: (context, index) {
-                return IssueCard(
-                  issue: (snapshot.data! as IssueData).issueList![index],
+                return BugHuntListTile(
+                  hunt: snapshot.data[index],
                 );
               },
             );
@@ -75,7 +76,7 @@ class BLTSearchDelegate extends SearchDelegate {
       height: size.height,
       child: Center(
         child: Text(
-          'Search an issue!',
+          'Search a Bug Hunt!',
           style: GoogleFonts.ubuntu(
             textStyle: TextStyle(
               color: Color(0xFF737373),
