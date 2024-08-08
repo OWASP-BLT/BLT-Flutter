@@ -1,64 +1,89 @@
-import 'package:blt/src/pages/home/home_imports.dart';
+import 'package:blt/src/pages/drawer/drawer_imports.dart';
 
-/// Issues page for viewing all the issues posted via the website and app.
-class IssuesPage extends ConsumerStatefulWidget {
-  const IssuesPage({Key? key}) : super(key: key);
+class ShowBugHunts extends ConsumerStatefulWidget {
+  const ShowBugHunts({Key? key}) : super(key: key);
 
   @override
-  IssuesPageState createState() => IssuesPageState();
+  _ShowBugHuntsState createState() => _ShowBugHuntsState();
 }
 
 ScrollController _scrollController = new ScrollController();
 
-class IssuesPageState extends ConsumerState<IssuesPage>
+class _ShowBugHuntsState extends ConsumerState<ShowBugHunts>
     with TickerProviderStateMixin {
   late AnimationController animationController;
-  late String paginatedUrl;
-
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   @override
   void initState() {
-    paginatedUrl = IssueEndPoints.issues;
-
     animationController =
         AnimationController(duration: new Duration(seconds: 2), vsync: this);
     animationController.repeat();
-
-    _scrollController.addListener(() async {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        loadMoreIssues();
-      }
-    });
     super.initState();
   }
 
   @override
-  void dispose() {
-    animationController.dispose();
-    super.dispose();
-  }
-
-  void loadMoreIssues() {
-    paginatedUrl = ref.watch(issueListProvider.notifier).nxtUrl!;
-    ref.watch(issueListProvider.notifier).getMoreIssues(paginatedUrl);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final issueState = ref.watch(issueListProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final Size size = MediaQuery.of(context).size;
+    final bugHuntList = ref.watch(bugHuntListProvider);
 
     return Scaffold(
       backgroundColor: isDarkMode
           ? Color.fromRGBO(34, 22, 23, 1)
           : Theme.of(context).canvasColor,
+      appBar: AppBar(
+        backgroundColor:
+            isDarkMode ? Color.fromRGBO(58, 21, 31, 1) : Color(0xFFDC4654),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: Text(
+          "Bug Hunts",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: BugHuntSearchDelegate(),
+              );
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: IconButton(
+              icon: Icon(
+                Icons.history_rounded,
+                color: Colors.white,
+                size: 24,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  RouteManager.showPrevBugHunt,
+                );
+              },
+            ),
+          )
+        ],
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
-          ref.read(issueListProvider.notifier).refreshIssueList();
+          ref.read(bugHuntListProvider.notifier).refreshBugHuntList();
         },
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -77,7 +102,7 @@ class IssuesPageState extends ConsumerState<IssuesPage>
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
                       child: Text(
-                        AppLocalizations.of(context)!.issues,
+                        "Bug Hunts",
                         style: GoogleFonts.ubuntu(
                           textStyle: TextStyle(
                             color: Color(0xFF737373),
@@ -89,7 +114,7 @@ class IssuesPageState extends ConsumerState<IssuesPage>
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
                       child: Text(
-                        AppLocalizations.of(context)!.checkLatestIssues,
+                        "Check out the list of awesome active and upcoming Bug Hunts. Maybe try to participate in them too?",
                         style: GoogleFonts.aBeeZee(
                           textStyle: TextStyle(
                             color: Color(0xFF737373),
@@ -101,20 +126,36 @@ class IssuesPageState extends ConsumerState<IssuesPage>
                 ),
               ),
               Container(
-                height: size.height * 0.8,
+                // height: size.height * 0.8,
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: issueState!.when(
-                  data: (List<Issue>? issueList) {
-                    if (issueList!.isEmpty) {
+                child: bugHuntList!.when(
+                  data: (List<BugHunt>? bugHuntsList) {
+                    if (bugHuntsList!.isEmpty) {
                       return Center(
                         child: Text(
-                          "${AppLocalizations.of(context)!.notManyBugs}:) \n ${AppLocalizations.of(context)!.yay}",
+                          "No Bug Hunts found !!",
                           textAlign: TextAlign.center,
                         ),
                       );
                     } else {
-                      return ShowIssueList(
-                        issueList: issueList,
+                      return ListView.separated(
+                        controller: _scrollController,
+                        itemCount: bugHuntsList.length,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final hunt = bugHuntsList[index];
+                          // if (widget.isTest != null && widget.isTest == true) {
+                          //   return ListTile(
+                          //     title: Text(company.companyName),
+                          //     subtitle: Text('${company.lastModified}'),
+                          //   );
+                          // }
+                          return BugHuntListTile(hunt: hunt);
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return SizedBox(height: 10);
+                        },
                       );
                     }
                   },
@@ -144,32 +185,6 @@ class IssuesPageState extends ConsumerState<IssuesPage>
           ),
         ),
       ),
-    );
-  }
-}
-
-class ShowIssueList extends StatefulWidget {
-  const ShowIssueList({super.key, required this.issueList, this.isTesting});
-  final List<Issue> issueList;
-  final bool? isTesting;
-
-  @override
-  State<ShowIssueList> createState() => _ShowIssueListState();
-}
-
-class _ShowIssueListState extends State<ShowIssueList> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      controller: _scrollController,
-      itemCount: widget.issueList.length,
-      itemBuilder: (context, index) {
-        final currentIssue = widget.issueList[index];
-        return IssueCard(
-          isTesting: widget.isTesting,
-          issue: currentIssue,
-        );
-      },
     );
   }
 }
