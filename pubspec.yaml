@@ -29,7 +29,7 @@ dependencies:
   #flutter_inappwebview: ^5.7.2+3
   font_awesome_flutter: ^10.4.0
   sentry_flutter: ^8.2.0
-  cached_network_image: ^3.2.3
+  cached_network_image: ^3.4.1
   flutter_localizations:
     sdk: flutter
   primer_progress_bar: ^0.4.2
